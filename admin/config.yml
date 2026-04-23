@@ -7,54 +7,167 @@ media_folder: "assets/images"
 public_folder: "/assets/images"
 
 collections:
+
+  # ══════════════════════════════════════════
+  # 1. SITE SETTINGS — Hero section info
+  #    Dashboard থেকে নাম, bio, photo সব বদলাও
+  # ══════════════════════════════════════════
+  - name: "site_settings"
+    label: "⚙ Site Settings"
+    files:
+      - label: "Hero / Profile Info"
+        name: "hero"
+        file: "content/settings/hero.md"
+        fields:
+          - {label: "Your Full Name",   name: "name",     widget: "string"}
+          - {label: "Tagline",          name: "tagline",  widget: "string",
+             hint: "e.g. Electrical & Electronic Engineer · Level 2 Fiverr Seller"}
+          - {label: "Short Bio",        name: "bio",      widget: "text",
+             hint: "This shows under your name on the homepage"}
+          - {label: "Profile Photo",    name: "photo",    widget: "image",
+             hint: "Upload your profile photo here"}
+          - {label: "Email",            name: "email",    widget: "string"}
+          - {label: "GitHub URL",       name: "github",   widget: "string", required: false}
+          - {label: "LinkedIn URL",     name: "linkedin", widget: "string", required: false}
+          - {label: "Fiverr URL",       name: "fiverr",   widget: "string", required: false,
+             hint: "e.g. https://www.fiverr.com/your_username"}
+
+  # ══════════════════════════════════════════
+  # 2. EDUCATION
+  #    প্রতিটা শিক্ষাপ্রতিষ্ঠানের জন্য আলাদা entry
+  # ══════════════════════════════════════════
+  - name: "education"
+    label: "🎓 Education"
+    folder: "content/education"
+    create: true
+    slug: "{{order}}-{{slug}}"
+    fields:
+      - label: "Order (1=top)"
+        name: "order"
+        widget: "number"
+        default: 1
+        hint: "1 = University (shows first), 2 = College, 3 = School"
+
+      - label: "Level"
+        name: "level"
+        widget: "select"
+        options: ["University", "College", "School", "Other"]
+        default: "University"
+
+      - {label: "Institution Name",  name: "institution", widget: "string"}
+      - {label: "Degree / Group",    name: "degree",      widget: "string",
+         hint: "e.g. B.Sc. in EEE  or  HSC · Science Group"}
+      - {label: "Passing Year",      name: "passing",     widget: "string",  hint: "e.g. 2025"}
+      - {label: "GPA / Result",      name: "gpa",         widget: "string",  hint: "e.g. 3.75 / 4.00"}
+
+      - label: "Icon (emoji)"
+        name: "icon"
+        widget: "string"
+        default: "🎓"
+        hint: "Paste an emoji: 🎓 🏫 📚 🏛"
+
+      - label: "Icon Background Color"
+        name: "icon_bg"
+        widget: "select"
+        options:
+          - {label: "Blue",   value: "var(--blue-l)"}
+          - {label: "Teal",   value: "var(--teal-l)"}
+          - {label: "Amber",  value: "var(--amber-l)"}
+          - {label: "Rose",   value: "var(--rose-l)"}
+        default: "var(--blue-l)"
+
+      - {label: "Institution Photo",
+         name: "photo",
+         widget: "image",
+         required: false,
+         hint: "Photo of the institution (shows in modal popup)"}
+
+      - {label: "Description",
+         name: "description",
+         widget: "text",
+         hint: "Brief description about your experience there"}
+
+      - label: "Subjects Studied"
+        name: "subjects"
+        widget: "string"
+        required: false
+        hint: "Comma separated — e.g. Physics, Chemistry, Mathematics, Biology"
+
+  # ══════════════════════════════════════════
+  # 3. CUSTOM CATEGORIES
+  #    নতুন category add করলে menu এ automatically আসবে
+  # ══════════════════════════════════════════
+  - name: "categories"
+    label: "🗂 Custom Categories"
+    folder: "content/categories"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{icon}} {{name}} → {{parent_group}}"
+    fields:
+      - {label: "Category Name",  name: "name",  widget: "string",
+         hint: "e.g. Workshop, Internship, Publication, Patent"}
+
+      - {label: "Icon (emoji)",   name: "icon",  widget: "string",
+         default: "📌",  hint: "Paste an emoji for this category"}
+
+      - label: "Add to Group"
+        name: "parent_group"
+        widget: "select"
+        hint: "Which nav tab should this appear under? 'Standalone' creates its own tab."
+        options:
+          - {label: "Research (Thesis/Journal section)",    value: "Research"}
+          - {label: "Projects (Academic/Freelance section)",value: "Projects"}
+          - {label: "Experiences (Full Time/Voluntary)",    value: "Experiences"}
+          - {label: "Standalone (own nav tab)",             value: "Standalone"}
+        default: "Standalone"
+
+  # ══════════════════════════════════════════
+  # 4. PORTFOLIO ITEMS
+  # ══════════════════════════════════════════
   - name: "projects"
-    label: "All Portfolio Items"
+    label: "📁 Portfolio Items"
     folder: "content/projects"
     create: true
     slug: "{{year}}{{month}}{{day}}-{{slug}}"
     fields:
-      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Title",            name: "title",       widget: "string"}
 
       - label: "Category"
         name: "category"
         widget: "select"
-        hint: "Select the closest matching category. For something custom, pick the nearest and fill 'Custom Category' below."
+        hint: "Pick the closest match. For a custom category you created above, pick 'Custom' and fill below."
         options:
-          # Research
-          - { label: "📄 Thesis",              value: "Thesis" }
-          - { label: "📰 Journal",              value: "Journal" }
-          - { label: "🎤 Conference",           value: "Conference" }
-          # Projects
-          - { label: "🎓 Academic Project",     value: "Academic Project" }
-          - { label: "💼 Freelance Project",    value: "Freelance Project" }
-          # Experiences
-          - { label: "🏢 Full Time",            value: "Full Time" }
-          - { label: "🤝 Voluntary",            value: "Voluntary" }
-          # More
-          - { label: "📜 Certificate",          value: "Certificate" }
-          - { label: "🎙 Session",              value: "Session" }
-          - { label: "🏆 Award",                value: "Award" }
-          # Custom
-          - { label: "✏️ Custom (fill below)",  value: "Custom" }
+          - {label: "📄 Thesis",              value: "Thesis"}
+          - {label: "📰 Journal",             value: "Journal"}
+          - {label: "🎤 Conference",          value: "Conference"}
+          - {label: "🎓 Academic Project",    value: "Academic Project"}
+          - {label: "💼 Freelance Project",   value: "Freelance Project"}
+          - {label: "🏢 Full Time",           value: "Full Time"}
+          - {label: "🤝 Voluntary",           value: "Voluntary"}
+          - {label: "📜 Certificate",         value: "Certificate"}
+          - {label: "🎙 Session",             value: "Session"}
+          - {label: "🏆 Award",               value: "Award"}
+          - {label: "✏️ Custom (fill below)", value: "Custom"}
         default: "Freelance Project"
 
       - label: "Custom Category Name"
         name: "custom_category"
         widget: "string"
         required: false
-        hint: "Only fill this if you selected 'Custom' above. This will override the Category selection on the website. Example: 'Workshop', 'Internship', 'Publication' etc."
+        hint: "Only if you selected 'Custom' above. Must exactly match the name you used in Custom Categories."
 
-      - {label: "Featured Image",     name: "image",       widget: "image",    required: false}
-      - {label: "Short Description",  name: "description", widget: "text"}
-      - {label: "Full Details",       name: "body",        widget: "markdown"}
-      - label: "External Link"
-        name: "link"
-        widget: "string"
-        required: false
-        hint: "GitHub repo, paper URL, Fiverr gig, etc."
+      - {label: "Featured Image",    name: "image",       widget: "image",    required: false}
+      - {label: "Short Description", name: "description", widget: "text"}
+      - {label: "Full Details",      name: "body",        widget: "markdown"}
 
       - label: "YouTube Video URL"
         name: "youtube"
         widget: "string"
         required: false
-        hint: "Paste the full YouTube URL here, e.g. https://www.youtube.com/watch?v=xxxxx — the video will be embedded on the detail page."
+        hint: "Paste full YouTube URL — e.g. https://www.youtube.com/watch?v=xxxxx"
+
+      - label: "External Link"
+        name: "link"
+        widget: "string"
+        required: false
+        hint: "GitHub, paper, Fiverr gig, etc."
