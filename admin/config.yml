@@ -6,23 +6,34 @@ backend:
 media_folder: "assets/images"
 public_folder: "/assets/images"
 
-# Netlify CMS Identity প্রয়োজন — Netlify Dashboard > Identity > Enable
-# তারপর: Identity > Settings > Git Gateway > Enable
-
 collections:
   - name: "projects"
-    label: "Portfolio Items"
+    label: "All Portfolio Items"
     folder: "content/projects"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"   # ← unique filename
+    slug: "{{year}}{{month}}{{day}}-{{slug}}"
     fields:
       - {label: "Title",             name: "title",       widget: "string"}
       - label: "Category"
         name: "category"
         widget: "select"
-        options: ["Fiverr", "Research", "Session", "Award"]
-        default: "Fiverr"
-      - {label: "Featured Image",    name: "image",       widget: "image", required: false}
+        options:
+          # Research
+          - { label: "📄 Thesis",             value: "Thesis" }
+          - { label: "📰 Journal",             value: "Journal" }
+          - { label: "🎤 Conference",          value: "Conference" }
+          # Projects
+          - { label: "🎓 Academic Project",    value: "Academic Project" }
+          - { label: "💼 Freelance Project",   value: "Freelance Project" }
+          # Experiences
+          - { label: "🏢 Full Time",           value: "Full Time" }
+          - { label: "🤝 Voluntary",           value: "Voluntary" }
+          # More
+          - { label: "📜 Certificate",         value: "Certificate" }
+          - { label: "🎙 Session",             value: "Session" }
+          - { label: "🏆 Award",               value: "Award" }
+        default: "Freelance Project"
+      - {label: "Featured Image",    name: "image",       widget: "image",  required: false}
       - {label: "Short Description", name: "description", widget: "text"}
       - {label: "Full Details",      name: "body",        widget: "markdown"}
       - {label: "External Link",     name: "link",        widget: "string", required: false}
