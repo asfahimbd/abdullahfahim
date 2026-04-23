@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: abdullahfahim19/abdullahfahim # আপনার গিটহাব ইউজারনেম/রিপো-নেম দিন
+  repo: asfahimbd/abdullahfahim # আপনার গিটহাব ইউজারনেম/রিপো-নেম দিন
 
 media_folder: "assets/images"
 public_folder: "/assets/images"
