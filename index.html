@@ -12,10 +12,11 @@
 
   <style>
     :root { --bg: #f8f7f3; --accent: #1d5aff; }
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #1a1714; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #1a1714; scroll-behavior: smooth; }
     .heading { font-family: 'Fraunces', serif; }
     .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(230, 225, 217, 1); }
     .hero-gradient { background: radial-gradient(circle at top right, #e8eeff, transparent); }
+    .project-card:hover { transform: translateY(-8px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
   </style>
 </head>
 <body class="hero-gradient min-h-screen">
@@ -23,27 +24,26 @@
   <nav class="sticky top-0 z-50 glass px-6 py-4 flex justify-between items-center">
     <div class="heading text-xl font-bold tracking-tighter text-blue-600">A.S. FAHIM</div>
     <div class="flex items-center gap-6">
-      <a href="#research" class="hidden md:block text-sm font-semibold hover:text-blue-600">Research</a>
-      <a href="#projects" class="hidden md:block text-sm font-semibold hover:text-blue-600">Fiverr</a>
+      <a href="#projects" class="hidden md:block text-sm font-semibold hover:text-blue-600">Portfolio</a>
       <a href="/admin/" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-lg hover:bg-blue-700 transition">Dashboard</a>
     </div>
   </nav>
 
   <header class="max-w-6xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-12 items-center">
-    <div class="reveal">
-      <div class="inline-block bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs font-bold mb-4 uppercase tracking-widest">Available for PhD Fall 2027</div>
+    <div>
+      <div class="inline-block bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs font-bold mb-4 uppercase tracking-widest tracking-tighter">Available for PhD Fall 2027</div>
       <h1 class="heading text-6xl lg:text-7xl mb-6 leading-[1.1]">Electrical <br><span class="italic text-blue-600">Engineer.</span></h1>
       <p class="text-gray-600 text-lg mb-8 max-w-md leading-relaxed">
-        EEE graduate from JUST. Researcher in Semiconductor Ion Implantation. Level 2 Seller completing 350+ projects.
+        EEE graduate from JUST. Researcher in Semiconductor Ion Implantation. Level 2 Seller on Fiverr completing 350+ projects.
       </p>
       <div class="flex gap-4">
         <a href="mailto:asfahimbd@gmail.com" class="bg-gray-900 text-white px-8 py-4 rounded-xl font-bold shadow-xl hover:scale-105 transition italic">Hire as Expert</a>
-        <a href="#projects" class="glass px-8 py-4 rounded-xl font-bold hover:bg-white transition">View Portfolio</a>
+        <a href="#projects" class="glass px-8 py-4 rounded-xl font-bold hover:bg-white transition">View Works</a>
       </div>
     </div>
     <div class="relative">
       <div class="w-full h-[500px] bg-gray-200 rounded-[2rem] overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-all duration-500 border-8 border-white">
-        <img src="https://via.placeholder.com/600x800" id="hero-img" class="w-full h-full object-cover">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80" id="hero-img" class="w-full h-full object-cover">
       </div>
     </div>
   </header>
@@ -63,14 +63,16 @@
     </div>
     <div class="glass p-8 rounded-3xl text-center">
       <div class="heading text-4xl text-blue-600 mb-1">IEEE</div>
-      <div class="text-xs font-bold text-gray-500 uppercase">Award Holder</div>
+      <div class="text-xs font-bold text-gray-500 uppercase">Student Branch Chair</div>
     </div>
   </section>
 
   <section id="projects" class="max-w-6xl mx-auto px-6 py-20">
-    <h2 class="heading text-4xl mb-12 border-l-8 border-blue-600 pl-6 uppercase">Featured Works</h2>
-    <div id="item-list" class="grid md:grid-cols-3 gap-8 text-center">
-        <p class="text-gray-400">Loading your journey...</p>
+    <h2 class="heading text-4xl mb-12 border-l-8 border-blue-600 pl-6 uppercase">Featured Journey</h2>
+    <div id="item-list" class="grid md:grid-cols-3 gap-8">
+        <div class="col-span-full text-center py-20">
+          <div class="animate-pulse text-gray-400 font-semibold text-lg">Fetching your latest achievements...</div>
+        </div>
     </div>
   </section>
 
@@ -88,6 +90,52 @@
         }
       });
     }
+
+    // CMS DATA LOADER
+    async function fetchPortfolio() {
+      const container = document.getElementById('item-list');
+      try {
+        // GitHub API ব্যবহার করে content ফোল্ডার থেকে ডেটা রিড করা
+        const response = await fetch('https://api.github.com/repos/abdullahfahim19/abdullahfahim/contents/content/projects');
+        const files = await response.json();
+        
+        if (files.length === 0) {
+          container.innerHTML = '<p class="col-span-full text-center text-gray-400">No items found. Add something from the Dashboard!</p>';
+          return;
+        }
+
+        container.innerHTML = ''; // Clear loader
+
+        for (const file of files) {
+          if (file.name.endsWith('.md')) {
+            const raw = await fetch(file.download_url);
+            const content = await raw.text();
+            
+            // Markdown parsing (Frontmatter extract)
+            const title = content.match(/title:\s*"(.*)"/)?.[1] || "Untitled Project";
+            const category = content.match(/category:\s*(.*)/)?.[1] || "Project";
+            const image = content.match(/image:\s*(.*)/)?.[1] || "https://via.placeholder.com/400x300";
+            const desc = content.match(/description:\s*(.*)/)?.[1] || "No description available.";
+
+            container.innerHTML += `
+              <div class="project-card glass p-6 rounded-[2rem] shadow-sm flex flex-col items-center text-center">
+                <div class="w-full h-48 rounded-2xl overflow-hidden mb-6">
+                  <img src="${image}" class="w-full h-full object-cover">
+                </div>
+                <div class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-[10px] font-bold mb-3 uppercase tracking-widest">${category}</div>
+                <h3 class="heading text-xl mb-3">${title}</h3>
+                <p class="text-gray-500 text-sm mb-6 flex-grow">${desc}</p>
+                <button class="text-blue-600 font-bold text-sm border-b-2 border-blue-600 pb-1 hover:text-blue-700 transition">View Story →</button>
+              </div>
+            `;
+          }
+        }
+      } catch (err) {
+        container.innerHTML = '<p class="col-span-full text-center text-gray-400 italic">Welcome to your new portfolio. Add your first item from the dashboard!</p>';
+      }
+    }
+
+    fetchPortfolio();
   </script>
 </body>
 </html>
