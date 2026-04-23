@@ -13,27 +13,48 @@ collections:
     create: true
     slug: "{{year}}{{month}}{{day}}-{{slug}}"
     fields:
-      - {label: "Title",             name: "title",       widget: "string"}
+      - {label: "Title", name: "title", widget: "string"}
+
       - label: "Category"
         name: "category"
         widget: "select"
+        hint: "Select the closest matching category. For something custom, pick the nearest and fill 'Custom Category' below."
         options:
           # Research
-          - { label: "📄 Thesis",             value: "Thesis" }
-          - { label: "📰 Journal",             value: "Journal" }
-          - { label: "🎤 Conference",          value: "Conference" }
+          - { label: "📄 Thesis",              value: "Thesis" }
+          - { label: "📰 Journal",              value: "Journal" }
+          - { label: "🎤 Conference",           value: "Conference" }
           # Projects
-          - { label: "🎓 Academic Project",    value: "Academic Project" }
-          - { label: "💼 Freelance Project",   value: "Freelance Project" }
+          - { label: "🎓 Academic Project",     value: "Academic Project" }
+          - { label: "💼 Freelance Project",    value: "Freelance Project" }
           # Experiences
-          - { label: "🏢 Full Time",           value: "Full Time" }
-          - { label: "🤝 Voluntary",           value: "Voluntary" }
+          - { label: "🏢 Full Time",            value: "Full Time" }
+          - { label: "🤝 Voluntary",            value: "Voluntary" }
           # More
-          - { label: "📜 Certificate",         value: "Certificate" }
-          - { label: "🎙 Session",             value: "Session" }
-          - { label: "🏆 Award",               value: "Award" }
+          - { label: "📜 Certificate",          value: "Certificate" }
+          - { label: "🎙 Session",              value: "Session" }
+          - { label: "🏆 Award",                value: "Award" }
+          # Custom
+          - { label: "✏️ Custom (fill below)",  value: "Custom" }
         default: "Freelance Project"
-      - {label: "Featured Image",    name: "image",       widget: "image",  required: false}
-      - {label: "Short Description", name: "description", widget: "text"}
-      - {label: "Full Details",      name: "body",        widget: "markdown"}
-      - {label: "External Link",     name: "link",        widget: "string", required: false}
+
+      - label: "Custom Category Name"
+        name: "custom_category"
+        widget: "string"
+        required: false
+        hint: "Only fill this if you selected 'Custom' above. This will override the Category selection on the website. Example: 'Workshop', 'Internship', 'Publication' etc."
+
+      - {label: "Featured Image",     name: "image",       widget: "image",    required: false}
+      - {label: "Short Description",  name: "description", widget: "text"}
+      - {label: "Full Details",       name: "body",        widget: "markdown"}
+      - label: "External Link"
+        name: "link"
+        widget: "string"
+        required: false
+        hint: "GitHub repo, paper URL, Fiverr gig, etc."
+
+      - label: "YouTube Video URL"
+        name: "youtube"
+        widget: "string"
+        required: false
+        hint: "Paste the full YouTube URL here, e.g. https://www.youtube.com/watch?v=xxxxx — the video will be embedded on the detail page."
