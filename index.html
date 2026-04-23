@@ -1,604 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title id="pg-title">Abdullah Shadek Fahim | Researcher</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#f8f7f3;--surface:#fff;--surface2:#f2efe9;
-  --border:#e6e1d9;--border2:#d5cfc6;
-  --ink:#1a1714;--ink2:#4a453e;--ink3:#8a837a;
-  --blue:#1d5aff;--blue-l:#e8eeff;--blue-m:#c5d3ff;
-  --teal:#00897b;--teal-l:#e0f4f1;
-  --amber:#b87000;--amber-l:#fef3e0;
-  --rose:#c0335a;--rose-l:#fde8ef;
-  --green:#2e7d32;--green-l:#e8f5e9;
-  --shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.06);
-  --shadow-lg:0 4px 6px rgba(0,0,0,.05),0 16px 48px rgba(0,0,0,.12);
-  --r:14px;--r-sm:8px;
-}
-html{scroll-behavior:smooth}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
-nav{position:sticky;top:0;z-index:80;background:rgba(248,247,243,.93);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 5vw;height:56px}
-.nav-logo{font-family:'Fraunces',serif;font-weight:700;font-size:1.1rem;color:var(--ink);letter-spacing:-.02em;cursor:pointer}
-.nav-logo span{color:var(--blue)}
-.nav-links{display:flex;gap:1.5rem;list-style:none}
-.nav-links a{color:var(--ink3);text-decoration:none;font-size:.83rem;font-weight:500;transition:color .2s}
-.nav-links a:hover{color:var(--blue)}
-.nav-edit{font-size:.75rem;font-weight:600;padding:.28rem .7rem;border-radius:6px;border:1px solid var(--border2);background:var(--surface);color:var(--ink3);cursor:pointer;transition:all .2s}
-.nav-edit:hover{border-color:var(--blue);color:var(--blue)}
-#app{min-height:calc(100vh - 56px)}
-.hero{max-width:1100px;margin:0 auto;padding:4rem 5vw 3rem;display:grid;grid-template-columns:auto 1fr;gap:3rem;align-items:center}
-.hero-photo{width:140px;height:140px;border-radius:50%;object-fit:cover;border:3px solid var(--border);box-shadow:var(--shadow)}
-.hero-initials{width:140px;height:140px;border-radius:50%;background:var(--blue-l);border:3px solid var(--blue-m);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:2rem;font-weight:700;color:var(--blue)}
-.hero-eyebrow{font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
-.hero-eyebrow::before{content:'';width:18px;height:2px;background:var(--blue);border-radius:2px}
-.hero-name{font-family:'Fraunces',serif;font-size:clamp(2rem,4.5vw,3.2rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:.7rem}
-.hero-name em{font-style:italic;color:var(--blue)}
-.hero-bio{font-size:.95rem;color:var(--ink2);max-width:540px;line-height:1.75;margin-bottom:1.5rem}
-.hero-links{display:flex;flex-wrap:wrap;gap:.55rem;margin-bottom:1.8rem}
-.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1.1rem;border-radius:var(--r-sm);font-size:.83rem;font-weight:600;text-decoration:none;cursor:pointer;border:none;transition:all .2s;font-family:inherit;white-space:nowrap}
-.btn-p{background:var(--blue);color:#fff;box-shadow:0 2px 10px rgba(29,90,255,.25)}
-.btn-p:hover{background:#1248d4;transform:translateY(-1px)}
-.btn-g{background:var(--surface);color:var(--ink2);border:1px solid var(--border2)}
-.btn-g:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-1px)}
-.hero-stats{display:flex;gap:2rem;flex-wrap:wrap}
-.stat-n{font-family:'Fraunces',serif;font-size:1.7rem;font-weight:700;color:var(--blue);line-height:1}
-.stat-l{font-size:.7rem;color:var(--ink3);margin-top:.15rem;font-weight:500}
-.sec{max-width:1100px;margin:0 auto;padding:3rem 5vw}
-.sec-sep{max-width:1100px;margin:0 auto;height:1px;background:var(--border)}
-.sec-eye{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:.35rem}
-.sec-title{font-family:'Fraunces',serif;font-size:clamp(1.5rem,3vw,2rem);font-weight:700;letter-spacing:-.02em;color:var(--ink);margin-bottom:.3rem}
-.sec-title em{font-style:italic;color:var(--blue)}
-.sec-line{width:32px;height:3px;background:var(--blue);border-radius:2px;margin:.4rem 0 1.8rem}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.9rem}
-.grid-sm{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.3rem;cursor:pointer;transition:all .22s;display:flex;flex-direction:column;position:relative;overflow:hidden}
-.card-stripe{position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity .22s}
-.card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px);border-color:transparent}
-.card:hover .card-stripe{opacity:1}
-.card-icon-wrap{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:.9rem;flex-shrink:0}
-.card-thumb{width:100%;height:130px;object-fit:cover;border-radius:8px;margin-bottom:.9rem}
-.card-title{font-family:'Fraunces',serif;font-weight:600;font-size:.95rem;color:var(--ink);margin-bottom:.4rem;line-height:1.3}
-.card-short{font-size:.8rem;color:var(--ink2);line-height:1.6;flex:1}
-.card-tags{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.75rem}
-.tag{padding:.18rem .55rem;border-radius:999px;font-size:.68rem;font-weight:600;border:1px solid}
-.tag-blue{background:var(--blue-l);border-color:var(--blue-m);color:var(--blue)}
-.tag-teal{background:var(--teal-l);border-color:#b2dfdb;color:var(--teal)}
-.tag-amber{background:var(--amber-l);border-color:#ffe082;color:var(--amber)}
-.tag-rose{background:var(--rose-l);border-color:#f8bbd0;color:var(--rose)}
-.tag-green{background:var(--green-l);border-color:#c8e6c9;color:var(--green)}
-.tag-gray{background:var(--surface2);border-color:var(--border2);color:var(--ink3)}
-.card-footer{display:flex;justify-content:space-between;align-items:center;margin-top:.8rem;padding-top:.7rem;border-top:1px solid var(--border);font-size:.75rem}
-.card-cta{font-weight:700}
-.c-blue .card-stripe,.c-blue .card-icon-wrap{background:var(--blue-l)}.c-blue .card-stripe{background:var(--blue)}.c-blue .card-cta{color:var(--blue)}
-.c-teal .card-icon-wrap{background:var(--teal-l)}.c-teal .card-stripe{background:var(--teal)}.c-teal .card-cta{color:var(--teal)}
-.c-amber .card-icon-wrap{background:var(--amber-l)}.c-amber .card-stripe{background:var(--amber)}.c-amber .card-cta{color:var(--amber)}
-.c-rose .card-icon-wrap{background:var(--rose-l)}.c-rose .card-stripe{background:var(--rose)}.c-rose .card-cta{color:var(--rose)}
-.c-green .card-icon-wrap{background:var(--green-l)}.c-green .card-stripe{background:var(--green)}.c-green .card-cta{color:var(--green)}
-.pub-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.3rem 1.5rem;display:flex;gap:1rem;align-items:flex-start;transition:all .2s;cursor:pointer;margin-bottom:.8rem}
-.pub-card:hover{border-color:var(--blue-m);box-shadow:var(--shadow)}
-.pub-n{font-family:'Fraunces',serif;font-size:2rem;font-weight:700;color:var(--blue-m);line-height:1;min-width:34px}
-.pub-badge{display:inline-block;padding:.13rem .5rem;border-radius:999px;font-size:.65rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.35rem}
-.pb-ieee{background:var(--blue-l);color:var(--blue)}.pb-acc{background:var(--teal-l);color:var(--teal)}.pb-prep{background:var(--amber-l);color:var(--amber)}
-.pub-title{font-family:'Fraunces',serif;font-weight:600;font-size:.92rem;color:var(--ink);margin-bottom:.35rem;line-height:1.4}
-.pub-meta{font-size:.77rem;color:var(--ink3);margin-bottom:.5rem}
-.cert-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .22s}
-.cert-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px)}
-.cert-img{width:100%;height:120px;object-fit:cover}
-.cert-ph{width:100%;height:120px;background:var(--blue-l);display:flex;align-items:center;justify-content:center;font-size:2rem}
-.cert-body{padding:1rem}
-.cert-title{font-weight:600;font-size:.88rem;color:var(--ink);margin-bottom:.25rem}
-.cert-org{font-size:.75rem;color:var(--ink3)}
-.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.8rem}
-.skill-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem}
-.skill-card-title{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:.7rem}
-.chips{display:flex;flex-wrap:wrap;gap:.3rem}
-.chip{padding:.22rem .6rem;border-radius:6px;font-size:.75rem;background:var(--surface2);border:1px solid var(--border);color:var(--ink2)}
-footer{text-align:center;padding:1.5rem;font-size:.75rem;color:var(--ink3);border-top:1px solid var(--border);background:var(--surface);margin-top:2rem}
-.overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(26,23,20,.5);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:1rem}
-.overlay.open{display:flex}
-.modal{background:var(--surface);border-radius:18px;max-width:600px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:var(--shadow-lg);position:relative}
-.modal-stripe{height:4px;border-radius:18px 18px 0 0}
-.modal-inner{padding:1.6rem}
-.modal-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem}
-.modal-icon-area{display:flex;gap:.8rem;align-items:center}
-.modal-icon-box{width:46px;height:46px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
-.modal-type-badge{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.2rem}
-.modal-title{font-family:'Fraunces',serif;font-weight:700;font-size:1.1rem;color:var(--ink);line-height:1.3}
-.modal-close{background:var(--surface2);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:.95rem;color:var(--ink2);display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
-.modal-close:hover{background:var(--border2)}
-.modal-meta{font-size:.8rem;color:var(--ink3);margin-bottom:.8rem}
-.modal-tags{display:flex;flex-wrap:wrap;gap:.3rem;margin:.6rem 0 1rem}
-.modal-desc{font-size:.88rem;color:var(--ink2);line-height:1.8;margin-bottom:1.2rem}
-.modal-photo{width:100%;max-height:240px;object-fit:cover;border-radius:9px;border:1px solid var(--border);margin-bottom:.5rem;cursor:zoom-in}
-.modal-thumbs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
-.modal-thumb{width:50px;height:38px;object-fit:cover;border-radius:5px;cursor:pointer;border:2px solid transparent;transition:all .15s;opacity:.65}
-.modal-thumb.active{border-color:var(--blue);opacity:1}
-.modal-no-media{padding:1rem;background:var(--bg);border-radius:8px;text-align:center;font-size:.8rem;color:var(--ink3);margin-top:.5rem}
-.modal-actions{display:flex;gap:.5rem;margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--border);flex-wrap:wrap}
-.detail-page{max-width:900px;margin:0 auto;padding:2rem 5vw 4rem}
-.detail-back{display:inline-flex;align-items:center;gap:.5rem;font-size:.83rem;font-weight:600;color:var(--ink3);cursor:pointer;margin-bottom:1.5rem;transition:color .2s;background:none;border:none;font-family:inherit}
-.detail-back:hover{color:var(--blue)}
-.detail-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:2rem;margin-bottom:1.2rem;box-shadow:var(--shadow);position:relative;overflow:hidden}
-.detail-stripe{position:absolute;top:0;left:0;right:0;height:4px}
-.detail-type-badge{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem;margin-top:.3rem}
-.detail-title{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(1.4rem,3vw,2rem);color:var(--ink);margin-bottom:.5rem;line-height:1.2}
-.detail-meta{font-size:.85rem;color:var(--ink3);margin-bottom:.8rem}
-.detail-tags{display:flex;flex-wrap:wrap;gap:.35rem}
-.detail-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-bottom:1rem}
-.detail-section-title{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:.9rem}
-.detail-body{font-size:.92rem;color:var(--ink2);line-height:1.85}
-.detail-photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.6rem}
-.detail-photo{width:100%;height:140px;object-fit:cover;border-radius:8px;cursor:zoom-in;transition:transform .2s}
-.detail-photo:hover{transform:scale(1.02)}
-.detail-video{position:relative;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000;margin-bottom:.8rem}
-.detail-video iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
-.detail-links{display:flex;flex-wrap:wrap;gap:.6rem}
-.review-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:.7rem}
-.review-stars{color:#f59e0b;font-size:.9rem;margin-bottom:.3rem}
-.review-text{font-size:.85rem;color:var(--ink2);line-height:1.7;font-style:italic;margin-bottom:.4rem}
-.review-name{font-size:.75rem;font-weight:600;color:var(--ink3)}
-.hl-list{list-style:none;display:flex;flex-direction:column;gap:.5rem}
-.hl-list li{font-size:.88rem;color:var(--ink2);padding-left:1.2rem;position:relative;line-height:1.6}
-.hl-list li::before{content:'✦';position:absolute;left:0;color:var(--blue);font-size:.6rem;top:.3rem}
-#adm-ov{display:none;position:fixed;inset:0;z-index:300;background:rgba(26,23,20,.5);backdrop-filter:blur(5px);justify-content:flex-end;align-items:flex-start}
-#adm-ov.open{display:flex}
-.adm-panel{background:var(--surface);width:100%;max-width:500px;height:100vh;overflow-y:auto;box-shadow:-4px 0 30px rgba(0,0,0,.12);display:flex;flex-direction:column}
-.adm-head{display:flex;justify-content:space-between;align-items:center;padding:1.1rem 1.3rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:1}
-.adm-head h3{font-family:'Fraunces',serif;font-weight:700;font-size:1rem;color:var(--ink)}
-.adm-body{padding:1rem 1.3rem;flex:1}
-.adm-tabs{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.1rem}
-.adm-tab{padding:.35rem .7rem;border-radius:6px;border:1px solid var(--border2);background:none;font-size:.76rem;font-weight:600;color:var(--ink2);cursor:pointer;transition:all .15s;font-family:inherit}
-.adm-tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
-.adm-items{display:flex;flex-direction:column;gap:.4rem;margin-bottom:.8rem}
-.adm-row{display:flex;align-items:center;gap:.6rem;padding:.6rem .8rem;border-radius:8px;border:1px solid var(--border);background:var(--bg)}
-.adm-row:hover{border-color:var(--blue-m);background:var(--blue-l)}
-.adm-row-title{flex:1;font-size:.83rem;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.adm-row-btns{display:flex;gap:.3rem;flex-shrink:0}
-.f-group{margin-bottom:.8rem}
-.f-label{display:block;font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);margin-bottom:.3rem}
-.f-input{width:100%;padding:.55rem .75rem;border:1px solid var(--border2);border-radius:var(--r-sm);background:var(--bg);color:var(--ink);font-size:.85rem;font-family:inherit;outline:none;transition:border-color .15s}
-.f-input:focus{border-color:var(--blue);background:#fff}
-textarea.f-input{resize:vertical;min-height:75px}
-select.f-input{cursor:pointer}
-.f-chips{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.4rem;min-height:24px}
-.f-chip{display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:999px;font-size:.72rem;background:var(--blue-l);border:1px solid var(--blue-m);color:var(--blue);cursor:pointer}
-.f-chip:hover{background:var(--blue-m)}
-.f-add-row{display:flex;gap:.35rem}
-.f-add-row .f-input{flex:1}
-.f-media-item{display:flex;align-items:center;gap:.45rem;padding:.35rem .55rem;border-radius:6px;background:var(--bg);border:1px solid var(--border);margin-bottom:.3rem;font-size:.75rem;color:var(--ink2)}
-.f-media-item span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.f-mthumb{width:34px;height:26px;object-fit:cover;border-radius:4px;flex-shrink:0}
-.rm-btn{background:none;border:none;color:var(--rose);cursor:pointer;font-size:.95rem;padding:0;line-height:1;flex-shrink:0}
-.f-review-item{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.7rem;margin-bottom:.4rem;font-size:.78rem}
-.f-col-row{display:flex;gap:.45rem;margin-top:.2rem}
-.f-col-opt{width:28px;height:28px;border-radius:6px;cursor:pointer;border:2px solid transparent;transition:all .15s;display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:800}
-.f-col-opt.sel{border-color:var(--ink)!important}
-.f-actions{display:flex;gap:.4rem;justify-content:flex-end;padding-top:.9rem;border-top:1px solid var(--border);margin-top:.4rem}
-.btn-sm{padding:.42rem .75rem;border-radius:var(--r-sm);font-size:.78rem;font-weight:600;cursor:pointer;border:1px solid;transition:all .15s;font-family:inherit}
-.btn-sm-p{background:var(--blue);color:#fff;border-color:var(--blue)}.btn-sm-p:hover{background:#1248d4}
-.btn-sm-g{background:none;color:var(--ink2);border-color:var(--border2)}.btn-sm-g:hover{border-color:var(--blue);color:var(--blue)}
-.btn-sm-r{background:none;color:var(--rose);border-color:#f8bbd0}.btn-sm-r:hover{background:var(--rose-l)}
-.f-tip{font-size:.71rem;color:var(--ink3);margin-top:.3rem;line-height:1.5}
-.f-sec-head{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin:.9rem 0 .4rem;padding-bottom:.3rem;border-bottom:1px solid var(--border)}
-.h2r{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
-#lbox{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.92);align-items:center;justify-content:center;cursor:zoom-out}
-#lbox.open{display:flex}
-#lbox img{max-width:90vw;max-height:90vh;border-radius:8px;object-fit:contain}
-#lbox-x{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.15);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;padding:.65rem 1.1rem;border-radius:10px;font-size:.83rem;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.15);transform:translateY(70px);opacity:0;transition:all .3s;pointer-events:none}
-.toast.show{transform:translateY(0);opacity:1}
-.t-ok{background:var(--teal);color:#fff}.t-err{background:var(--rose);color:#fff}
-.reveal{opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s}
-.reveal.vis{opacity:1;transform:none}
-@media(max-width:680px){.hero{grid-template-columns:1fr;text-align:center;gap:1.5rem}.hero-photo,.hero-initials{margin:0 auto}.hero-eyebrow,.hero-links{justify-content:center}.hero-stats{justify-content:center}nav .nav-links{display:none}.h2r{grid-template-columns:1fr}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abdullah Shadek Fahim | Researcher & Level 2 Seller</title>
+  <meta name="description" content="Portfolio of Abdullah Shadek Fahim, EEE Researcher at JUST and Level 2 Seller on Fiverr. Specialist in Ion Implantation and Web Architecture.">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;1,400&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <style>
+    :root { --bg: #f8f7f3; --accent: #1d5aff; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #1a1714; }
+    .heading { font-family: 'Fraunces', serif; }
+    .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(230, 225, 217, 1); }
+    .hero-gradient { background: radial-gradient(circle at top right, #e8eeff, transparent); }
+  </style>
 </head>
-<body>
-<nav>
-  <div class="nav-logo" onclick="goHome()">A.<span>S.</span>Fahim</div>
-  <ul class="nav-links">
-    <li><a href="javascript:void(0)" onclick="goHome()">Home</a></li>
-    <li><a href="#research">Research</a></li>
-    <li><a href="#publications">Papers</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <button class="nav-edit" onclick="openAdmin()">⚙ Edit</button>
-</nav>
-<div id="app"></div>
-<footer>© 2025 Abdullah Shadek Fahim · Jashore University of Science and Technology</footer>
-<div class="overlay" id="modal-ov" onclick="if(event.target===this)closeModal()">
-  <div class="modal" id="modal-box">
-    <div class="modal-stripe" id="m-stripe"></div>
-    <div class="modal-inner">
-      <div class="modal-head">
-        <div class="modal-icon-area">
-          <div class="modal-icon-box" id="m-ibox"><span id="m-icon"></span></div>
-          <div><div class="modal-type-badge" id="m-type"></div><div class="modal-title" id="m-title"></div></div>
-        </div>
-        <button class="modal-close" onclick="closeModal()">✕</button>
-      </div>
-      <div class="modal-meta" id="m-meta"></div>
-      <div class="modal-tags" id="m-tags"></div>
-      <div class="modal-desc" id="m-desc"></div>
-      <div id="m-media"></div>
-      <div class="modal-actions" id="m-act"></div>
+<body class="hero-gradient min-h-screen">
+
+  <nav class="sticky top-0 z-50 glass px-6 py-4 flex justify-between items-center">
+    <div class="heading text-xl font-bold tracking-tighter text-blue-600">A.S. FAHIM</div>
+    <div class="flex items-center gap-6">
+      <a href="#research" class="hidden md:block text-sm font-semibold hover:text-blue-600">Research</a>
+      <a href="#projects" class="hidden md:block text-sm font-semibold hover:text-blue-600">Fiverr</a>
+      <a href="/admin/" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-lg hover:bg-blue-700 transition">Dashboard</a>
     </div>
-  </div>
-</div>
-<div id="adm-ov" onclick="if(event.target===this)closeAdmin()">
-  <div class="adm-panel">
-    <div class="adm-head"><h3>⚙ Edit Portfolio</h3><button class="modal-close" onclick="closeAdmin()">✕</button></div>
-    <div class="adm-body" id="adm-body"></div>
-  </div>
-</div>
-<div id="lbox" onclick="closeLbox()"><button id="lbox-x" onclick="closeLbox()">✕</button><img id="lbox-img" src="" alt=""/></div>
-<div class="toast" id="toast"></div>
-<script>
-const DEF={
-  hero:{name:"Abdullah Shadek Fahim",tagline:"EEE Researcher · JUST, Bangladesh",
-    bio:"Building machine learning models for semiconductor process simulation and biomedical AI systems. IEEE Chair, conference author, and prospective PhD applicant for Fall 2027.",
-    photo:"",email:"asfahimbd@gmail.com",github:"https://github.com/abdullahFahim19",
-    linkedin:"https://linkedin.com/in/abdullah-fahim7640",researchgate:"https://researchgate.net/profile/Abdullah-Fahim-17",
-    location:"Cox's Bazar, Bangladesh",phone:"+8801816-357640",fiverr_link:"",
-    stats:[{val:"3.81",lbl:"CGPA / 4.00"},{val:"2+",lbl:"Publications"},{val:"R²>0.98",lbl:"Thesis Accuracy"},{val:"350+",lbl:"Fiverr Projects"}]},
-  research:[
-    {id:"r1",color:"blue",icon:"⚛️",title:"Semiconductor Process ML",
-     short:"ML surrogate models replacing SRIM/TRIM Monte Carlo simulations — R² > 0.98, millisecond inference.",
-     details:"Built a dual-stage Hybrid Random Forest framework for forward and inverse ion implantation modeling in Si, SiC, and GaAs. Automated SRIM/TRIM pipeline in Python generating 10,000+ samples. R²>0.98 with inference reduced from minutes to milliseconds.",
-     tags:["Random Forest","SRIM/TRIM","SiC","GaAs","Surrogate Modeling"],
-     highlights:["R²>0.98 across all substrates","Orders-of-magnitude speedup","5 ion species, 10keV–10MeV"],photos:[],github:"https://github.com/abdullahFahim19"},
-    {id:"r2",color:"teal",icon:"🫀",title:"Biomedical & Predictive Healthcare",
-     short:"IoT-enabled non-invasive CVD prediction using Gradient Boosting — 89% accuracy on Framingham Dataset.",
-     details:"Designed CardioPredictor: end-to-end non-invasive CVD prediction. Assembled sensor hardware, integrated ThingSpeak IoT, trained Gradient Boosting on Framingham Dataset with 10-fold CV achieving 89% accuracy. Published in IEEE.",
-     tags:["Gradient Boosting","IoT","Framingham","Non-invasive"],
-     highlights:["89% accuracy (10-fold CV)","Sub-30 second results","Published in IEEE"],photos:[],github:""}],
-  publications:[
-    {id:"pub1",status:"ieee",number:"01",title:"CardioPredictor: A Real-Time Non-Invasive and Cuffless Cardiovascular Disease Prediction System Using 10-Fold Cross Validation on the Framingham Dataset",
-     authors:"Abdullah Shadek Fahim et al.",venue:"IEEE Xplore",year:"2025",doi:"10.1109/QPAIN66474.2025.11171821",pdfLink:"",
-     abstract:"Non-invasive health monitoring device measuring biomarkers using low-cost sensors. Gradient Boosting trained on Framingham dataset with 89% accuracy validated via 10-fold CV.",
-     keywords:["Gradient Boosting","IoT Healthcare","Non-invasive","89% Accuracy"]},
-    {id:"pub2",status:"accepted",number:"02",title:"Ion Implantation Surrogate Modeling — Extended Abstract",
-     authors:"Abdullah Shadek Fahim",venue:"ICOPS 2026",year:"2026",doi:"",pdfLink:"",
-     abstract:"Extended abstract on ML surrogate modeling for ion implantation simulation, accepted at ICOPS 2026.",
-     keywords:["Ion Implantation","SRIM/TRIM","Surrogate Modeling"]},
-    {id:"pub3",status:"prep",number:"03",title:"A Dual-Stage Hybrid Random Forest Framework for Forward and Inverse Ion Implantation in Si, SiC, and GaAs Substrates",
-     authors:"Abdullah Shadek Fahim",venue:"Q1/Q2 Journal (target)",year:"2025-2026",doi:"",pdfLink:"",
-     abstract:"Thesis-to-journal. Physics-informed Random Forest surrogate for forward and inverse ion implantation with R²>0.98 across multiple substrates.",
-     keywords:["Random Forest","R²>0.98","Wide Bandgap","Forward & Inverse"]}],
-  projects:[
-    {id:"p1",color:"amber",icon:"🤖",title:"SRIM Automation Pipeline",
-     short:"Python pipeline automating SRIM/TRIM simulations for large-scale dataset generation.",
-     details:"Wrote a Python script that programmatically launches SRIM, injects parameters, extracts outputs, and compiles structured datasets — reducing manual work from days to hours.",
-     tags:["Python","Automation","SRIM/TRIM","Data Pipeline"],photos:[],videos:[],github:"",behance:"",report:""},
-    {id:"p2",color:"rose",icon:"⚖️",title:"Self-Balancing Robot",
-     short:"Two-wheel robot with Arduino Nano + MPU6050 using real-time PID control for stable balancing.",
-     details:"Designed and programmed a two-wheeled inverted pendulum robot. Tuned PID algorithm using MPU6050 IMU for stable balancing under disturbances.",
-     tags:["Arduino","PID Control","MPU6050","Embedded C"],photos:[],videos:[],github:"",behance:"",report:""},
-    {id:"p3",color:"teal",icon:"🔍",title:"Varley Loop Test Kit",
-     short:"Functional underground cable fault locator for the university analog electronics lab.",
-     details:"Designed and implemented a working Varley Loop Test Kit to locate cable faults using resistance ratio principles. Now used as a university teaching tool.",
-     tags:["Analog Electronics","Fault Detection","Lab Instrument"],photos:[],videos:[],github:"",behance:"",report:""}],
-  experience:[
-    {id:"e1",type:"Internship",icon:"🏭",color:"blue",company:"TICI – Training Institute for Chemical Industries",role:"Internship Trainee – Industrial Technology",duration:"Jun 2025 – Jul 2025",location:"Ghorashal, Bangladesh",description:"2-week training in Instrumentation, PLC, DCS, and Electrical Systems. Achieved A+ grade.",photos:[]},
-    {id:"e2",type:"Internship",icon:"🔬",color:"teal",company:"Ulkasemi Pvt. Ltd.",role:"Internship Trainee – VLSI Design",duration:"May 2025",location:"Dhaka, Bangladesh",description:"5-day intensive training on analog IC design, custom layout, and place-and-route methodology.",photos:[]},
-    {id:"e3",type:"Freelance",icon:"💻",color:"amber",company:"Fiverr International Ltd.",role:"Level 2 Seller",duration:"April 2021 – Present",location:"Remote",description:"Completed 350+ projects for 160+ international clients. Book formatting, web design, graphic design. Consistent 5-star rating.",photos:[]}],
-  sessions:[
-    {id:"s1",icon:"🎤",color:"blue",title:"From Idea to Publication: Writing a Conference Paper",event:"IEEE JUST Student Branch Webinar",date:"2025",description:"Comprehensive keynote on writing a full IEEE conference paper from scratch with detailed demonstration.",thumbnail:"",youtube:"",slides:""},
-    {id:"s2",icon:"🏆",color:"teal",title:"Lead Coordinator — STUDENT-LED CON 2025",event:"IEEE Bangladesh Section",date:"December 2025",description:"Coordinated the International Student-Led Conference 2025 in hybrid mode.",thumbnail:"",youtube:"",slides:""}],
-  certificates:[
-    {id:"c1",type:"Award",icon:"🏅",title:"Outstanding Student Volunteer Award 2025 (Honorable Mention)",issuer:"IEEE Bangladesh Section",date:"December 2025",photo:"",link:""},
-    {id:"c2",type:"Competition",icon:"🥉",title:"2nd Runner-Up – SYW Idea Pitching Competition 2025",issuer:"IEEE Bangladesh Section",date:"2025",photo:"",link:""},
-    {id:"c3",type:"Academic",icon:"🎓",title:"Talent Pool Board Scholarship (JSC)",issuer:"Board of ISE, Chittagong",date:"2014",photo:"",link:""}],
-  fiverr:[
-    {id:"f1",icon:"📚",color:"blue",title:"Book Formatting & Publishing",category:"Book Formatting",
-     description:"Professional book formatting for print and digital. Covers layout, typography, TOC, indexing, and export to PDF/EPUB.",
-     photos:[],link:"https://fiverr.com",
-     reviews:[{name:"Michael G. Ricciardi",stars:5,text:"Exceptional work! Abdullah consistently delivers high-quality formatting with great attention to detail. One of the best on Fiverr."},{name:"Client",stars:5,text:"Perfect delivery, fast turnaround. Will definitely work with again."}]}]
-};
+  </nav>
 
-let D={},admSec='hero',admForm=null,admFormId=null;
-let _tags=[],_hl=[],_kw=[],_photos=[],_videos=[],_reviews=[],_stats=[],_color='blue';
-
-function loadD(){try{const s=localStorage.getItem('asf3');return s?JSON.parse(s):JSON.parse(JSON.stringify(DEF))}catch{return JSON.parse(JSON.stringify(DEF))}}
-function saveD(){try{localStorage.setItem('asf3',JSON.stringify(D))}catch{toast('Storage full','err')}}
-
-function route(){
-  const h=location.hash.replace('#','');
-  if(!h||h==='/'){renderHome();return}
-  const dash=h.indexOf('-');
-  if(dash<0){renderHome();return}
-  renderDetail(h.slice(0,dash),h.slice(dash+1));
-}
-function goHome(){location.hash='';renderHome()}
-function goTo(t,id){location.hash=t+'-'+id}
-window.addEventListener('hashchange',route);
-window.addEventListener('load',()=>{D=loadD();route()});
-
-const CM={blue:'var(--blue)',teal:'var(--teal)',amber:'var(--amber)',rose:'var(--rose)',green:'var(--green)'};
-const BM={blue:'var(--blue-l)',teal:'var(--teal-l)',amber:'var(--amber-l)',rose:'var(--rose-l)',green:'var(--green-l)'};
-const TC={blue:'tag-blue',teal:'tag-teal',amber:'tag-amber',rose:'tag-rose',green:'tag-green'};
-const co=c=>TC[c]||'tag-gray';
-
-function renderHome(){
-  const h=D.hero;
-  const ph=h.photo?`<img class="hero-photo" src="${h.photo}" alt="${h.name}"/>`:`<div class="hero-initials">${ini(h.name)}</div>`;
-  document.getElementById('app').innerHTML=`
-  <div class="hero">
-    <div>${ph}</div>
-    <div>
-      <div class="hero-eyebrow">${h.tagline}</div>
-      <h1 class="hero-name">${hname(h.name)}</h1>
-      <p class="hero-bio">${h.bio}</p>
-      <div class="hero-links">
-        <a class="btn btn-p" href="mailto:${h.email}">✉ Email Me</a>
-        ${h.researchgate?`<a class="btn btn-g" href="${h.researchgate}" target="_blank">📄 ResearchGate</a>`:''}
-        ${h.github?`<a class="btn btn-g" href="${h.github}" target="_blank">💻 GitHub</a>`:''}
-        ${h.linkedin?`<a class="btn btn-g" href="${h.linkedin}" target="_blank">🔗 LinkedIn</a>`:''}
+  <header class="max-w-6xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-12 items-center">
+    <div class="reveal">
+      <div class="inline-block bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs font-bold mb-4 uppercase tracking-widest">Available for PhD Fall 2027</div>
+      <h1 class="heading text-6xl lg:text-7xl mb-6 leading-[1.1]">Electrical <br><span class="italic text-blue-600">Engineer.</span></h1>
+      <p class="text-gray-600 text-lg mb-8 max-w-md leading-relaxed">
+        EEE graduate from JUST. Researcher in Semiconductor Ion Implantation. Level 2 Seller completing 350+ projects.
+      </p>
+      <div class="flex gap-4">
+        <a href="mailto:asfahimbd@gmail.com" class="bg-gray-900 text-white px-8 py-4 rounded-xl font-bold shadow-xl hover:scale-105 transition italic">Hire as Expert</a>
+        <a href="#projects" class="glass px-8 py-4 rounded-xl font-bold hover:bg-white transition">View Portfolio</a>
       </div>
-      <div class="hero-stats">${(h.stats||[]).map(s=>`<div><div class="stat-n">${s.val}</div><div class="stat-l">${s.lbl}</div></div>`).join('')}</div>
     </div>
-  </div>
-  <div class="sec-sep"></div>
-  <div class="sec reveal" id="research"><div class="sec-eye">What I Study</div><h2 class="sec-title">Research <em>Interests</em></h2><div class="sec-line"></div><div class="grid">${D.research.map(i=>crd(i,'research')).join('')}</div></div>
-  <div class="sec-sep"></div>
-  <div class="sec reveal" id="publications"><div class="sec-eye">My Work</div><h2 class="sec-title">Publications</h2><div class="sec-line"></div>${D.publications.map(pubcrd).join('')}</div>
-  <div class="sec-sep"></div>
-  <div class="sec reveal" id="projects"><div class="sec-eye">What I've Built</div><h2 class="sec-title">Key <em>Projects</em></h2><div class="sec-line"></div><div class="grid">${D.projects.map(i=>crd(i,'project')).join('')}</div></div>
-  <div class="sec-sep"></div>
-  <div class="sec reveal" id="experience"><div class="sec-eye">Work & Training</div><h2 class="sec-title">Experience</h2><div class="sec-line"></div><div class="grid">${D.experience.map(i=>crd(i,'experience')).join('')}</div></div>
-  <div class="sec-sep"></div>
-  <div class="sec reveal" id="sessions"><div class="sec-eye">Talks & Events</div><h2 class="sec-title">Sessions & <em>Talks</em></h2><div class="sec-line"></div><div class="grid">${D.sessions.map(i=>crd(i,'session')).join('')}</div></div>
-  <div class="sec-sep"></div>
-  <div class="sec reveal" id="certificates"><div class="sec-eye">Recognition</div><h2 class="sec-title">Awards & <em>Certificates</em></h2><div class="sec-line"></div><div class="grid grid-sm">${D.certificates.map(certcrd).join('')}</div></div>
-  <div class="sec-sep"></div>
-  <div class="sec reveal" id="fiverr"><div class="sec-eye">Freelance Work</div><h2 class="sec-title">Fiverr <em>Projects</em></h2><div class="sec-line"></div><div class="grid">${D.fiverr.map(i=>crd(i,'fiverr')).join('')}</div>${h.fiverr_link?`<div style="margin-top:1.2rem"><a class="btn btn-g" href="${h.fiverr_link}" target="_blank">View All on Fiverr →</a></div>`:''}</div>
-  <div class="sec-sep"></div>
-  <div class="sec reveal"><div class="sec-eye">Technical Arsenal</div><h2 class="sec-title">Skills & <em>Tools</em></h2><div class="sec-line"></div><div class="skills-grid"><div class="skill-card"><div class="skill-card-title">Programming</div><div class="chips"><span class="chip">Python</span><span class="chip">C</span><span class="chip">MATLAB</span><span class="chip">Verilog</span><span class="chip">HDL</span></div></div><div class="skill-card"><div class="skill-card-title">ML & Data Science</div><div class="chips"><span class="chip">Scikit-Learn</span><span class="chip">Pandas</span><span class="chip">NumPy</span><span class="chip">Random Forest</span><span class="chip">Gradient Boosting</span></div></div><div class="skill-card"><div class="skill-card-title">Simulation & EDA</div><div class="chips"><span class="chip">SRIM/TRIM</span><span class="chip">Proteus</span><span class="chip">ModelSim</span><span class="chip">NI Multisim</span><span class="chip">PowerFactory</span></div></div><div class="skill-card"><div class="skill-card-title">Hardware & IoT</div><div class="chips"><span class="chip">Arduino</span><span class="chip">ESP32</span><span class="chip">ThingSpeak</span><span class="chip">PLC/DCS</span></div></div><div class="skill-card"><div class="skill-card-title">Documentation</div><div class="chips"><span class="chip">LaTeX</span><span class="chip">Adobe InDesign</span><span class="chip">MS Office</span></div></div><div class="skill-card"><div class="skill-card-title">Leadership</div><div class="chips"><span class="chip">IEEE Chair</span><span class="chip">Event Org.</span><span class="chip">Mentorship</span></div></div></div></div>
-  <div class="sec-sep"></div>
-  <div class="sec reveal" id="contact"><div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:2.5rem;text-align:center;max-width:560px;margin:0 auto;box-shadow:var(--shadow)"><div class="sec-eye" style="display:block;margin-bottom:.4rem">Get In Touch</div><h2 class="sec-title" style="margin-bottom:.6rem">Let's <em>Connect</em></h2><p style="font-size:.9rem;color:var(--ink2);margin-bottom:1.5rem;line-height:1.7">Looking for PhD opportunities for Fall 2027. I'd love to hear from you.</p><div style="display:flex;flex-wrap:wrap;gap:.55rem;justify-content:center"><a class="btn btn-p" href="mailto:${h.email}">✉ ${h.email}</a>${h.researchgate?`<a class="btn btn-g" href="${h.researchgate}" target="_blank">📄 ResearchGate</a>`:''} ${h.linkedin?`<a class="btn btn-g" href="${h.linkedin}" target="_blank">🔗 LinkedIn</a>`:''}</div><p style="margin-top:1rem;font-size:.77rem;color:var(--ink3)">📍 ${h.location} · 📞 ${h.phone}</p></div></div>`;
-  setupReveal();
-}
+    <div class="relative">
+      <div class="w-full h-[500px] bg-gray-200 rounded-[2rem] overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-all duration-500 border-8 border-white">
+        <img src="https://via.placeholder.com/600x800" id="hero-img" class="w-full h-full object-cover">
+      </div>
+    </div>
+  </header>
 
-function crd(i,type){
-  const c=i.color||'blue';
-  const tags=(i.tags||[]).slice(0,3).map(t=>`<span class="tag ${co(c)}">${t}</span>`).join('');
-  const extra=(i.tags||[]).length>3?`<span class="tag tag-gray">+${(i.tags||[]).length-3}</span>`:'';
-  const media=[i.photos?.length?`🖼 ${i.photos.length}`:'',i.videos?.length?`🎬 ${i.videos.length}`:'',i.youtube?'🎬 Video':'',i.thumbnail?'🖼':''].filter(Boolean).join(' ');
-  const th=i.thumbnail?`<img class="card-thumb" src="${i.thumbnail}" alt="" onerror="this.style.display='none'"/>`:'';
-  const meta=type==='experience'?`<div style="font-size:.73rem;color:var(--ink3);margin-bottom:.3rem">${i.duration||''}</div>`:'';
-  return `<div class="card c-${c}" onclick="openModal('${type}','${i.id}')"><div class="card-stripe"></div>${th}<div class="card-icon-wrap">${i.icon||'📌'}</div>${meta}<div class="card-title">${i.title}</div><div class="card-short">${i.short||i.description||i.role||''}</div><div class="card-tags">${tags}${extra}</div><div class="card-footer"><span style="color:var(--ink3)">${media}</span><span class="card-cta">View →</span></div></div>`;
-}
+  <section class="max-w-6xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-6">
+    <div class="glass p-8 rounded-3xl text-center">
+      <div class="heading text-4xl text-blue-600 mb-1">3.81</div>
+      <div class="text-xs font-bold text-gray-500 uppercase">CGPA</div>
+    </div>
+    <div class="glass p-8 rounded-3xl text-center">
+      <div class="heading text-4xl text-blue-600 mb-1">Level 2</div>
+      <div class="text-xs font-bold text-gray-500 uppercase">Fiverr Seller</div>
+    </div>
+    <div class="glass p-8 rounded-3xl text-center">
+      <div class="heading text-4xl text-blue-600 mb-1">2+</div>
+      <div class="text-xs font-bold text-gray-500 uppercase">Publications</div>
+    </div>
+    <div class="glass p-8 rounded-3xl text-center">
+      <div class="heading text-4xl text-blue-600 mb-1">IEEE</div>
+      <div class="text-xs font-bold text-gray-500 uppercase">Award Holder</div>
+    </div>
+  </section>
 
-function pubcrd(p){
-  const sc={ieee:'pb-ieee',accepted:'pb-acc',prep:'pb-prep'};
-  const sl={ieee:'Published · IEEE',accepted:'Accepted',prep:'In Preparation'};
-  return `<div class="pub-card" onclick="openModal('pub','${p.id}')"><div class="pub-n">${p.number}</div><div><div class="pub-badge ${sc[p.status]||'pb-prep'}">${sl[p.status]||p.status}</div><div class="pub-title">${p.title}</div><div class="pub-meta">${p.authors} · ${p.venue} · ${p.year}${p.doi?` · DOI: ${p.doi}`:''}</div><div style="display:flex;flex-wrap:wrap;gap:.3rem">${(p.keywords||[]).map(k=>`<span class="tag tag-blue">${k}</span>`).join('')}</div></div></div>`;
-}
+  <section id="projects" class="max-w-6xl mx-auto px-6 py-20">
+    <h2 class="heading text-4xl mb-12 border-l-8 border-blue-600 pl-6 uppercase">Featured Works</h2>
+    <div id="item-list" class="grid md:grid-cols-3 gap-8 text-center">
+        <p class="text-gray-400">Loading your journey...</p>
+    </div>
+  </section>
 
-function certcrd(c){
-  const ph=c.photo?`<img class="cert-img" src="${c.photo}" alt="" onerror="this.style.display='none'"/>`:`<div class="cert-ph">${c.icon||'🏅'}</div>`;
-  return `<div class="cert-card" onclick="openModal('certificate','${c.id}')">${ph}<div class="cert-body"><div class="cert-title">${c.title}</div><div class="cert-org">${c.issuer} · ${c.date}</div></div></div>`;
-}
+  <footer class="py-12 text-center text-gray-400 text-sm border-t">
+    © 2026 Abdullah Shadek Fahim. Built for Excellence.
+  </footer>
 
-let mType='',mId='';
-function openModal(type,id){
-  mType=type;mId=id;
-  const item=getItem(type,id);if(!item)return;
-  const c=item.color||'blue';
-  document.getElementById('m-stripe').style.background=CM[c]||CM.blue;
-  document.getElementById('m-ibox').style.background=BM[c]||BM.blue;
-  document.getElementById('m-icon').textContent=item.icon||item.number||'📌';
-  document.getElementById('m-type').style.color=CM[c]||CM.blue;
-  document.getElementById('m-type').textContent=(type==='pub'?'Publication':type).toUpperCase();
-  document.getElementById('m-title').textContent=item.title;
-  let meta='';
-  if(type==='experience')meta=`${item.company} · ${item.duration}`;
-  else if(type==='session')meta=`${item.event||''} · ${item.date||''}`;
-  else if(type==='pub')meta=`${item.authors} · ${item.venue} · ${item.year}`;
-  else if(type==='certificate')meta=`${item.issuer} · ${item.date}`;
-  document.getElementById('m-meta').textContent=meta;
-  document.getElementById('m-tags').innerHTML=(item.tags||item.keywords||[]).map(t=>`<span class="tag ${co(c)}">${t}</span>`).join('');
-  document.getElementById('m-desc').textContent=item.details||item.description||item.abstract||item.short||'';
-  const photos=getAllPh(type,id);
-  let mhtml='';
-  if(photos.length){
-    mhtml+=`<img id="m-mphoto" class="modal-photo" src="${photos[0]}" alt="" onclick="openLbox('${photos[0]}')"/>`;
-    if(photos.length>1)mhtml+=`<div class="modal-thumbs">${photos.map((p,i)=>`<img class="modal-thumb${i===0?' active':''}" src="${p}" onclick="swMPh(${i})" alt=""/>`).join('')}</div>`;
-  }
-  const vid=item.youtube?ytId(item.youtube):'';
-  if(vid)mhtml+=`<div style="position:relative;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000;margin-bottom:.8rem"><iframe style="position:absolute;inset:0;width:100%;height:100%;border:none" src="https://www.youtube.com/embed/${vid}" allowfullscreen></iframe></div>`;
-  if(!photos.length&&!vid)mhtml=`<div class="modal-no-media">No media yet — add from ⚙ Edit panel</div>`;
-  document.getElementById('m-media').innerHTML=mhtml;
-  let acts=`<button class="btn btn-p" onclick="closeModal();goTo('${type}','${id}')">📖 Learn More</button>`;
-  if(item.doi)acts+=`<a class="btn btn-g" href="https://doi.org/${item.doi}" target="_blank">🔗 DOI</a>`;
-  if(item.github)acts+=`<a class="btn btn-g" href="${item.github}" target="_blank">💻 GitHub</a>`;
-  if(item.link)acts+=`<a class="btn btn-g" href="${item.link}" target="_blank">🌐 Link</a>`;
-  if(item.pdfLink)acts+=`<a class="btn btn-g" href="${item.pdfLink}" target="_blank">📄 PDF</a>`;
-  document.getElementById('m-act').innerHTML=acts;
-  document.getElementById('modal-ov').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-
-function swMPh(i){const ph=getAllPh(mType,mId);if(!ph[i])return;document.getElementById('m-mphoto').src=ph[i];document.querySelectorAll('.modal-thumb').forEach((t,j)=>t.classList.toggle('active',j===i))}
-function getAllPh(type,id){const item=getItem(type,id);if(!item)return[];const p=[...(item.photos||[])];if(item.photo&&!p.includes(item.photo))p.push(item.photo);if(item.thumbnail&&!p.includes(item.thumbnail))p.unshift(item.thumbnail);return p}
-function closeModal(){document.getElementById('modal-ov').classList.remove('open');document.body.style.overflow=''}
-
-function renderDetail(type,id){
-  const item=getItem(type,id);if(!item){renderHome();return}
-  const c=item.color||'blue';
-  const col=CM[c]||CM.blue;
-  let meta='';
-  if(type==='experience')meta=`<span class="tag tag-gray">${item.type||''}</span> ${item.company} · ${item.duration} · ${item.location||''}`;
-  else if(type==='session')meta=`${item.event||''} · ${item.date||''}`;
-  else if(type==='pub')meta=`${item.authors} · ${item.venue} · ${item.year}`;
-  else if(type==='certificate')meta=`${item.issuer} · ${item.date}`;
-  const tags=(item.tags||item.keywords||[]).map(t=>`<span class="tag ${co(c)}">${t}</span>`).join(' ');
-  const photos=getAllPh(type,id);
-  let secs='';
-  const desc=item.details||item.description||item.abstract||item.short||'';
-  if(desc)secs+=`<div class="detail-section"><div class="detail-section-title">${type==='pub'?'Abstract':'Description'}</div><div class="detail-body">${desc}</div></div>`;
-  if(item.highlights?.length)secs+=`<div class="detail-section"><div class="detail-section-title">Key Highlights</div><ul class="hl-list">${item.highlights.map(h=>`<li>${h}</li>`).join('')}</ul></div>`;
-  if(photos.length)secs+=`<div class="detail-section"><div class="detail-section-title">📸 Photos</div><div class="detail-photo-grid">${photos.map(p=>`<img class="detail-photo" src="${p}" alt="" onclick="openLbox('${p}')" onerror="this.style.display='none'"/>`).join('')}</div></div>`;
-  const vids=[...(item.videos||[])];if(item.youtube)vids.push(item.youtube);
-  if(vids.length)secs+=`<div class="detail-section"><div class="detail-section-title">🎬 Videos</div>${vids.map(v=>{const vid=ytId(v);return vid?`<div class="detail-video"><iframe src="https://www.youtube.com/embed/${vid}" allowfullscreen></iframe></div>`:''}).join('')}</div>`;
-  if(item.reviews?.length)secs+=`<div class="detail-section"><div class="detail-section-title">⭐ Client Reviews (${item.reviews.length})</div>${item.reviews.map(r=>`<div class="review-card"><div class="review-stars">${'★'.repeat(r.stars||5)}</div><div class="review-text">"${r.text}"</div><div class="review-name">— ${r.name}</div></div>`).join('')}</div>`;
-  const links=[];
-  if(item.doi)links.push(`<a class="btn btn-g" href="https://doi.org/${item.doi}" target="_blank">🔗 DOI</a>`);
-  if(item.pdfLink)links.push(`<a class="btn btn-g" href="${item.pdfLink}" target="_blank">📄 PDF</a>`);
-  if(item.github)links.push(`<a class="btn btn-g" href="${item.github}" target="_blank">💻 GitHub</a>`);
-  if(item.behance)links.push(`<a class="btn btn-g" href="${item.behance}" target="_blank">🎨 Behance</a>`);
-  if(item.report)links.push(`<a class="btn btn-g" href="${item.report}" target="_blank">📋 Report</a>`);
-  if(item.link)links.push(`<a class="btn btn-g" href="${item.link}" target="_blank">🌐 View Link</a>`);
-  if(item.slides)links.push(`<a class="btn btn-g" href="${item.slides}" target="_blank">📊 Slides</a>`);
-  if(links.length)secs+=`<div class="detail-section"><div class="detail-section-title">🔗 Links</div><div class="detail-links">${links.join('')}</div></div>`;
-  document.getElementById('app').innerHTML=`<div class="detail-page"><button class="detail-back" onclick="history.back()">← Back to Portfolio</button><div class="detail-hero"><div class="detail-stripe" style="background:${col}"></div><div class="detail-type-badge" style="color:${col}">${type.toUpperCase()}</div><div class="detail-title">${item.title}</div><div class="detail-meta">${meta}</div><div class="detail-tags">${tags}</div></div>${secs}</div>`;
-  window.scrollTo(0,0);
-}
-
-/* ── ADMIN ── */
-const SMETA={hero:{l:'Profile',i:'👤'},research:{l:'Research',i:'🔬',a:'research'},publications:{l:'Papers',i:'📄',a:'publications'},projects:{l:'Projects',i:'🛠️',a:'projects'},experience:{l:'Experience',i:'💼',a:'experience'},sessions:{l:'Sessions',i:'🎤',a:'sessions'},certificates:{l:'Certs',i:'🏅',a:'certificates'},fiverr:{l:'Fiverr',i:'⭐',a:'fiverr'}};
-const SECS=['hero','research','publications','projects','experience','sessions','certificates','fiverr'];
-
-function openAdmin(){renderAdmin();document.getElementById('adm-ov').classList.add('open');document.body.style.overflow='hidden'}
-function closeAdmin(){document.getElementById('adm-ov').classList.remove('open');document.body.style.overflow=''}
-
-function renderAdmin(){
-  document.getElementById('adm-body').innerHTML=`<div class="adm-tabs">${SECS.map(s=>`<button class="adm-tab${admSec===s?' active':''}" onclick="switchSec('${s}')">${SMETA[s].i} ${SMETA[s].l}</button>`).join('')}</div><div id="adm-c"></div>`;
-  renderAdmC();
-}
-function switchSec(s){admSec=s;admForm=null;admFormId=null;renderAdmin()}
-
-function renderAdmC(){
-  const el=document.getElementById('adm-c');
-  if(admForm){el.innerHTML=buildForm();return}
-  if(admSec==='hero'){el.innerHTML=heroForm();return}
-  const arr=D[SMETA[admSec]?.a]||[];
-  el.innerHTML=`<div class="adm-items">${arr.map(i=>`<div class="adm-row"><span style="font-size:.95rem">${i.icon||i.number||'📌'}</span><span class="adm-row-title">${i.title||i.company||'Untitled'}</span><span class="adm-row-btns"><button class="btn-sm btn-sm-g" onclick="startEdit('${i.id}')">✏</button><button class="btn-sm btn-sm-r" onclick="delIt('${i.id}')">🗑</button></span></div>`).join('')||'<p style="color:var(--ink3);font-size:.83rem">No items yet.</p>'}</div><button class="btn-sm btn-sm-p" onclick="startNew()" style="width:100%">+ Add New</button>`;
-}
-
-function startEdit(id){const item=getItArr(admSec,id);admFormId=id;admForm='edit';ifs(item);renderAdmC()}
-function startNew(){admFormId=null;admForm='new';ifs(null);renderAdmC()}
-function cancelForm(){admForm=null;admFormId=null;renderAdmC()}
-function ifs(item){_color=item?.color||'blue';_tags=[...(item?.tags||[])];_hl=[...(item?.highlights||[])];_kw=[...(item?.keywords||[])];_photos=[...(item?.photos||[])];_videos=[...(item?.videos||[])];_reviews=[...(item?.reviews||[])];_stats=[...(item?.stats||[])]}
-
-const SCHEMAS={
-  research:[{k:'icon',l:'Icon',t:'t'},{k:'color',l:'Color',t:'col'},{k:'title',l:'Title',t:'t'},{k:'short',l:'Short (card)',t:'ta'},{k:'details',l:'Full Details',t:'ta'},{k:'tags',l:'Tags',t:'chips',r:'_tags'},{k:'highlights',l:'Key Highlights',t:'chips',r:'_hl'},{k:'photos',l:'Plot Images (URLs)',t:'urls',r:'_photos'},{k:'github',l:'GitHub Link',t:'t'}],
-  publications:[{k:'number',l:'Number',t:'t'},{k:'status',l:'Status',t:'sel',o:['ieee','accepted','prep']},{k:'title',l:'Title',t:'ta'},{k:'authors',l:'Authors',t:'t'},{k:'venue',l:'Venue',t:'t'},{k:'year',l:'Year',t:'t'},{k:'doi',l:'DOI',t:'t'},{k:'pdfLink',l:'PDF Link',t:'t'},{k:'abstract',l:'Abstract',t:'ta'},{k:'keywords',l:'Keywords',t:'chips',r:'_kw'}],
-  projects:[{k:'icon',l:'Icon',t:'t'},{k:'color',l:'Color',t:'col'},{k:'title',l:'Title',t:'t'},{k:'short',l:'Short (card)',t:'ta'},{k:'details',l:'Full Details',t:'ta'},{k:'tags',l:'Tags',t:'chips',r:'_tags'},{k:'photos',l:'Photos (Behance/Imgur URLs)',t:'urls',r:'_photos'},{k:'videos',l:'YouTube Videos',t:'urls',r:'_videos'},{k:'github',l:'GitHub',t:'t'},{k:'behance',l:'Behance',t:'t'},{k:'report',l:'Report Link',t:'t'}],
-  experience:[{k:'icon',l:'Icon',t:'t'},{k:'color',l:'Color',t:'col'},{k:'company',l:'Company',t:'t'},{k:'role',l:'Role',t:'t'},{k:'duration',l:'Duration',t:'t'},{k:'location',l:'Location',t:'t'},{k:'type',l:'Type',t:'sel',o:['Internship','Full-time','Volunteer','Freelance']},{k:'description',l:'Description',t:'ta'},{k:'photos',l:'Photos (URLs)',t:'urls',r:'_photos'}],
-  sessions:[{k:'icon',l:'Icon',t:'t'},{k:'color',l:'Color',t:'col'},{k:'title',l:'Title',t:'t'},{k:'event',l:'Event',t:'t'},{k:'date',l:'Date',t:'t'},{k:'description',l:'Description',t:'ta'},{k:'thumbnail',l:'Thumbnail URL',t:'t'},{k:'youtube',l:'YouTube Link',t:'t'},{k:'slides',l:'Slides Link',t:'t'}],
-  certificates:[{k:'icon',l:'Icon',t:'t'},{k:'title',l:'Title',t:'t'},{k:'issuer',l:'Issuer',t:'t'},{k:'date',l:'Date',t:'t'},{k:'type',l:'Type',t:'sel',o:['Academic','Professional','Competition','Award']},{k:'photo',l:'Certificate Image URL',t:'t'},{k:'link',l:'Verification Link',t:'t'}],
-  fiverr:[{k:'icon',l:'Icon',t:'t'},{k:'color',l:'Color',t:'col'},{k:'title',l:'Title',t:'t'},{k:'category',l:'Category',t:'t'},{k:'description',l:'Description',t:'ta'},{k:'photos',l:'Photos (Behance/Imgur URLs)',t:'urls',r:'_photos'},{k:'link',l:'Fiverr Link',t:'t'},{k:'reviews',l:'Client Reviews',t:'rv'}]
-};
-
-const COLS=['blue','teal','amber','rose','green'];
-const CSTYLE={blue:'background:#e8eeff;border-color:#c5d3ff;color:#1d5aff',teal:'background:#e0f4f1;border-color:#b2dfdb;color:#00897b',amber:'background:#fef3e0;border-color:#ffe082;color:#b87000',rose:'background:#fde8ef;border-color:#f8bbd0;color:#c0335a',green:'background:#e8f5e9;border-color:#c8e6c9;color:#2e7d32'};
-
-function buildForm(){
-  const item=admFormId?getItArr(admSec,admFormId):null;
-  const schema=SCHEMAS[admSec]||[];
-  let h=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem"><strong style="font-size:.85rem">${admFormId?'Edit':'New'} ${SMETA[admSec]?.l}</strong><button class="btn-sm btn-sm-g" onclick="cancelForm()">← Back</button></div>`;
-  schema.forEach(f=>{
-    const v=item?.[f.k]??'';
-    if(f.t==='t')h+=`<div class="f-group"><label class="f-label">${f.l}</label><input class="f-input" id="f-${f.k}" value="${esc(String(v))}" placeholder="${f.l}…"/></div>`;
-    else if(f.t==='ta')h+=`<div class="f-group"><label class="f-label">${f.l}</label><textarea class="f-input" id="f-${f.k}">${esc(String(v))}</textarea></div>`;
-    else if(f.t==='sel')h+=`<div class="f-group"><label class="f-label">${f.l}</label><select class="f-input" id="f-${f.k}">${(f.o||[]).map(o=>`<option value="${o}"${v===o?' selected':''}>${o}</option>`).join('')}</select></div>`;
-    else if(f.t==='col')h+=`<div class="f-group"><label class="f-label">${f.l}</label><div class="f-col-row">${COLS.map(c=>`<div class="f-col-opt${_color===c?' sel':''}" style="${CSTYLE[c]}" onclick="pcol('${c}')" id="fc-${c}">${c[0].toUpperCase()}</div>`).join('')}</div></div>`;
-    else if(f.t==='chips'){const arr=f.r==='_hl'?_hl:f.r==='_kw'?_kw:_tags;h+=chipsF(f.l,arr,f.r)}
-    else if(f.t==='urls'){const arr=f.r==='_videos'?_videos:_photos;h+=urlsF(f.l,arr,f.r)}
-    else if(f.t==='rv')h+=rvF();
-  });
-  h+=`<div class="f-actions">${admFormId?`<button class="btn-sm btn-sm-r" onclick="delIt('${admFormId}')">🗑 Delete</button>`:''}<button class="btn-sm btn-sm-g" onclick="cancelForm()">Cancel</button><button class="btn-sm btn-sm-p" onclick="saveForm()">💾 Save</button></div>`;
-  return h;
-}
-
-function chipsF(l,arr,r){return`<div class="f-group"><label class="f-label">${l}</label><div class="f-chips" id="fchips-${r}">${arr.map(t=>`<span class="f-chip" onclick="rmc('${r}','${t}')">${t} ×</span>`).join('')}</div><div class="f-add-row"><input class="f-input" id="fi-${r}" placeholder="Type and press Enter…" onkeydown="if(event.key==='Enter'){event.preventDefault();addc('${r}')}"/><button class="btn-sm btn-sm-p" onclick="addc('${r}')">Add</button></div></div>`}
-function urlsF(l,arr,r){const isV=r==='_videos';const items=arr.map((u,i)=>{const vid=u.includes('youtu')?ytId(u):'';const ts=vid?`https://img.youtube.com/vi/${vid}/default.jpg`:u;return`<div class="f-media-item"><img class="f-mthumb" src="${ts}" onerror="this.style.display='none'" alt=""/><span>${u}</span><button class="rm-btn" onclick="rmu('${r}',${i})">×</button></div>`}).join('');return`<div class="f-group"><label class="f-label">${l}</label><div id="fu-${r}">${items}</div><div class="f-add-row"><input class="f-input" id="fui-${r}" placeholder="${isV?'YouTube URL…':'Image URL (Behance/Imgur)…'}" onkeydown="if(event.key==='Enter'){event.preventDefault();addu('${r}')}"/><button class="btn-sm btn-sm-p" onclick="addu('${r}')">Add</button></div><div class="f-tip">💡 ${isV?'Full YouTube URL':'Direct image URL from Behance, Imgur, or Google Drive'}</div></div>`}
-function rvF(){return`<div class="f-group"><label class="f-label">Client Reviews</label><div id="f-rv">${_reviews.map((r,i)=>`<div class="f-review-item"><strong>${r.name}</strong> ${'★'.repeat(r.stars||5)}<div style="color:var(--ink2);font-size:.8rem">${r.text}</div><button class="rm-btn" onclick="rmrv(${i})">× Remove</button></div>`).join('')}</div><div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.8rem;margin-top:.4rem"><div class="f-group"><label class="f-label">Name</label><input class="f-input" id="rv-n" placeholder="Client name…"/></div><div class="f-group"><label class="f-label">Stars</label><select class="f-input" id="rv-s"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></div><div class="f-group"><label class="f-label">Review</label><textarea class="f-input" id="rv-t" style="min-height:55px" placeholder="Review text…"></textarea></div><button class="btn-sm btn-sm-p" onclick="addrv()">+ Add Review</button></div></div>`}
-
-function pcol(c){_color=c;document.querySelectorAll('.f-col-opt').forEach(el=>el.classList.toggle('sel',el.id===`fc-${c}`))}
-function getArr(r){return r==='_hl'?_hl:r==='_kw'?_kw:r==='_videos'?_videos:r==='_reviews'?_reviews:r==='_stats'?_stats:_photos}
-function addc(r){const i=document.getElementById(`fi-${r}`);const v=i.value.trim();if(!v)return;const a=getArr(r);if(!a.includes(v))a.push(v);i.value='';const el=document.getElementById(`fchips-${r}`);if(el)el.innerHTML=a.map(t=>`<span class="f-chip" onclick="rmc('${r}','${t}')">${t} ×</span>`).join('')}
-function rmc(r,v){const a=getArr(r);const i=a.indexOf(v);if(i>=0)a.splice(i,1);const el=document.getElementById(`fchips-${r}`);if(el)el.innerHTML=a.map(t=>`<span class="f-chip" onclick="rmc('${r}','${t}')">${t} ×</span>`).join('')}
-function addu(r){const i=document.getElementById(`fui-${r}`);const v=i.value.trim();if(!v)return;getArr(r).push(v);i.value='';rfru(r)}
-function rmu(r,i){getArr(r).splice(i,1);rfru(r)}
-function rfru(r){const arr=getArr(r);const el=document.getElementById(`fu-${r}`);if(!el)return;el.innerHTML=arr.map((u,i)=>{const vid=u.includes('youtu')?ytId(u):'';const ts=vid?`https://img.youtube.com/vi/${vid}/default.jpg`:u;return`<div class="f-media-item"><img class="f-mthumb" src="${ts}" onerror="this.style.display='none'" alt=""/><span>${u}</span><button class="rm-btn" onclick="rmu('${r}',${i})">×</button></div>`}).join('')}
-function addrv(){const n=document.getElementById('rv-n').value.trim();const s=parseInt(document.getElementById('rv-s').value)||5;const t=document.getElementById('rv-t').value.trim();if(!n&&!t)return;_reviews.push({name:n||'Client',stars:s,text:t});document.getElementById('rv-n').value='';document.getElementById('rv-t').value='';rfrrv()}
-function rmrv(i){_reviews.splice(i,1);rfrrv()}
-function rfrrv(){const el=document.getElementById('f-rv');if(!el)return;el.innerHTML=_reviews.map((r,i)=>`<div class="f-review-item"><strong>${r.name}</strong> ${'★'.repeat(r.stars||5)}<div style="color:var(--ink2);font-size:.8rem">${r.text}</div><button class="rm-btn" onclick="rmrv(${i})">× Remove</button></div>`).join('')}
-
-function saveForm(){
-  const schema=SCHEMAS[admSec]||[];
-  const item={};
-  schema.forEach(f=>{
-    if(f.t==='chips')item[f.k]=f.r==='_hl'?[..._hl]:f.r==='_kw'?[..._kw]:[..._tags];
-    else if(f.t==='urls')item[f.k]=f.r==='_videos'?[..._videos]:[..._photos];
-    else if(f.t==='rv')item[f.k]=[..._reviews];
-    else if(f.t==='col')item[f.k]=_color;
-    else{const el=document.getElementById(`f-${f.k}`);if(el)item[f.k]=el.value}
-  });
-  const arr=D[SMETA[admSec].a];
-  if(admFormId){const idx=arr.findIndex(i=>i.id===admFormId);if(idx>=0){item.id=admFormId;arr[idx]={...arr[idx],...item}}}
-  else{item.id=SMETA[admSec].a[0]+Date.now();arr.push(item)}
-  saveD();if(!location.hash||location.hash==='#')renderHome();toast('✓ Saved!','ok');cancelForm();
-}
-
-function delIt(id){
-  if(!confirm('Delete this item?'))return;
-  const arr=D[SMETA[admSec].a];
-  const idx=arr.findIndex(i=>i.id===id);
-  if(idx>=0)arr.splice(idx,1);
-  saveD();if(!location.hash||location.hash==='#')renderHome();toast('Deleted','ok');cancelForm();
-}
-
-function heroForm(){
-  const h=D.hero;
-  return`<div class="f-group"><label class="f-label">Profile Photo URL</label><input class="f-input" id="hf-photo" value="${h.photo||''}" placeholder="Direct image URL (Imgur, etc.)"/><div class="f-tip">💡 Upload to imgur.com → right-click image → Copy image address</div></div>
-  <div class="h2r"><div class="f-group"><label class="f-label">Full Name</label><input class="f-input" id="hf-name" value="${esc(h.name)}"/></div><div class="f-group"><label class="f-label">Tagline</label><input class="f-input" id="hf-tagline" value="${esc(h.tagline)}"/></div></div>
-  <div class="f-group"><label class="f-label">Bio</label><textarea class="f-input" id="hf-bio">${esc(h.bio)}</textarea></div>
-  <div class="f-sec-head">Contact & Links</div>
-  <div class="h2r">
-    <div class="f-group"><label class="f-label">Email</label><input class="f-input" id="hf-email" value="${esc(h.email||'')}"/></div>
-    <div class="f-group"><label class="f-label">Phone</label><input class="f-input" id="hf-phone" value="${esc(h.phone||'')}"/></div>
-    <div class="f-group"><label class="f-label">Location</label><input class="f-input" id="hf-location" value="${esc(h.location||'')}"/></div>
-    <div class="f-group"><label class="f-label">GitHub URL</label><input class="f-input" id="hf-github" value="${esc(h.github||'')}"/></div>
-    <div class="f-group"><label class="f-label">LinkedIn URL</label><input class="f-input" id="hf-linkedin" value="${esc(h.linkedin||'')}"/></div>
-    <div class="f-group"><label class="f-label">ResearchGate URL</label><input class="f-input" id="hf-researchgate" value="${esc(h.researchgate||'')}"/></div>
-    <div class="f-group"><label class="f-label">Fiverr Profile URL</label><input class="f-input" id="hf-fiverr_link" value="${esc(h.fiverr_link||'')}"/></div>
-  </div>
-  <div class="f-sec-head">Stats</div>
-  <div id="stats-list">${(h.stats||[]).map((s,i)=>`<div class="f-media-item"><span>${s.val} — ${s.lbl}</span><button class="rm-btn" onclick="rmstat(${i})">×</button></div>`).join('')}</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem;margin-top:.4rem">
-    <input class="f-input" id="sv" placeholder="Value (e.g. 3.81)"/>
-    <input class="f-input" id="sl" placeholder="Label (e.g. CGPA / 4.00)"/>
-  </div>
-  <button class="btn-sm btn-sm-p" style="margin-top:.4rem;width:100%" onclick="addstat()">+ Add Stat</button>
-  <div class="f-actions"><button class="btn-sm btn-sm-g" onclick="closeAdmin()">Cancel</button><button class="btn-sm btn-sm-p" onclick="saveHero()">💾 Save Profile</button></div>`;
-}
-function rmstat(i){D.hero.stats.splice(i,1);renderAdmin()}
-function addstat(){const v=document.getElementById('sv').value.trim();const l=document.getElementById('sl').value.trim();if(!v&&!l)return;D.hero.stats.push({val:v,lbl:l});renderAdmin()}
-function saveHero(){['photo','name','tagline','bio','email','phone','location','github','linkedin','researchgate','fiverr_link'].forEach(k=>{const el=document.getElementById('hf-'+k);if(el)D.hero[k]=el.value});saveD();renderHome();toast('✓ Profile saved!','ok')}
-
-/* UTILS */
-const KM={research:'research',pub:'publications',project:'projects',experience:'experience',session:'sessions',certificate:'certificates',fiverr:'fiverr'};
-function getItem(type,id){const arr=D[KM[type]||type]||[];return arr.find(i=>i.id===id)}
-function getItArr(sec,id){const arr=D[SMETA[sec]?.a]||[];return arr.find(i=>i.id===id)}
-function ytId(url){if(!url)return'';const m=url.match(/(?:youtu\.be\/|v=|embed\/)([A-Za-z0-9_-]{11})/);return m?m[1]:''}
-function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
-function ini(n){return(n||'').split(' ').map(w=>w[0]).join('').slice(0,3).toUpperCase()}
-function hname(n){const p=n.split(' ');return p.length<2?n:`${p[0]}<br/><em>${p.slice(1).join(' ')}</em>`}
-function openLbox(src){document.getElementById('lbox-img').src=src;document.getElementById('lbox').classList.add('open')}
-function closeLbox(){document.getElementById('lbox').classList.remove('open')}
-function toast(msg,type='ok'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast t-${type} show`;setTimeout(()=>t.classList.remove('show'),2500)}
-function setupReveal(){const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis')}),{threshold:.08});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))}
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin();closeLbox()}});
-</script>
+  <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+  </script>
 </body>
 </html>
