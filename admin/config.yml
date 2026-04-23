@@ -2,8 +2,7 @@ backend:
   name: github
   repo: asfahimbd/abdullahfahim
   branch: main
-  client_id: Ov23liPSGiyh6XED26AR
-  client_secret: 1c95cf1cc4b0af9a06830204bc7971d4fc75a7fb
+  base_url: https://oauth-proxy.asfahimbd.workers.dev
 
 media_folder: "assets/images"
 public_folder: "/assets/images"
