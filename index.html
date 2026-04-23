@@ -16,515 +16,445 @@
   --teal:#00897b;--teal-l:#e0f4f1;--teal-d:#006b5f;
   --amber:#b87000;--amber-l:#fef3e0;
   --rose:#c0335a;--rose-l:#fde8ef;
-  --green:#2e7d32;--green-l:#e8f5e9;
-  --purple:#6c35c9;--purple-l:#f0eaff;
   --shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.06);
-  --shadow-lg:0 4px 6px rgba(0,0,0,.05),0 16px 48px rgba(0,0,0,.12);
+  --shadow-lg:0 4px 6px rgba(0,0,0,.05),0 16px 48px rgba(0,0,0,.14);
   --r:14px;--r-sm:8px;
 }
 html{scroll-behavior:smooth}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh;overflow-x:hidden}
 
-/* ══════════════ NAV ══════════════ */
+/* ════ NAV ════ */
 nav{
   position:sticky;top:0;z-index:200;
-  background:rgba(248,247,243,.95);backdrop-filter:blur(18px);
+  background:rgba(248,247,243,.96);backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
   display:flex;align-items:center;justify-content:space-between;
   padding:0 5vw;height:58px;gap:1rem;
 }
-.nav-logo{font-family:'Fraunces',serif;font-weight:700;font-size:1.1rem;color:var(--ink);cursor:pointer;white-space:nowrap}
+.nav-logo{font-family:'Fraunces',serif;font-weight:700;font-size:1.05rem;color:var(--ink);cursor:pointer;white-space:nowrap;flex-shrink:0}
 .nav-logo span{color:var(--blue)}
-
-/* Nav Items with Dropdown */
 .nav-links{display:flex;gap:0;list-style:none;align-items:center}
 .nav-item{position:relative}
 .nav-item>a{
-  display:flex;align-items:center;gap:.3rem;
-  color:var(--ink3);text-decoration:none;
-  font-size:.82rem;font-weight:500;
-  padding:.5rem .7rem;border-radius:6px;
-  transition:all .18s;white-space:nowrap;
-  cursor:pointer;
+  display:flex;align-items:center;gap:.28rem;
+  color:var(--ink3);text-decoration:none;font-size:.79rem;font-weight:500;
+  padding:.44rem .58rem;border-radius:6px;
+  transition:all .16s;white-space:nowrap;cursor:pointer;
 }
 .nav-item>a:hover,.nav-item:hover>a{color:var(--blue);background:var(--blue-l)}
-.nav-arrow{font-size:.55rem;opacity:.6;transition:transform .18s}
+.nav-arrow{font-size:.5rem;opacity:.55;transition:transform .16s}
 .nav-item:hover .nav-arrow{transform:rotate(180deg)}
-
-/* Count Badge in Nav */
-.nav-cnt{
-  background:var(--blue);color:#fff;
-  border-radius:999px;padding:.05rem .38rem;
-  font-size:.6rem;font-weight:700;min-width:18px;text-align:center;
-  display:inline-block;
-}
-
-/* Dropdown Menu */
+.nav-cnt{background:var(--blue);color:#fff;border-radius:999px;padding:.03rem .34rem;font-size:.57rem;font-weight:700;min-width:16px;text-align:center;display:inline-block}
 .dropdown{
-  display:none;position:absolute;top:calc(100% + 6px);left:0;
-  background:var(--surface);
-  border:1px solid var(--border);border-radius:12px;
-  min-width:210px;box-shadow:var(--shadow-lg);
-  padding:.4rem;z-index:300;
-  animation:dropIn .16s ease;
+  display:none;position:absolute;top:calc(100% + 7px);left:0;
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  min-width:198px;box-shadow:var(--shadow-lg);padding:.32rem;z-index:300;
+  animation:dropIn .14s ease;
 }
-@keyframes dropIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes dropIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
 .nav-item:hover .dropdown{display:block}
 .dropdown a{
   display:flex;align-items:center;justify-content:space-between;
-  padding:.48rem .75rem;border-radius:7px;
-  color:var(--ink2);text-decoration:none;
-  font-size:.8rem;font-weight:500;
-  transition:all .14s;
+  padding:.42rem .68rem;border-radius:7px;color:var(--ink2);
+  text-decoration:none;font-size:.77rem;font-weight:500;transition:all .13s;cursor:pointer;
 }
 .dropdown a:hover{background:var(--blue-l);color:var(--blue)}
-.dd-cnt{
-  background:var(--blue-l);color:var(--blue);
-  border-radius:999px;padding:.05rem .42rem;
-  font-size:.65rem;font-weight:700;
-}
-.dropdown-div{height:1px;background:var(--border);margin:.3rem .4rem}
+.dd-cnt{background:var(--blue-l);color:var(--blue);border-radius:999px;padding:.03rem .38rem;font-size:.62rem;font-weight:700}
+.dropdown-div{height:1px;background:var(--border);margin:.28rem .28rem}
 .nav-hire{
-  font-size:.78rem;font-weight:700;padding:.38rem .9rem;
-  border-radius:7px;border:none;background:var(--teal);color:#fff;
-  cursor:pointer;transition:all .18s;text-decoration:none;
-  white-space:nowrap;
+  font-size:.74rem;font-weight:700;padding:.34rem .78rem;border-radius:7px;
+  border:none;background:var(--teal);color:#fff;cursor:pointer;
+  transition:all .17s;text-decoration:none;white-space:nowrap;flex-shrink:0;
 }
-.nav-hire:hover{background:var(--teal-d);transform:translateY(-1px)}
+.nav-hire:hover{background:var(--teal-d)}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;flex-shrink:0}
+.hamburger span{display:block;width:22px;height:2px;background:var(--ink);border-radius:2px;transition:all .24s}
 
-/* ══════════════ HERO ══════════════ */
-.hero{
-  max-width:1100px;margin:0 auto;padding:4rem 5vw 2.5rem;
-  display:grid;grid-template-columns:auto 1fr;gap:3.5rem;align-items:center;
+/* ════ SIDE DRAWER ════ */
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;backdrop-filter:blur(3px)}
+.drawer-overlay.open{display:block}
+.side-drawer{
+  position:fixed;top:0;right:-290px;width:275px;height:100vh;
+  background:var(--surface);z-index:401;box-shadow:var(--shadow-lg);
+  transition:right .3s cubic-bezier(.4,0,.2,1);
+  overflow-y:auto;display:flex;flex-direction:column;
 }
+.side-drawer.open{right:0}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:.95rem 1.15rem;border-bottom:1px solid var(--border)}
+.drawer-close{background:none;border:none;font-size:1.25rem;cursor:pointer;color:var(--ink3)}
+.drawer-body{padding:.45rem .55rem;flex:1}
+.drawer-group-btn{
+  display:flex;align-items:center;justify-content:space-between;
+  width:100%;padding:.58rem .78rem;border-radius:8px;
+  background:none;border:none;font-family:inherit;font-size:.83rem;font-weight:600;
+  color:var(--ink);cursor:pointer;transition:all .14s;text-align:left;
+}
+.drawer-group-btn:hover{background:var(--surface2)}
+.dg-right{display:flex;align-items:center;gap:.38rem;font-size:.68rem}
+.drawer-sub{padding:0 .45rem .25rem 1.3rem;display:none}
+.drawer-sub.open{display:block}
+.drawer-sub a{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.38rem .58rem;border-radius:6px;font-size:.79rem;color:var(--ink2);
+  text-decoration:none;cursor:pointer;transition:all .12s;
+}
+.drawer-sub a:hover{background:var(--blue-l);color:var(--blue)}
+.drawer-divider{height:1px;background:var(--border);margin:.45rem 0}
+.drawer-direct{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.58rem .78rem;border-radius:8px;cursor:pointer;
+  font-size:.83rem;font-weight:500;color:var(--ink2);transition:all .13s;
+}
+.drawer-direct:hover{background:var(--blue-l);color:var(--blue)}
+.drawer-hire{display:block;margin:.85rem .55rem .3rem;padding:.68rem;border-radius:8px;background:var(--teal);color:#fff;text-align:center;font-weight:700;font-size:.83rem;text-decoration:none}
 
-/* Photo with glass wave */
-.photo-wrap{
-  position:relative;display:inline-block;
-  border-radius:24px;
-  box-shadow:var(--shadow-lg);
-  overflow:hidden;
-  flex-shrink:0;
-}
-.hero-photo{
-  width:180px;height:180px;
-  border-radius:24px;object-fit:cover;
-  display:block;border:4px solid var(--surface);
-}
-/* Glassy wave sweep */
+/* ════ HERO ════ */
+.hero{max-width:1100px;margin:0 auto;padding:3.5rem 5vw 2.5rem;display:grid;grid-template-columns:auto 1fr;gap:3rem;align-items:center}
+.photo-wrap{position:relative;display:inline-block;border-radius:24px;box-shadow:var(--shadow-lg);overflow:hidden;flex-shrink:0}
+.hero-photo{width:178px;height:178px;border-radius:24px;object-fit:cover;display:block;border:4px solid var(--surface)}
 .photo-wrap::after{
-  content:'';position:absolute;
-  top:-20%;left:-80%;
-  width:55%;height:140%;
-  background:linear-gradient(
-    105deg,
-    transparent 30%,
-    rgba(255,255,255,.08) 45%,
-    rgba(255,255,255,.45) 50%,
-    rgba(255,255,255,.08) 55%,
-    transparent 70%
-  );
-  transform:skewX(-12deg);
-  animation:glassWave 3.8s cubic-bezier(.45,0,.55,1) infinite;
-  pointer-events:none;border-radius:24px;
+  content:'';position:absolute;top:-20%;left:-80%;width:52%;height:140%;
+  background:linear-gradient(105deg,transparent 28%,rgba(255,255,255,.07) 44%,rgba(255,255,255,.44) 50%,rgba(255,255,255,.07) 56%,transparent 70%);
+  transform:skewX(-12deg);animation:glassWave 4s cubic-bezier(.45,0,.55,1) infinite;pointer-events:none;
 }
-@keyframes glassWave{
-  0%   {left:-80%}
-  55%,100%{left:130%}
-}
-/* Subtle border glow ring */
-.photo-wrap::before{
-  content:'';position:absolute;inset:-1px;
-  border-radius:26px;
-  background:linear-gradient(135deg,rgba(29,90,255,.35),rgba(0,137,123,.25),transparent 60%);
-  z-index:-1;
-}
+@keyframes glassWave{0%{left:-80%}55%,100%{left:130%}}
+.photo-wrap::before{content:'';position:absolute;inset:-1px;border-radius:26px;background:linear-gradient(135deg,rgba(29,90,255,.28),rgba(0,137,123,.18),transparent 60%);z-index:-1}
+.hero-eyebrow{color:var(--blue);font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.42rem}
+.hero-name{font-family:'Fraunces',serif;font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:.42rem}
+.hero-sub{font-size:.84rem;color:var(--ink3);margin-bottom:.55rem;font-weight:500}
+.hero-bio{font-size:.91rem;color:var(--ink2);max-width:540px;line-height:1.8;margin-bottom:1.25rem}
+.hero-btns{display:flex;gap:.55rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.36rem;padding:.52rem 1.05rem;border-radius:var(--r-sm);font-size:.79rem;font-weight:600;text-decoration:none;cursor:pointer;border:none;transition:all .19s;font-family:inherit}
+.btn-p{background:var(--blue);color:#fff}.btn-p:hover{background:#1449d6;transform:translateY(-1px)}
+.btn-hire{background:var(--teal);color:#fff}.btn-hire:hover{background:var(--teal-d);transform:translateY(-1px)}
+.btn-g{background:var(--surface);color:var(--ink2);border:1px solid var(--border2)}.btn-g:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-1px)}
 
-.hero-eyebrow{color:var(--blue);font-weight:700;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem}
-.hero-name{font-family:'Fraunces',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:.5rem}
-.hero-name em{font-style:italic;color:var(--blue)}
-.hero-sub{font-size:.88rem;color:var(--ink3);margin-bottom:.7rem;font-weight:500}
-.hero-bio{font-size:.95rem;color:var(--ink2);max-width:560px;line-height:1.8;margin-bottom:1.4rem}
-.hero-btns{display:flex;gap:.75rem;flex-wrap:wrap}
+/* ════ SECTIONS ════ */
+.section{max-width:1100px;margin:0 auto;padding:2.3rem 5vw}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;gap:.5rem}
+.section-title{font-family:'Fraunces',serif;font-size:1.52rem}
+.divider{max-width:1100px;margin:0 auto;padding:0 5vw}
+.divider hr{border:none;border-top:1px solid var(--border)}
 
-/* Buttons */
-.btn{
-  display:inline-flex;align-items:center;gap:.4rem;
-  padding:.6rem 1.25rem;border-radius:var(--r-sm);
-  font-size:.83rem;font-weight:600;text-decoration:none;
-  cursor:pointer;border:none;transition:all .2s;
-  font-family:inherit;
-}
-.btn-p{background:var(--blue);color:#fff}
-.btn-p:hover{background:#1449d6;transform:translateY(-1px)}
-.btn-hire{background:var(--teal);color:#fff}
-.btn-hire:hover{background:var(--teal-d);transform:translateY(-1px)}
-.btn-g{background:var(--surface);color:var(--ink2);border:1px solid var(--border2)}
-.btn-g:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-1px)}
-
-/* ══════════════ EDUCATION ══════════════ */
-.edu-section{max-width:1100px;margin:0 auto;padding:2.5rem 5vw}
-.section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1.4rem}
-.section-title{font-family:'Fraunces',serif;font-size:1.6rem}
-.see-all{color:var(--blue);font-size:.8rem;font-weight:600;text-decoration:none;cursor:pointer}
-.see-all:hover{text-decoration:underline}
-.edu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.1rem}
-.edu-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r);padding:1.4rem;
-  display:flex;gap:1rem;align-items:flex-start;
-  transition:all .2s;
-}
+/* ════ EDUCATION ════ */
+.edu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:1rem}
+.edu-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;display:flex;gap:.88rem;align-items:flex-start;transition:all .2s;cursor:pointer}
 .edu-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px);border-color:var(--blue-m)}
-.edu-icon{
-  font-size:1.6rem;width:48px;height:48px;
-  border-radius:12px;display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-}
-.edu-level{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin-bottom:.2rem}
-.edu-inst{font-size:.9rem;font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:.25rem}
-.edu-degree{font-size:.78rem;color:var(--ink2);margin-bottom:.5rem}
-.edu-meta{display:flex;gap:.5rem;flex-wrap:wrap}
-.edu-pill{
-  padding:.18rem .55rem;border-radius:999px;font-size:.68rem;font-weight:600;
-  background:var(--surface2);color:var(--ink3);border:1px solid var(--border);
-}
+.edu-card:hover .edu-arr{opacity:1;transform:translateX(3px)}
+.edu-icon{font-size:1.45rem;width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.edu-level{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin-bottom:.13rem}
+.edu-inst{font-size:.86rem;font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:.2rem}
+.edu-degree{font-size:.74rem;color:var(--ink2);margin-bottom:.42rem}
+.edu-meta{display:flex;gap:.4rem;flex-wrap:wrap}
+.edu-pill{padding:.14rem .48rem;border-radius:999px;font-size:.64rem;font-weight:600;background:var(--surface2);color:var(--ink3);border:1px solid var(--border)}
+.edu-arr{color:var(--blue);font-size:.72rem;opacity:0;transition:all .2s;align-self:center;flex-shrink:0;margin-left:auto}
 
-/* ══════════════ SECTION PREVIEW (Latest 3) ══════════════ */
-.preview-section{max-width:1100px;margin:0 auto;padding:2rem 5vw}
-.preview-divider{width:100%;height:1px;background:var(--border);margin:1rem 0 2.5rem}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem}
-.card{
-  background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
-  padding:1.4rem;cursor:pointer;transition:all .22s;
-  display:flex;flex-direction:column;overflow:hidden;
-}
+/* Education Modal */
+.modal-bg{display:none;position:fixed;inset:0;z-index:500;background:rgba(26,23,20,.55);backdrop-filter:blur(6px);justify-content:center;align-items:flex-start;padding:2rem 1rem;overflow-y:auto}
+.modal-bg.open{display:flex}
+.modal-box{background:var(--surface);border-radius:18px;max-width:650px;width:100%;box-shadow:var(--shadow-lg);animation:modalIn .2s ease;margin:auto}
+@keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(10px)}to{opacity:1;transform:none}}
+.modal-img{width:100%;height:195px;object-fit:cover;border-radius:18px 18px 0 0}
+.modal-body{padding:1.7rem}
+.modal-close{float:right;background:var(--surface2);border:none;cursor:pointer;font-size:.82rem;padding:.28rem .6rem;border-radius:7px;color:var(--ink3);font-weight:700;transition:all .14s}
+.modal-close:hover{background:var(--rose-l);color:var(--rose)}
+.modal-badge{display:inline-block;padding:.16rem .52rem;border-radius:999px;font-size:.64rem;font-weight:700;margin-bottom:.55rem;background:var(--blue-l);color:var(--blue)}
+.modal-title{font-family:'Fraunces',serif;font-size:1.45rem;margin-bottom:.25rem}
+.modal-sub{font-size:.8rem;color:var(--ink3);margin-bottom:.9rem}
+.modal-desc{font-size:.85rem;color:var(--ink2);line-height:1.75;margin-bottom:1.1rem}
+.subjects-grid{display:flex;gap:.38rem;flex-wrap:wrap}
+.subject-tag{padding:.2rem .6rem;border-radius:7px;font-size:.7rem;font-weight:600;background:var(--surface2);color:var(--ink2);border:1px solid var(--border)}
+
+/* ════ CARDS / GRID ════ */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:1.1rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;cursor:pointer;transition:all .21s;display:flex;flex-direction:column;overflow:hidden}
 .card:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px);border-color:var(--blue-m)}
-.card-img{width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:.9rem;background:var(--surface2)}
-.card h3{font-size:.95rem;font-weight:700;margin-bottom:.4rem;line-height:1.35}
-.card p{font-size:.8rem;color:var(--ink2);flex:1;line-height:1.6}
-.card-cta{margin-top:.8rem;color:var(--blue);font-weight:700;font-size:.78rem}
-.card-footer{margin-top:.8rem;display:flex;align-items:center;justify-content:space-between}
-
-/* Badges */
-.badge{
-  display:inline-block;padding:.18rem .55rem;border-radius:999px;
-  font-size:.66rem;font-weight:700;margin-bottom:.5rem;
-}
+.card-img{width:100%;height:132px;object-fit:cover;border-radius:8px;margin-bottom:.82rem;background:var(--surface2)}
+.card h3{font-size:.9rem;font-weight:700;margin-bottom:.35rem;line-height:1.35}
+.card p{font-size:.77rem;color:var(--ink2);flex:1;line-height:1.6}
+.card-cta{margin-top:.7rem;color:var(--blue);font-weight:700;font-size:.75rem}
+.badge{display:inline-block;padding:.15rem .5rem;border-radius:999px;font-size:.63rem;font-weight:700;margin-bottom:.42rem}
 .badge-Thesis,.badge-Journal,.badge-Conference{background:var(--blue-l);color:var(--blue)}
 .badge-AcademicProject,.badge-FreelanceProject{background:var(--teal-l);color:var(--teal)}
 .badge-FullTime,.badge-Voluntary{background:var(--amber-l);color:var(--amber)}
 .badge-Certificate,.badge-Session,.badge-Award{background:var(--rose-l);color:var(--rose)}
-
-/* see all row */
-.see-all-row{
-  display:flex;align-items:center;justify-content:center;
-  margin-top:1.2rem;
-}
-.see-all-btn{
-  padding:.55rem 1.8rem;border-radius:999px;
-  border:1.5px solid var(--blue-m);background:var(--blue-l);
-  color:var(--blue);font-size:.8rem;font-weight:700;
-  cursor:pointer;transition:all .2s;
-}
+.see-all-row{display:flex;justify-content:center;margin-top:1rem}
+.see-all-btn{padding:.48rem 1.65rem;border-radius:999px;border:1.5px solid var(--blue-m);background:var(--blue-l);color:var(--blue);font-size:.77rem;font-weight:700;cursor:pointer;transition:all .19s}
 .see-all-btn:hover{background:var(--blue);color:#fff}
+.see-all-link{color:var(--blue);font-size:.77rem;font-weight:700;cursor:pointer;text-decoration:none;padding:.28rem .7rem;border-radius:6px;transition:all .15s}
+.see-all-link:hover{background:var(--blue-l)}
 
-/* ══════════════ REVIEWS ══════════════ */
-.reviews-section{max-width:1100px;margin:0 auto;padding:2rem 5vw}
-.reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.1rem}
-.review-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r);padding:1.4rem;
-  border-left:4px solid var(--amber);
-  transition:all .2s;
-}
-.review-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px)}
-.review-top{display:flex;align-items:center;gap:.75rem;margin-bottom:.9rem}
-.review-avatar{
-  width:44px;height:44px;border-radius:50%;object-fit:cover;
-  border:2px solid var(--amber-l);background:var(--surface2);flex-shrink:0;
-}
-.review-name{font-weight:700;font-size:.88rem}
-.review-platform{font-size:.7rem;color:var(--ink3)}
-.review-stars{color:#f59e0b;font-size:.9rem;margin-bottom:.6rem;letter-spacing:.05em}
-.review-text{font-size:.83rem;color:var(--ink2);line-height:1.65;font-style:italic}
-.review-time{font-size:.7rem;color:var(--ink3);margin-top:.6rem}
+/* ════ REVIEWS SLIDER ════ */
+.reviews-track{display:flex;gap:1rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:0 5vw .5rem;scroll-padding-left:5vw}
+.reviews-track::-webkit-scrollbar{display:none}
+.review-card{scroll-snap-align:start;flex:0 0 300px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;border-left:4px solid var(--amber);transition:box-shadow .2s}
+.review-card:hover{box-shadow:var(--shadow-lg)}
+.review-top{display:flex;align-items:center;gap:.68rem;margin-bottom:.8rem}
+.review-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--amber-l);background:var(--surface2);flex-shrink:0}
+.review-name{font-weight:700;font-size:.83rem}
+.review-platform{font-size:.66rem;color:var(--ink3)}
+.review-stars{color:#f59e0b;font-size:.86rem;margin-bottom:.52rem;letter-spacing:.04em}
+.review-text{font-size:.79rem;color:var(--ink2);line-height:1.65;font-style:italic}
+.review-time{font-size:.66rem;color:var(--ink3);margin-top:.52rem}
+.slider-controls{display:flex;align-items:center;gap:.55rem;justify-content:center;margin-top:.75rem}
+.slider-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border2);background:var(--surface);cursor:pointer;font-size:1rem;color:var(--ink2);display:flex;align-items:center;justify-content:center;transition:all .17s}
+.slider-btn:hover{border-color:var(--blue);color:var(--blue)}
+.slider-dots{display:flex;gap:5px;align-items:center}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--border2);transition:all .2s;cursor:pointer}
+.dot.active{background:var(--amber);width:18px;border-radius:4px}
 
-/* ══════════════ DETAIL PAGE ══════════════ */
-.detail-page{max-width:860px;margin:0 auto;padding:2rem 5vw 4rem}
-.detail-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:2.5rem;margin-bottom:1.5rem;box-shadow:var(--shadow)}
-.detail-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.8rem;margin-bottom:1.2rem}
-.detail-title{font-family:'Fraunces',serif;font-size:2rem;margin-bottom:.5rem}
-.detail-body{line-height:1.85;color:var(--ink2)}
-.detail-body h1,.detail-body h2,.detail-body h3{font-family:'Fraunces',serif;margin:1.2rem 0 .6rem;color:var(--ink)}
-.detail-body p{margin-bottom:.85rem}
-.detail-body ul,.detail-body ol{margin-left:1.4rem;margin-bottom:.85rem}
+/* ════ DETAIL ════ */
+.detail-page{max-width:855px;margin:0 auto;padding:2rem 5vw 4rem}
+.detail-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:2.1rem;margin-bottom:1.25rem;box-shadow:var(--shadow)}
+.detail-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.65rem;margin-bottom:1.05rem}
+.detail-title{font-family:'Fraunces',serif;font-size:1.85rem;margin-bottom:.42rem}
+.detail-body{line-height:1.85;color:var(--ink2);font-size:.88rem}
+.detail-body h1,.detail-body h2,.detail-body h3{font-family:'Fraunces',serif;margin:1.1rem 0 .52rem;color:var(--ink)}
+.detail-body p{margin-bottom:.78rem}
+.detail-body ul,.detail-body ol{margin-left:1.3rem;margin-bottom:.78rem}
 .detail-body strong{color:var(--ink)}
+.yt-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:10px;margin-top:.9rem}
+.yt-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
 
-/* ══════════════ ALL PAGE ══════════════ */
-.filter-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
-.ftab{padding:.38rem .95rem;border-radius:999px;font-size:.76rem;font-weight:600;border:1.5px solid var(--border2);background:var(--surface);color:var(--ink3);cursor:pointer;transition:all .18s}
+/* ════ ALL PAGE FILTERS ════ */
+.filter-tabs{display:flex;gap:.42rem;flex-wrap:wrap;margin-bottom:1.3rem}
+.ftab{padding:.33rem .88rem;border-radius:999px;font-size:.74rem;font-weight:600;border:1.5px solid var(--border2);background:var(--surface);color:var(--ink3);cursor:pointer;transition:all .16s}
 .ftab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
 
-/* ══════════════ SKELETON ══════════════ */
+/* ════ SKELETON ════ */
 .skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--border) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.skel-card{height:260px}
+.skel-card{height:230px}
 .empty{text-align:center;padding:3rem;color:var(--ink3);background:var(--surface);border:1px dashed var(--border2);border-radius:var(--r)}
 
-footer{text-align:center;padding:3rem;color:var(--ink3);border-top:1px solid var(--border);margin-top:3rem}
-@media(max-width:700px){
-  .hero{grid-template-columns:1fr;text-align:center}
+footer{text-align:center;padding:2.3rem;color:var(--ink3);border-top:1px solid var(--border);margin-top:3rem;font-size:.81rem}
+
+/* ════ RESPONSIVE ════ */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .hero{grid-template-columns:1fr;text-align:center;gap:1.8rem;padding:2.2rem 5vw 2rem}
   .photo-wrap{margin:0 auto}
   .hero-btns{justify-content:center}
-  .nav-links{gap:0}
-  .nav-item>a{padding:.5rem .45rem;font-size:.75rem}
+  .hero-bio{margin:0 auto 1.1rem}
+  .review-card{flex:0 0 82vw}
 }
+@media(max-width:480px){.review-card{flex:0 0 90vw}}
 </style>
 </head>
 <body>
 
-<!-- ════════════════ NAV ════════════════ -->
 <nav>
   <div class="nav-logo" onclick="goHome()">A.S.<span>FAHIM</span></div>
-
-  <ul class="nav-links" id="main-nav">
-    <!-- Populated by JS after data loads so counts are accurate -->
-  </ul>
-
-  <a href="https://www.fiverr.com/YOUR_FIVERR_USERNAME" target="_blank" class="nav-hire">🛒 Hire on Fiverr</a>
+  <ul class="nav-links" id="main-nav"></ul>
+  <a href="https://www.fiverr.com/YOUR_USERNAME" target="_blank" class="nav-hire">🛒 Hire Me</a>
+  <button class="hamburger" id="hamburger-btn" onclick="openDrawer()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="side-drawer" id="side-drawer">
+  <div class="drawer-head">
+    <div class="nav-logo">A.S.<span style="color:var(--blue)">FAHIM</span></div>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</div>
+
 <div id="app"></div>
+
+<div class="modal-bg" id="edu-modal" onclick="closeEduModal(event)">
+  <div class="modal-box" id="edu-modal-box"></div>
+</div>
 
 <footer>© 2026 Abdullah Shadek Fahim · Jashore University of Science and Technology</footer>
 
 <script>
-/* ══════════════════════════════════════════════════
-   CONFIG — শুধু এই সেকশন এডিট করো
-══════════════════════════════════════════════════ */
-const REPO   = 'asfahimbd/abdullahfahim';
-const BRANCH = 'main';
-const CONTENT_PATH = 'content/projects';
+/* ══════════════════════════════════════════
+   ⚙ CONFIG
+══════════════════════════════════════════ */
+const REPO        = 'asfahimbd/abdullahfahim';
+const BRANCH      = 'main';
+const CONTENT_PATH= 'content/projects';
 
 const HERO = {
-  name: "Abdullah Shadek Fahim",
+  name:    "Abdullah Shadek Fahim",
   tagline: "Electrical & Electronic Engineer · Level 2 Fiverr Seller",
-  bio: "Specializing in Semiconductor Research (Ion Implantation) and Full-stack Web Development. Undergraduate at JUST with a passion for Machine Learning in Physics.",
-  photo: "https://avatars.githubusercontent.com/u/86173987?", // ← তোমার Imgur photo link দাও
-  email: "asfahimbd@gmail.com",
-  github: "https://github.com/abdullahFahim19",
-  linkedin: "https://linkedin.com/in/abdullah-fahim7640",
-  fiverr: "https://www.fiverr.com/YOUR_FIVERR_USERNAME"
+  bio:     "Specializing in Semiconductor Research (Ion Implantation) and Full-stack Web Development. Undergraduate at JUST with a passion for Machine Learning in Physics.",
+  photo:   "https://avatars.githubusercontent.com/u/86173987?v=4",
+  email:   "asfahimbd@gmail.com",
+  github:  "https://github.com/abdullahFahim19",
+  linkedin:"https://linkedin.com/in/abdullah-fahim7640",
+  fiverr:  "https://www.fiverr.com/YOUR_USERNAME"
 };
 
 const EDUCATION = [
   {
-    level: "University",
-    institution: "Jashore University of Science and Technology",
-    degree: "B.Sc. in Electrical & Electronic Engineering",
-    passing: "2025",
-    gpa: "3.XX / 4.00",
-    icon: "🎓",
-    color: "#e8eeff",
-    iconBg: "var(--blue-l)"
+    level:"University", institution:"Jashore University of Science and Technology",
+    degree:"B.Sc. in Electrical & Electronic Engineering",
+    passing:"2025", gpa:"3.XX / 4.00", icon:"🎓", iconBg:"var(--blue-l)",
+    photo:"",
+    description:"Completed undergraduate studies focusing on Semiconductor devices, Power systems, and Machine Learning applications in Physics. Thesis on Ion Implantation in Silicon.",
+    subjects:["Digital Electronics","Electromagnetics","Signal Processing","VLSI Design","Power Systems","Machine Learning","Ion Implantation","Microprocessors","Control Systems","Optical Fiber Communication"]
   },
   {
-    level: "College",
-    institution: "Your College Name Here",     // ← Edit korো
-    degree: "HSC · Science Group",
-    passing: "2019",
-    gpa: "5.00 / 5.00",
-    icon: "🏫",
-    iconBg: "var(--teal-l)"
+    level:"College", institution:"Your College Name Here",
+    degree:"HSC · Science Group",
+    passing:"2019", gpa:"5.00 / 5.00", icon:"🏫", iconBg:"var(--teal-l)",
+    photo:"",
+    description:"Completed Higher Secondary Certificate with distinction in Science group.",
+    subjects:["Physics","Chemistry","Mathematics","Biology","English","ICT"]
   },
   {
-    level: "School",
-    institution: "Your School Name Here",      // ← Edit korো
-    degree: "SSC · Science Group",
-    passing: "2017",
-    gpa: "5.00 / 5.00",
-    icon: "📚",
-    iconBg: "var(--amber-l)"
+    level:"School", institution:"Your School Name Here",
+    degree:"SSC · Science Group",
+    passing:"2017", gpa:"5.00 / 5.00", icon:"📚", iconBg:"var(--amber-l)",
+    photo:"",
+    description:"Completed Secondary School Certificate with Golden A+.",
+    subjects:["Physics","Chemistry","Mathematics","Biology","General Science","English","Bangla"]
   }
 ];
 
-/* Client Reviews — নতুন review add করতে এই array তে push করো */
 const REVIEWS = [
   {
-    name: "Client Name",
-    photo: "",               // Imgur/direct image URL দাও
-    platform: "Fiverr",
-    stars: 5,
-    text: "Excellent work! Delivered on time and went beyond expectations. Highly recommend!",
-    time: "April 2025"
+    name:"Client Name", photo:"", platform:"Fiverr", stars:5,
+    text:"Excellent work! Delivered on time and exceeded expectations. Highly recommend to anyone looking for quality work.",
+    time:"April 2025"
   },
-  // আরো reviews এখানে add করো
+  {
+    name:"Another Client", photo:"", platform:"Fiverr", stars:5,
+    text:"Very professional and responsive. The project was completed exactly as described. Will definitely hire again!",
+    time:"March 2025"
+  }
 ];
 
-/* Category grouping — CMS category নামের সাথে match করতে হবে */
 const GROUPS = {
-  Research: {
-    label: "Research",
-    icon: "🔬",
-    subcats: ["Thesis", "Journal", "Conference"],
-    color: "blue"
-  },
-  Projects: {
-    label: "Projects",
-    icon: "💻",
-    subcats: ["Academic Project", "Freelance Project"],
-    color: "teal"
-  },
-  Experiences: {
-    label: "Experiences",
-    icon: "💼",
-    subcats: ["Full Time", "Voluntary"],
-    color: "amber"
-  },
-  More: {
-    label: "More",
-    icon: "✨",
-    subcats: ["Certificate", "Session", "Award"],
-    color: "rose"
-  }
+  Research:{label:"Research",icon:"🔬",subcats:["Thesis","Journal","Conference"],hasDropdown:true},
+  Projects:{label:"Projects",icon:"💻",subcats:["Academic Project","Freelance Project"],hasDropdown:true},
+  Experiences:{label:"Experiences",icon:"💼",subcats:["Full Time","Voluntary"],hasDropdown:true},
+  Certificates:{label:"Certificates",icon:"📜",subcats:["Certificate"],hasDropdown:false},
+  Sessions:{label:"Sessions",icon:"🎙",subcats:["Session"],hasDropdown:false},
+  Awards:{label:"Awards",icon:"🏆",subcats:["Award"],hasDropdown:false}
 };
 
-/* ══════════════════════════════════════════════════
-   DATA LAYER
-══════════════════════════════════════════════════ */
-let ALL_PROJECTS = [];
+/* ══════════════════════════════════════════
+   DATA
+══════════════════════════════════════════ */
+let ALL_PROJECTS=[];
 
-async function fetchProjects() {
-  try {
-    const res = await fetch(
-      `https://api.github.com/repos/${REPO}/contents/${CONTENT_PATH}?ref=${BRANCH}`,
-      { headers: { Accept: 'application/vnd.github+json' } }
-    );
-    if (!res.ok) return [];
-    const files = await res.json();
-    const mdFiles = files.filter(f => f.name.endsWith('.md'));
-    const projects = await Promise.all(mdFiles.map(async f => {
-      try {
-        const raw = await fetch(f.download_url);
-        return parseMarkdown(await raw.text(), f.name);
-      } catch { return null; }
+async function fetchProjects(){
+  try{
+    const res=await fetch(`https://api.github.com/repos/${REPO}/contents/${CONTENT_PATH}?ref=${BRANCH}`,{headers:{Accept:'application/vnd.github+json'}});
+    if(!res.ok)return[];
+    const files=await res.json();
+    const items=await Promise.all(files.filter(f=>f.name.endsWith('.md')).map(async f=>{
+      try{const r=await fetch(f.download_url);return parseMarkdown(await r.text(),f.name);}catch{return null;}
     }));
-    return projects.filter(Boolean);
-  } catch(e) { console.error(e); return []; }
+    return items.filter(Boolean);
+  }catch(e){console.error(e);return[];}
 }
 
-function parseMarkdown(text, filename) {
-  const m = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
-  if (!m) return null;
-  const fm = m[1], body = m[2].trim();
-  const get = k => { const r = fm.match(new RegExp(`^${k}:\\s*["']?([^"'\\n]+?)["']?\\s*$`,'m')); return r ? r[1].trim() : ''; };
-  let image = get('image');
-  if (image && image.startsWith('/assets/'))
-    image = `https://raw.githubusercontent.com/${REPO}/${BRANCH}${image}`;
-  return {
-    id: filename.replace('.md',''),
-    title: get('title') || 'Untitled',
-    category: get('category') || '',
-    image, description: get('description') || '',
-    link: get('link') || '', body
+function parseMarkdown(text,filename){
+  const m=text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
+  if(!m)return null;
+  const fm=m[1],body=m[2].trim();
+  const get=k=>{const r=fm.match(new RegExp(`^${k}:\\s*["']?([^"'\\n]+?)["']?\\s*$`,'m'));return r?r[1].trim():'';};
+  let image=get('image');
+  if(image&&image.startsWith('/assets/'))image=`https://raw.githubusercontent.com/${REPO}/${BRANCH}${image}`;
+  return{
+    id:filename.replace('.md',''),title:get('title')||'Untitled',
+    category:get('custom_category')||get('category')||'',
+    image,description:get('description')||'',link:get('link')||'',
+    youtube:get('youtube')||'',body
   };
 }
 
-function md2html(md) {
-  if (!md) return '';
-  return md
-    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
-    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
-    .replace(/^# (.+)$/gm,'<h1>$1</h1>')
-    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g,'<em>$1</em>')
-    .replace(/`(.+?)`/g,'<code>$1</code>')
-    .replace(/^\- (.+)$/gm,'<li>$1</li>')
-    .replace(/(<li>[\s\S]+?<\/li>)/g,'<ul>$1</ul>')
-    .replace(/\n\n/g,'</p><p>').replace(/^([^<])/,'<p>$1') + '</p>';
+function md2html(md){
+  if(!md)return'';
+  return md.replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`(.+?)`/g,'<code>$1</code>')
+    .replace(/^\- (.+)$/gm,'<li>$1</li>').replace(/(<li>[\s\S]+?<\/li>)/g,'<ul>$1</ul>')
+    .replace(/\n\n/g,'</p><p>')+'</p>';
 }
 
-/* ══════════════════════════════════════════════════
-   COUNTS HELPER
-══════════════════════════════════════════════════ */
-function countGroup(groupKey) {
-  const g = GROUPS[groupKey];
-  return ALL_PROJECTS.filter(p => g.subcats.includes(p.category)).length;
-}
-function countSubcat(cat) {
-  return ALL_PROJECTS.filter(p => p.category === cat).length;
+function getYtId(url){const m=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);return m?m[1]:url;}
+
+function countGroup(k){return ALL_PROJECTS.filter(p=>GROUPS[k]?.subcats.includes(p.category)).length;}
+function countCat(c){return ALL_PROJECTS.filter(p=>p.category===c).length;}
+
+/* ══════════════════════════════════════════
+   NAV
+══════════════════════════════════════════ */
+function buildNav(){
+  document.getElementById('main-nav').innerHTML=Object.entries(GROUPS).map(([key,g])=>{
+    const tot=countGroup(key);
+    if(g.hasDropdown){
+      return`<li class="nav-item"><a>${g.icon} ${g.label}${tot>0?` <span class="nav-cnt">${tot}</span>`:''} <span class="nav-arrow">▾</span></a><div class="dropdown">${g.subcats.map(cat=>`<a onclick="showAll('${key}','${cat}')">${cat} <span class="dd-cnt">${countCat(cat)}</span></a>`).join('')}<div class="dropdown-div"></div><a onclick="showAll('${key}',null)" style="font-weight:700">All ${g.label} <span class="dd-cnt">${tot}</span></a></div></li>`;
+    }else{
+      return`<li class="nav-item"><a onclick="showAll('${key}',null)">${g.icon} ${g.label}${tot>0?` <span class="nav-cnt">${tot}</span>`:''}</a></li>`;
+    }
+  }).join('');
+  buildDrawer();
 }
 
-/* ══════════════════════════════════════════════════
-   NAV BUILD
-══════════════════════════════════════════════════ */
-function buildNav() {
-  const nav = document.getElementById('main-nav');
-  nav.innerHTML = Object.entries(GROUPS).map(([key, g]) => {
-    const total = countGroup(key);
-    return `
-    <li class="nav-item">
-      <a>
-        ${g.label}
-        ${total > 0 ? `<span class="nav-cnt">${total}</span>` : ''}
-        <span class="nav-arrow">▾</span>
-      </a>
-      <div class="dropdown">
-        ${g.subcats.map(cat => `
-          <a onclick="showAll('${key}','${cat}')">
-            ${cat}
-            <span class="dd-cnt">${countSubcat(cat)}</span>
-          </a>
-        `).join('')}
-        <div class="dropdown-div"></div>
-        <a onclick="showAll('${key}',null)" style="font-weight:700">
-          See All ${g.label}
-          <span class="dd-cnt">${total}</span>
-        </a>
-      </div>
-    </li>`;
-  }).join('') + `
-  <li style="margin-left:.3rem">
-    <a href="/admin/" target="_blank" style="color:var(--ink3);text-decoration:none;padding:.5rem .7rem;border-radius:6px;font-size:.82rem;font-weight:500;display:block;transition:all .18s" onmouseover="this.style.color='var(--blue)';this.style.background='var(--blue-l)'" onmouseout="this.style.color='var(--ink3)';this.style.background='transparent'">⚙ Admin</a>
-  </li>`;
+function buildDrawer(){
+  document.getElementById('drawer-body').innerHTML=
+    Object.entries(GROUPS).map(([key,g])=>{
+      const tot=countGroup(key);
+      if(g.hasDropdown){
+        return`<div><button class="drawer-group-btn" onclick="toggleDG('dg-${key}','dga-${key}')">${g.icon} ${g.label}<span class="dg-right">${tot>0?`<span class="nav-cnt">${tot}</span>`:''}<span id="dga-${key}" style="font-size:.58rem;transition:transform .2s">▾</span></span></button><div class="drawer-sub" id="dg-${key}">${g.subcats.map(cat=>`<a onclick="drawerGo('${key}','${cat}')">${cat} <span class="dd-cnt">${countCat(cat)}</span></a>`).join('')}<a onclick="drawerGo('${key}',null)" style="font-weight:700">All ${g.label} <span class="dd-cnt">${tot}</span></a></div></div>`;
+      }else{
+        return`<div class="drawer-direct" onclick="drawerGo('${key}',null)">${g.icon} ${g.label}${tot>0?`<span class="nav-cnt">${tot}</span>`:''}</div>`;
+      }
+    }).join('')
+    +`<div class="drawer-divider"></div><a href="${HERO.fiverr}" target="_blank" class="drawer-hire">🛒 Hire Me on Fiverr</a><div class="drawer-direct" onclick="closeDrawer()" style="margin-top:.2rem"><a href="mailto:${HERO.email}" style="color:inherit;text-decoration:none">✉ Contact Me</a></div>`;
 }
 
-/* ══════════════════════════════════════════════════
+function toggleDG(id,arrowId){
+  const el=document.getElementById(id);const ar=document.getElementById(arrowId);
+  const open=el.classList.toggle('open');
+  if(ar)ar.style.transform=open?'rotate(180deg)':'';
+}
+
+function drawerGo(k,s){closeDrawer();setTimeout(()=>showAll(k,s),300);}
+function openDrawer(){document.getElementById('side-drawer').classList.add('open');document.getElementById('drawer-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeDrawer(){document.getElementById('side-drawer').classList.remove('open');document.getElementById('drawer-overlay').classList.remove('open');document.body.style.overflow='';}
+
+/* ══════════════════════════════════════════
    ROUTING
-══════════════════════════════════════════════════ */
-async function init() {
-  renderHome(true);   // show skeleton first
-  ALL_PROJECTS = await fetchProjects();
+══════════════════════════════════════════ */
+async function init(){
+  renderHome(true);
+  ALL_PROJECTS=await fetchProjects();
   buildNav();
   route();
 }
 
-function route() {
-  const hash = window.location.hash.replace('#','');
-  if (!hash || hash === 'home') renderHome(false);
-  else if (hash.startsWith('view-')) renderDetail(hash.replace('view-',''));
-  else if (hash.startsWith('all-')) {
-    const parts = hash.split('-');
-    renderAllPage(parts[1], parts.slice(2).join('-') || null);
+function route(){
+  const hash=window.location.hash.replace('#','');
+  if(!hash||hash==='home') renderHome(false);
+  else if(hash.startsWith('view-')) renderDetail(hash.replace('view-',''));
+  else if(hash.startsWith('all-')){
+    const rest=hash.slice(4);
+    const key=Object.keys(GROUPS).find(k=>rest===k||rest.startsWith(k+'-'));
+    if(key){const sub=rest.length>key.length?rest.slice(key.length+1).replace(/-/g,' '):null;renderAllPage(key,sub);}
+    else renderHome(false);
   }
 }
 
-window.addEventListener('hashchange', route);
-window.addEventListener('load', init);
+window.addEventListener('hashchange',route);
+window.addEventListener('load',init);
 
-/* ══════════════════════════════════════════════════
-   HOME PAGE
-══════════════════════════════════════════════════ */
-function renderHome(loading = false) {
-  const h = HERO;
-  document.getElementById('app').innerHTML = `
-
-  <!-- HERO -->
+/* ══════════════════════════════════════════
+   HOME
+══════════════════════════════════════════ */
+function renderHome(loading=false){
+  const h=HERO;
+  document.getElementById('app').innerHTML=`
   <section class="hero">
     <div class="photo-wrap">
-      <img src="${h.photo}" class="hero-photo" alt="Abdullah Shadek Fahim"
-           onerror="this.src='https://via.placeholder.com/180/e8eeff/1d5aff?text=ASF'">
+      <img src="${h.photo}" class="hero-photo" alt="${h.name}" onerror="this.src='https://via.placeholder.com/178/e8eeff/1d5aff?text=ASF'">
     </div>
     <div>
       <div class="hero-eyebrow">Researcher · Engineer · Freelancer</div>
@@ -533,216 +463,223 @@ function renderHome(loading = false) {
       <p class="hero-bio">${h.bio}</p>
       <div class="hero-btns">
         <a href="${h.fiverr}" target="_blank" class="btn btn-hire">🛒 Hire Me on Fiverr</a>
-        <a href="mailto:${h.email}" class="btn btn-p">✉ Contact Me</a>
+        <a href="mailto:${h.email}" class="btn btn-p">✉ Contact</a>
         <a href="${h.linkedin}" target="_blank" class="btn btn-g">LinkedIn ↗</a>
         <a href="${h.github}" target="_blank" class="btn btn-g">GitHub ↗</a>
       </div>
     </div>
   </section>
 
-  <div style="max-width:1100px;margin:0 auto;padding:0 5vw"><div class="preview-divider"></div></div>
+  <div class="divider"><hr></div>
 
-  <!-- EDUCATION -->
-  <section class="edu-section">
+  <section class="section">
     <div class="section-header">
       <h2 class="section-title">🎓 Education</h2>
+      <span style="font-size:.74rem;color:var(--ink3)">Click for details</span>
     </div>
     <div class="edu-grid">
-      ${EDUCATION.map(e => `
-      <div class="edu-card">
-        <div class="edu-icon" style="background:${e.iconBg || 'var(--surface2)'}">${e.icon}</div>
-        <div style="flex:1">
+      ${EDUCATION.map((e,i)=>`
+      <div class="edu-card" onclick="openEduModal(${i})">
+        <div class="edu-icon" style="background:${e.iconBg||'var(--surface2)'}">${e.icon}</div>
+        <div style="flex:1;min-width:0">
           <div class="edu-level">${e.level}</div>
           <div class="edu-inst">${e.institution}</div>
           <div class="edu-degree">${e.degree}</div>
           <div class="edu-meta">
             <span class="edu-pill">📅 ${e.passing}</span>
-            <span class="edu-pill">⭐ GPA ${e.gpa}</span>
+            <span class="edu-pill">⭐ ${e.gpa}</span>
           </div>
         </div>
-      </div>
-      `).join('')}
+        <div class="edu-arr">→</div>
+      </div>`).join('')}
     </div>
   </section>
 
-  <div style="max-width:1100px;margin:0 auto;padding:0 5vw"><div class="preview-divider"></div></div>
+  <div class="divider"><hr></div>
 
-  ${loading ? renderSkeletonSections() : renderPreviewSections()}
+  ${loading ? renderSkeletons() : renderPreviews()}
 
-  <!-- REVIEWS -->
-  ${REVIEWS.length > 0 ? `
-  <div style="max-width:1100px;margin:0 auto;padding:0 5vw"><div class="preview-divider"></div></div>
-  <section class="reviews-section">
+  ${REVIEWS.length>0?`
+  <div class="divider"><hr></div>
+  <section class="section">
     <div class="section-header">
       <h2 class="section-title">⭐ Client Reviews</h2>
-      <span style="font-size:.8rem;color:var(--ink3)">${REVIEWS.length} reviews</span>
+      <span style="font-size:.74rem;color:var(--ink3)">${REVIEWS.length} reviews</span>
     </div>
-    <div class="reviews-grid">
-      ${REVIEWS.map(r => `
-      <div class="review-card">
-        <div class="review-top">
-          <img src="${r.photo || ''}" class="review-avatar"
-               onerror="this.src='https://via.placeholder.com/44/f2efe9/8a837a?text=${r.name[0]}'">
-          <div>
-            <div class="review-name">${r.name}</div>
-            <div class="review-platform">${r.platform}</div>
+    <div style="overflow:hidden">
+      <div class="reviews-track" id="reviews-track">
+        ${REVIEWS.map((r,i)=>`
+        <div class="review-card">
+          <div class="review-top">
+            <img src="${r.photo||''}" class="review-avatar" onerror="this.src='https://via.placeholder.com/40/f2efe9/8a837a?text=${encodeURIComponent(r.name[0])}'">
+            <div><div class="review-name">${r.name}</div><div class="review-platform">${r.platform}</div></div>
           </div>
-        </div>
-        <div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
-        <div class="review-text">"${r.text}"</div>
-        <div class="review-time">${r.time}</div>
+          <div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+          <div class="review-text">"${r.text}"</div>
+          <div class="review-time">${r.time}</div>
+        </div>`).join('')}
       </div>
-      `).join('')}
     </div>
-  </section>
-  ` : ''}
+    <div class="slider-controls">
+      <button class="slider-btn" onclick="scrollRevs(-1)">‹</button>
+      <div class="slider-dots" id="rev-dots">
+        ${REVIEWS.map((_,i)=>`<div class="dot ${i===0?'active':''}" onclick="scrollToRev(${i})"></div>`).join('')}
+      </div>
+      <button class="slider-btn" onclick="scrollRevs(1)">›</button>
+    </div>
+  </section>` : ''}
   `;
+  if(REVIEWS.length>0) setupReviews();
 }
 
-/* ══════════════════════════════════════════════════
-   PREVIEW SECTIONS (latest 3 per group)
-══════════════════════════════════════════════════ */
-function renderPreviewSections() {
-  return Object.entries(GROUPS).map(([key, g]) => {
-    const items = ALL_PROJECTS
-      .filter(p => g.subcats.includes(p.category))
-      .slice(0, 3);
-
-    if (items.length === 0) return '';
-
-    return `
-    <section class="preview-section">
+function renderPreviews(){
+  return Object.entries(GROUPS).map(([key,g])=>{
+    const items=ALL_PROJECTS.filter(p=>g.subcats.includes(p.category)).slice(0,3);
+    if(!items.length)return'';
+    const tot=countGroup(key);
+    return`
+    <section class="section">
       <div class="section-header">
         <h2 class="section-title">${g.icon} ${g.label}</h2>
-        <a class="see-all" onclick="showAll('${key}',null)">See All (${countGroup(key)}) →</a>
+        <span class="see-all-link" onclick="showAll('${key}',null)">See All (${tot}) →</span>
       </div>
-      <div class="grid">
-        ${items.map(p => cardHTML(p)).join('')}
-      </div>
-      ${countGroup(key) > 3 ? `
-      <div class="see-all-row">
-        <button class="see-all-btn" onclick="showAll('${key}',null)">
-          See All ${g.label} (${countGroup(key)}) →
-        </button>
-      </div>` : ''}
+      <div class="grid">${items.map(p=>cardHTML(p)).join('')}</div>
+      ${tot>3?`<div class="see-all-row"><button class="see-all-btn" onclick="showAll('${key}',null)">See All ${g.label} (${tot}) →</button></div>`:''}
     </section>
-    <div style="max-width:1100px;margin:0 auto;padding:0 5vw"><div class="preview-divider"></div></div>
-    `;
+    <div class="divider"><hr></div>`;
   }).join('');
 }
 
-function renderSkeletonSections() {
-  return Object.entries(GROUPS).map(([key, g]) => `
-    <section class="preview-section">
-      <div class="section-header">
-        <h2 class="section-title">${g.icon} ${g.label}</h2>
-      </div>
-      <div class="grid">
-        ${Array(3).fill('<div class="card skeleton skel-card"></div>').join('')}
-      </div>
+function renderSkeletons(){
+  return Object.entries(GROUPS).slice(0,4).map(([key,g])=>`
+    <section class="section">
+      <h2 class="section-title" style="margin-bottom:1.2rem">${g.icon} ${g.label}</h2>
+      <div class="grid">${Array(3).fill('<div class="card skeleton skel-card"></div>').join('')}</div>
     </section>
-    <div style="max-width:1100px;margin:0 auto;padding:0 5vw"><div class="preview-divider"></div></div>
-  `).join('');
+    <div class="divider"><hr></div>`).join('');
 }
 
-function cardHTML(p) {
-  const badgeClass = 'badge-' + p.category.replace(/\s+/g,'');
-  return `
-  <div class="card" onclick="location.hash='view-${p.id}'">
-    ${p.image
-      ? `<img src="${p.image}" class="card-img" alt="${p.title}" onerror="this.style.display='none'">`
-      : `<div class="card-img" style="display:flex;align-items:center;justify-content:center;color:var(--ink3);font-size:.8rem">No Image</div>`
-    }
-    <span class="badge ${badgeClass}">${p.category}</span>
-    <h3>${p.title}</h3>
-    <p>${p.description}</p>
+function cardHTML(p){
+  const bc='badge-'+p.category.replace(/\s+/g,'');
+  return`<div class="card" onclick="location.hash='view-${p.id}'">
+    ${p.image?`<img src="${p.image}" class="card-img" alt="${p.title}" onerror="this.style.display='none'">`:`<div class="card-img" style="display:flex;align-items:center;justify-content:center;color:var(--ink3);font-size:.73rem">No Image</div>`}
+    <span class="badge ${bc}">${p.category}</span>
+    <h3>${p.title}</h3><p>${p.description}</p>
     <div class="card-cta">Learn More →</div>
   </div>`;
 }
 
-/* ══════════════════════════════════════════════════
-   ALL PAGE (See All for a group)
-══════════════════════════════════════════════════ */
-function showAll(groupKey, subcat) {
-  const encoded = subcat ? `all-${groupKey}-${subcat}` : `all-${groupKey}`;
-  window.location.hash = encoded;
+/* ══════════════════════════════════════════
+   REVIEWS SLIDER
+══════════════════════════════════════════ */
+let revTimer=null;
+function setupReviews(){
+  clearInterval(revTimer);
+  const t=document.getElementById('reviews-track');
+  if(!t)return;
+  t.addEventListener('scroll',updateDots,{passive:true});
+  revTimer=setInterval(()=>{if(document.getElementById('reviews-track'))scrollRevs(1);else clearInterval(revTimer);},5000);
+}
+function scrollRevs(dir){
+  const t=document.getElementById('reviews-track');if(!t)return;
+  const w=(t.querySelector('.review-card')?.offsetWidth||300)+16;
+  t.scrollBy({left:dir*w,behavior:'smooth'});setTimeout(updateDots,420);
+}
+function scrollToRev(i){
+  const t=document.getElementById('reviews-track');if(!t)return;
+  const w=(t.querySelector('.review-card')?.offsetWidth||300)+16;
+  t.scrollTo({left:i*w,behavior:'smooth'});setTimeout(updateDots,420);
+}
+function updateDots(){
+  const t=document.getElementById('reviews-track');const dots=document.getElementById('rev-dots');if(!t||!dots)return;
+  const w=(t.querySelector('.review-card')?.offsetWidth||300)+16;
+  const idx=Math.round(t.scrollLeft/w);
+  dots.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
 }
 
-function renderAllPage(groupKey, subcat) {
-  const g = GROUPS[groupKey];
-  if (!g) { goHome(); return; }
+/* ══════════════════════════════════════════
+   EDUCATION MODAL
+══════════════════════════════════════════ */
+function openEduModal(i){
+  const e=EDUCATION[i];
+  document.getElementById('edu-modal-box').innerHTML=`
+    ${e.photo?`<img src="${e.photo}" class="modal-img" onerror="this.style.display='none'">`:''}
+    <div class="modal-body">
+      <button class="modal-close" onclick="closeEduModal()">✕ Close</button>
+      <span class="modal-badge">${e.level}</span>
+      <h2 class="modal-title">${e.institution}</h2>
+      <p class="modal-sub">${e.degree} · Passing: ${e.passing} · GPA: ${e.gpa}</p>
+      ${e.description?`<p class="modal-desc">${e.description}</p>`:''}
+      ${e.subjects?.length?`<h4 style="font-size:.77rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.55rem">Subjects Studied</h4><div class="subjects-grid">${e.subjects.map(s=>`<span class="subject-tag">${s}</span>`).join('')}</div>`:''}
+    </div>`;
+  document.getElementById('edu-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeEduModal(e){
+  if(e&&e.target!==document.getElementById('edu-modal'))return;
+  document.getElementById('edu-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
 
-  let items = ALL_PROJECTS.filter(p => g.subcats.includes(p.category));
-  if (subcat) items = items.filter(p => p.category === subcat);
+/* ══════════════════════════════════════════
+   ALL PAGE
+══════════════════════════════════════════ */
+function showAll(key,sub){
+  const slug=sub?sub.replace(/\s+/g,'-'):'';
+  window.location.hash=slug?`all-${key}-${slug}`:`all-${key}`;
+}
 
-  const activeTab = subcat || 'All';
-
-  document.getElementById('app').innerHTML = `
+function renderAllPage(key,sub){
+  const g=GROUPS[key];if(!g){goHome();return;}
+  let items=ALL_PROJECTS.filter(p=>g.subcats.includes(p.category));
+  const active=sub||'All';
+  if(sub)items=items.filter(p=>p.category===sub);
+  document.getElementById('app').innerHTML=`
   <div class="detail-page">
-    <button onclick="goHome()" class="btn btn-g" style="margin-bottom:1.5rem">← Home</button>
-    <h2 class="section-title" style="margin-bottom:1.2rem">${g.icon} ${g.label}</h2>
-
-    <div class="filter-tabs">
-      <button class="ftab ${activeTab==='All'?'active':''}"
-              onclick="showAll('${groupKey}',null)">All (${countGroup(groupKey)})</button>
-      ${g.subcats.map(cat => `
-        <button class="ftab ${activeTab===cat?'active':''}"
-                onclick="showAll('${groupKey}','${cat}')">
-          ${cat} (${countSubcat(cat)})
-        </button>
-      `).join('')}
-    </div>
-
+    <button onclick="goHome()" class="btn btn-g" style="margin-bottom:1.2rem">← Home</button>
+    <h2 class="section-title" style="margin-bottom:1.1rem">${g.icon} ${g.label}</h2>
+    ${g.hasDropdown?`<div class="filter-tabs">
+      <button class="ftab ${active==='All'?'active':''}" onclick="showAll('${key}',null)">All (${countGroup(key)})</button>
+      ${g.subcats.map(cat=>`<button class="ftab ${active===cat?'active':''}" onclick="showAll('${key}','${cat}')">${cat} (${countCat(cat)})</button>`).join('')}
+    </div>`:''}
     <div class="grid">
-      ${items.length === 0
-        ? `<div class="empty" style="grid-column:1/-1">
-             <div style="font-size:2rem;margin-bottom:.5rem">📂</div>
-             <p>No items yet. <a href="/admin/" style="color:var(--blue)">Add via Admin →</a></p>
-           </div>`
-        : items.map(p => cardHTML(p)).join('')
-      }
+      ${items.length===0?`<div class="empty" style="grid-column:1/-1"><div style="font-size:2rem;margin-bottom:.5rem">📂</div><p>No items yet. <a href="/admin/" style="color:var(--blue)">Add via Admin →</a></p></div>`
+      :items.map(p=>cardHTML(p)).join('')}
     </div>
   </div>`;
   window.scrollTo(0,0);
 }
 
-/* ══════════════════════════════════════════════════
+/* ══════════════════════════════════════════
    DETAIL PAGE
-══════════════════════════════════════════════════ */
-function renderDetail(id) {
-  const item = ALL_PROJECTS.find(p => p.id === id);
-  if (!item) { goHome(); return; }
-
-  // Find which group this belongs to
-  const groupKey = Object.keys(GROUPS).find(k => GROUPS[k].subcats.includes(item.category)) || '';
-  const badgeClass = 'badge-' + item.category.replace(/\s+/g,'');
-
-  document.getElementById('app').innerHTML = `
+══════════════════════════════════════════ */
+function renderDetail(id){
+  const item=ALL_PROJECTS.find(p=>p.id===id);
+  if(!item){goHome();return;}
+  const gKey=Object.keys(GROUPS).find(k=>GROUPS[k].subcats.includes(item.category))||'';
+  const bc='badge-'+item.category.replace(/\s+/g,'');
+  document.getElementById('app').innerHTML=`
   <div class="detail-page">
-    <div style="display:flex;gap:.6rem;margin-bottom:2rem;flex-wrap:wrap">
+    <div style="display:flex;gap:.52rem;flex-wrap:wrap;margin-bottom:1.7rem">
       <button onclick="goHome()" class="btn btn-g">← Home</button>
-      ${groupKey ? `<button onclick="showAll('${groupKey}',null)" class="btn btn-g">← ${GROUPS[groupKey].label}</button>` : ''}
+      ${gKey?`<button onclick="showAll('${gKey}',null)" class="btn btn-g">← ${GROUPS[gKey].label}</button>`:''}
     </div>
-
     <div class="detail-hero">
-      ${item.image ? `<img src="${item.image}" style="width:100%;max-height:340px;object-fit:cover;border-radius:10px;margin-bottom:1.5rem">` : ''}
-      <span class="badge ${badgeClass}">${item.category}</span>
+      ${item.image?`<img src="${item.image}" style="width:100%;max-height:310px;object-fit:cover;border-radius:10px;margin-bottom:1.35rem">`:''}
+      <span class="badge ${bc}">${item.category}</span>
       <h1 class="detail-title">${item.title}</h1>
-      <p style="color:var(--ink2);margin-top:.5rem">${item.description}</p>
-      ${item.link ? `<a href="${item.link}" target="_blank" class="btn btn-p" style="margin-top:1rem">View Project ↗</a>` : ''}
+      <p style="color:var(--ink2);margin-top:.42rem;font-size:.88rem">${item.description}</p>
+      ${item.link?`<a href="${item.link}" target="_blank" class="btn btn-p" style="margin-top:.9rem">View Project ↗</a>`:''}
     </div>
-
-    ${item.body ? `
-    <div class="detail-section">
-      <h3 style="margin-bottom:1rem;font-family:Fraunces,serif">Details</h3>
-      <div class="detail-body">${md2html(item.body)}</div>
-    </div>` : ''}
+    ${item.youtube?`<div class="detail-section"><h3 style="font-family:Fraunces,serif;margin-bottom:.45rem">📹 Video</h3><div class="yt-wrap"><iframe src="https://www.youtube.com/embed/${getYtId(item.youtube)}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture" allowfullscreen></iframe></div></div>`:''}
+    ${item.body?`<div class="detail-section"><h3 style="font-family:Fraunces,serif;margin-bottom:.85rem">Details</h3><div class="detail-body">${md2html(item.body)}</div></div>`:''}
   </div>`;
   window.scrollTo(0,0);
 }
 
-function goHome() {
-  window.location.hash = '';
+function goHome(){
+  clearInterval(revTimer);
+  window.location.hash='';
   renderHome(false);
 }
 </script>
