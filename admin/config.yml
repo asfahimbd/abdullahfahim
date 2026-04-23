@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: abdullahfahim19/abdullahfahim
+  repo: asfahimbd/abdullahfahim
   branch: main
   site_domain: abdullahfahim.pages.dev
   base_url: https://abdullahfahim.pages.dev
