@@ -2,6 +2,8 @@ backend:
   name: github
   repo: asfahimbd/abdullahfahim
   branch: main
+  client_id: Ov23liPSGiyh6XED26AR
+  client_secret: *****3ace91a9
 
 media_folder: "assets/images"
 public_folder: "/assets/images"
