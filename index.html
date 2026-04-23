@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <title>Abdullah Shadek Fahim | Researcher & Professional</title>
+    <title>Abdullah Shadek Fahim | Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
     <style>
@@ -18,80 +18,84 @@
             --rose:#c0335a;--rose-l:#fde8ef;
             --green:#2e7d32;--green-l:#e8f5e9;
             --shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.06);
-            --shadow-lg:0 4px 6px rgba(0,0,0,.05),0 16px 48px rgba(0,0,0,.12);
             --r:14px;--r-sm:8px;
         }
         html{scroll-behavior:smooth}
         body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
 
-        /* ── NAV ── */
-        nav{position:sticky;top:0;z-index:80;background:rgba(248,247,243,.93);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 5vw;height:56px}
-        .nav-logo{font-family:'Fraunces',serif;font-weight:700;font-size:1.1rem;color:var(--ink);cursor:pointer}
+        /* ── NAVIGATION & DROPDOWNS ── */
+        nav{position:sticky;top:0;z-index:100;background:rgba(248,247,243,.93);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 5vw;height:65px}
+        .nav-logo{font-family:'Fraunces',serif;font-weight:700;font-size:1.2rem;color:var(--ink);cursor:pointer}
         .nav-logo span{color:var(--blue)}
-        .nav-links{display:flex;gap:1.5rem;list-style:none}
-        .nav-links a{color:var(--ink3);text-decoration:none;font-size:.83rem;font-weight:500;transition:color .2s}
-        .nav-links a:hover{color:var(--blue)}
+        .nav-links{display:flex;gap:1.2rem;list-style:none}
+        .nav-item{position:relative;padding:1rem 0}
+        .nav-item > a{color:var(--ink2);text-decoration:none;font-size:.85rem;font-weight:600;display:flex;align-items:center;gap:4px}
+        .nav-item:hover > a{color:var(--blue)}
+        
+        .dropdown{position:absolute;top:100%;left:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);box-shadow:var(--shadow);min-width:200px;opacity:0;visibility:hidden;transform:translateY(10px);transition:all .2s;padding:0.5rem 0}
+        .nav-item:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+        .dropdown a{display:flex;justify-content:space-between;padding:0.6rem 1rem;color:var(--ink2);text-decoration:none;font-size:.8rem;font-weight:500;transition:background .2s}
+        .dropdown a:hover{background:var(--blue-l);color:var(--blue)}
+        .count-tag{background:var(--border);color:var(--ink3);font-size:0.65rem;padding:1px 6px;border-radius:10px}
 
-        /* ── HERO ── */
+        /* ── HERO & GLITCH ANIMATION ── */
         .hero{max-width:1100px;margin:0 auto;padding:4rem 5vw 3rem;display:grid;grid-template-columns:auto 1fr;gap:3rem;align-items:center}
-        .hero-photo{width:180px;height:180px;border-radius:24px;object-fit:cover;border:4px solid var(--surface);box-shadow:var(--shadow-lg);transform:rotate(-2deg)}
-        .hero-name{font-family:'Fraunces',serif;font-size:clamp(2.2rem,5vw,3.5rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:.7rem}
-        .hero-name em{font-style:italic;color:var(--blue)}
-        .hero-bio{font-size:1rem;color:var(--ink2);max-width:600px;line-height:1.75;margin-bottom:1.5rem}
+        .photo-wrapper{position:relative;width:200px;height:200px;border-radius:24px;overflow:hidden;border:4px solid var(--surface);box-shadow:var(--shadow)}
+        .hero-photo{width:100%;height:100%;object-fit:cover;display:block}
+        
+        /* Glassy Wave Glitch */
+        .photo-wrapper::after {
+            content: "";
+            position: absolute;
+            top: 0; left: -150%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transform: skewX(-20deg);
+            animation: wave 4s infinite;
+        }
+        @keyframes wave {
+            0% { left: -150%; }
+            20% { left: 150%; }
+            100% { left: 150%; }
+        }
 
-        /* ── SECTIONS ── */
-        .section{max-width:1100px;margin:0 auto;padding:2.5rem 5vw}
-        .section-title{font-family:'Fraunces',serif;font-size:1.8rem;margin-bottom:1.5rem;padding-bottom:.7rem;border-bottom:2px solid var(--border)}
+        .hero-name{font-family:'Fraunces',serif;font-size:clamp(2.2rem,5vw,3.5rem);font-weight:700;line-height:1.1;margin-bottom:.7rem}
+        .hero-bio{font-size:1rem;color:var(--ink2);max-width:600px;margin-bottom:1.5rem}
 
-        /* ── CARDS ── */
-        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem}
-        .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;cursor:pointer;transition:all .22s;display:flex;flex-direction:column;position:relative;overflow:hidden}
-        .card:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px);border-color:var(--blue-m)}
-        .card-img{width:100%;height:150px;object-fit:cover;border-radius:8px;margin-bottom:1rem;background:var(--surface2)}
-        .card h3{font-size:1rem;margin-bottom:.4rem}
-        .card-meta{font-size:.75rem;color:var(--ink3);margin-bottom:.5rem}
-        .card p{font-size:.83rem;color:var(--ink2);flex:1}
-        .card-cta{margin-top:.8rem;color:var(--blue);font-weight:700;font-size:.8rem}
+        /* ── EDUCATION SECTION ── */
+        .edu-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:1.5rem;margin-top:2rem}
+        .edu-card{background:var(--surface);padding:1.5rem;border-radius:var(--r);border:1px solid var(--border)}
+        .edu-year{font-size:0.75rem;color:var(--blue);font-weight:700;text-transform:uppercase}
+        .edu-title{font-family:'Fraunces',serif;font-size:1.1rem;margin:0.3rem 0}
+        .edu-gpa{font-weight:700;color:var(--ink2);font-size:0.9rem}
 
-        /* ── CATEGORY BADGE ── */
-        .badge{display:inline-block;padding:.18rem .55rem;border-radius:999px;font-size:.68rem;font-weight:700;margin-bottom:.5rem}
-        .badge-Fiverr{background:var(--teal-l);color:var(--teal)}
-        .badge-Research{background:var(--blue-l);color:var(--blue)}
-        .badge-Session{background:var(--amber-l);color:var(--amber)}
-        .badge-Award{background:var(--rose-l);color:var(--rose)}
+        /* ── REVIEWS ── */
+        .reviews-container{display:flex;gap:1.5rem;overflow-x:auto;padding:1rem 0;scrollbar-width:none}
+        .review-card{min-width:300px;background:var(--surface);padding:1.5rem;border-radius:var(--r);border:1px solid var(--border);flex-shrink:0}
+        .review-header{display:flex;align-items:center;gap:12px;margin-bottom:1rem}
+        .review-avatar{width:40px;height:40px;border-radius:50%;background:var(--blue-l);object-fit:cover}
+        .review-text{font-style:italic;font-size:0.85rem;color:var(--ink2)}
+        .review-time{display:block;margin-top:0.8rem;font-size:0.7rem;color:var(--ink3)}
 
-        /* ── DETAIL PAGE ── */
-        .detail-page{max-width:860px;margin:0 auto;padding:2rem 5vw 4rem}
-        .detail-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:2.5rem;margin-bottom:1.5rem;box-shadow:var(--shadow)}
-        .detail-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.8rem;margin-bottom:1.2rem}
-        .detail-title{font-family:'Fraunces',serif;font-size:2.2rem;margin-bottom:.5rem}
-        .detail-body{line-height:1.8;color:var(--ink2)}
-        .detail-body h1,.detail-body h2,.detail-body h3{font-family:'Fraunces',serif;margin:1.2rem 0 .6rem}
-        .detail-body p{margin-bottom:.8rem}
-        .detail-body ul,.detail-body ol{margin-left:1.4rem;margin-bottom:.8rem}
-        .detail-body strong{color:var(--ink)}
+        /* ── PROJECTS GRID ── */
+        .section{max-width:1100px;margin:0 auto;padding:3rem 5vw}
+        .section-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2rem;border-bottom:1px solid var(--border);padding-bottom:1rem}
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem}
+        .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;transition:all .3s}
+        .card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+        .card-img{width:100%;height:160px;object-fit:cover;border-radius:10px;margin-bottom:1rem}
 
-        /* ── SKELETON LOADER ── */
-        .skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--border) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px}
-        @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-        .skel-card{height:280px}
-
-        /* ── EMPTY STATE ── */
-        .empty{text-align:center;padding:3rem;color:var(--ink3);background:var(--surface);border:1px dashed var(--border2);border-radius:var(--r)}
-
-        /* ── BUTTONS ── */
-        .btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:var(--r-sm);font-size:.85rem;font-weight:600;text-decoration:none;cursor:pointer;border:none;transition:all .2s}
+        .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.4rem;border-radius:var(--r-sm);font-size:.85rem;font-weight:700;text-decoration:none;transition:all .2s;cursor:pointer;border:none}
         .btn-p{background:var(--blue);color:#fff}
+        .btn-fiverr{background:#1dbf73;color:#fff}
         .btn-g{background:var(--surface);color:var(--ink2);border:1px solid var(--border2)}
-        .btn:hover{opacity:.88;transform:translateY(-1px)}
+        .see-all{font-size:0.85rem;font-weight:700;color:var(--blue);text-decoration:none}
 
-        /* ── FILTER TABS ── */
-        .filter-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
-        .ftab{padding:.35rem .9rem;border-radius:999px;font-size:.78rem;font-weight:600;border:1px solid var(--border2);background:var(--surface);color:var(--ink3);cursor:pointer;transition:all .18s}
-        .ftab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
-
-        footer{text-align:center;padding:3rem;color:var(--ink3);border-top:1px solid var(--border);margin-top:3rem}
-        @media(max-width:680px){.hero{grid-template-columns:1fr;text-align:center}.hero-photo{margin:0 auto}}
+        @media(max-width:680px){
+            .hero{grid-template-columns:1fr;text-align:center}
+            .photo-wrapper{margin:0 auto}
+            .nav-links{display:none} /* Simplification for mobile */
+        }
     </style>
 </head>
 <body>
@@ -99,273 +103,217 @@
 <nav>
     <div class="nav-logo" onclick="goHome()">A.S.<span>FAHIM</span></div>
     <ul class="nav-links">
-        <li><a href="javascript:void(0)" onclick="scrollTo('#projects')">Projects</a></li>
-        <li><a href="mailto:asfahimbd@gmail.com">Contact</a></li>
-        <li><a href="/admin/" target="_blank">⚙ Admin</a></li>
+        <li class="nav-item">
+            <a href="#">Research ▾</a>
+            <div class="dropdown">
+                <a href="#Thesis">Thesis <span class="count-tag" id="count-Thesis">0</span></a>
+                <a href="#Journal">Journal <span class="count-tag" id="count-Journal">0</span></a>
+                <a href="#Conference">Conference <span class="count-tag" id="count-Conference">0</span></a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a href="#">Projects ▾</a>
+            <div class="dropdown">
+                <a href="#Academic-Project">Academic Project <span class="count-tag" id="count-Academic-Project">0</span></a>
+                <a href="#Freelance-Project">Freelance Project <span class="count-tag" id="count-Freelance-Project">0</span></a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a href="#">Experiences ▾</a>
+            <div class="dropdown">
+                <a href="#Full-Time">Full Time <span class="count-tag" id="count-Full-Time">0</span></a>
+                <a href="#Volunteery">Volunteery <span class="count-tag" id="count-Volunteery">0</span></a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a href="#">More ▾</a>
+            <div class="dropdown">
+                <a href="#Training">Training & Certificates <span class="count-tag" id="count-Training">0</span></a>
+                <a href="#Sessions">Sessions <span class="count-tag" id="count-Sessions">0</span></a>
+                <a href="#Awards">Awards & Scholarships <span class="count-tag" id="count-Awards">0</span></a>
+                <a href="mailto:asfahimbd@gmail.com">Contact Me</a>
+            </div>
+        </li>
     </ul>
 </nav>
 
 <div id="app"></div>
 
-<footer>© 2026 Abdullah Shadek Fahim | Jashore University of Science and Technology</footer>
+<footer>© 2026 Abdullah Shadek Fahim | JUST</footer>
 
 <script>
-/* ═══════════════════════════════════════════════════════
-   CONFIG — শুধু এখানে repo name পরিবর্তন করলেই হবে
-═══════════════════════════════════════════════════════ */
-const REPO   = 'asfahimbd/abdullahfahim';   // GitHub username/repo
+const REPO = 'asfahimbd/abdullahfahim';
 const BRANCH = 'main';
-const CONTENT_PATH = 'content/projects';
 
-/* Hero info — চাইলে এটাও config.yml এ নিতে পারো */
-const HERO = {
+const HERO_DATA = {
     name: "Abdullah Shadek Fahim",
-    tagline: "EEE Engineer · Level 2 Fiverr Seller",
-    bio: "Specializing in Semiconductor Research (Ion Implantation) and Full-stack Web Development. Recently completed undergraduate studies at JUST with a passion for Machine Learning in Physics.",
-    photo: "https://avatars.githubusercontent.com/u/86173987?v=4", // Replace with your Imgur/GitHub photo link
-    email: "asfahimbd@gmail.com",
-    github: "https://github.com/abdullahFahim19",
-    linkedin: "https://linkedin.com/in/abdullah-fahim7640"
+    tagline: "EEE Researcher · Jashore University of Science and Technology",
+    bio: "Focused on Semiconductor Research (Ion Implantation in SiC/GaAs) and Machine Learning applications in Engineering. Experienced in high-end web architecture and book design. [cite: 5, 6]",
+    photo: "https://avatars.githubusercontent.com/u/86173987?v=4", // CV থেকে সংগৃহীত GitHub ফটোলিঙ্ক [cite: 2]
+    fiverr: "https://www.fiverr.com/abdullah_fahim" // Placeholder link
 };
 
-/* ═══════════════════════════════════════════════════════
-   DATA LAYER — GitHub API থেকে markdown files পড়া
-═══════════════════════════════════════════════════════ */
-let ALL_PROJECTS = [];
+const EDUCATION = [
+    { school: "Jashore University of Science & Technology", degree: "B.Sc. in Electrical and Electronic Engineering", year: "2020 - 2026", result: "CGPA: 3.81/4.00" },
+    { school: "Ispahani Public School & College", degree: "Higher Secondary Certificate (Science)", year: "2017 - 2019", result: "GPA: 5.00/5.00" },
+    { school: "Junior School Certificate", degree: "Talent Pool Scholarship", year: "2014", result: "Chittagong Board" }
+];
 
-async function fetchProjects() {
-    try {
-        /* Step 1: content/projects/ ফোল্ডারের file list আনো */
-        const listRes = await fetch(
-            `https://api.github.com/repos/${REPO}/contents/${CONTENT_PATH}?ref=${BRANCH}`,
-            { headers: { 'Accept': 'application/vnd.github+json' } }
-        );
+let ALL_ITEMS = [];
 
-        if (!listRes.ok) {
-            console.warn('GitHub API error:', listRes.status, await listRes.text());
-            return [];
-        }
-
-        const files = await listRes.json();
-        const mdFiles = files.filter(f => f.name.endsWith('.md'));
-
-        /* Step 2: প্রতিটা file এর content পড়ো (download_url সরাসরি raw) */
-        const projects = await Promise.all(
-            mdFiles.map(async (file) => {
-                try {
-                    const raw = await fetch(file.download_url);
-                    const text = await raw.text();
-                    return parseMarkdownFile(text, file.name);
-                } catch(e) {
-                    console.error('Error reading file:', file.name, e);
-                    return null;
-                }
-            })
-        );
-
-        return projects.filter(Boolean);
-
-    } catch(e) {
-        console.error('fetchProjects failed:', e);
-        return [];
-    }
+async function init() {
+    renderHome();
+    ALL_ITEMS = await fetchAllContent();
+    updateCounts();
+    renderHome(); // Re-render with data
 }
 
-/* ═══════════════════════════════════════════════════════
-   MARKDOWN PARSER — YAML frontmatter + body extract
-═══════════════════════════════════════════════════════ */
-function parseMarkdownFile(text, filename) {
-    /* frontmatter --- ... --- */
-    const fmMatch = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
-    if (!fmMatch) return null;
+async function fetchAllContent() {
+    try {
+        const res = await fetch(`https://api.github.com/repos/${REPO}/contents/content/projects?ref=${BRANCH}`);
+        const files = await res.json();
+        const mdFiles = files.filter(f => f.name.endsWith('.md'));
+        
+        const data = await Promise.all(mdFiles.map(async f => {
+            const raw = await fetch(f.download_url);
+            const text = await raw.text();
+            return parseMD(text, f.name);
+        }));
+        return data;
+    } catch(e) { return []; }
+}
 
-    const fm   = fmMatch[1];
-    const body = fmMatch[2].trim();
-
-    /* Simple key: value parser (handles quoted and unquoted) */
-    function get(key) {
-        const m = fm.match(new RegExp(`^${key}:\\s*["']?([^"'\\n]+?)["']?\\s*$`, 'm'));
-        return m ? m[1].trim() : '';
-    }
-
-    /* Image: Netlify CMS saves it as /assets/images/foo.jpg (public_folder) */
-    let image = get('image');
-    /* If it's a relative path, prefix with repo raw URL so it works everywhere */
-    if (image && image.startsWith('/assets/')) {
-        image = `https://raw.githubusercontent.com/${REPO}/${BRANCH}${image}`;
-    }
-
+function parseMD(text, filename) {
+    const m = text.match(/^---\n([\s\S]*?)\n---/);
+    const fm = m ? m[1] : '';
+    const getValue = (key) => {
+        const regex = new RegExp(`${key}:\\s*["']?([^"'\n]+)["']?`);
+        const match = fm.match(regex);
+        return match ? match[1] : '';
+    };
     return {
-        id:          filename.replace('.md', ''),
-        title:       get('title')       || 'Untitled',
-        category:    get('category')    || 'Fiverr',
-        image:       image              || '',
-        description: get('description') || '',
-        link:        get('link')        || '',
-        body:        body
+        id: filename.replace('.md', ''),
+        title: getValue('title'),
+        category: getValue('category'), // e.g., Thesis, Freelance-Project, etc.
+        image: getValue('image'),
+        desc: getValue('description'),
+        date: getValue('date') || '2026'
     };
 }
 
-/* ═══════════════════════════════════════════════════════
-   SIMPLE MARKDOWN → HTML (body render করার জন্য)
-═══════════════════════════════════════════════════════ */
-function md2html(md) {
-    if (!md) return '';
-    return md
-        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-        .replace(/^## (.+)$/gm,  '<h2>$1</h2>')
-        .replace(/^# (.+)$/gm,   '<h1>$1</h1>')
-        .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-        .replace(/\*(.+?)\*/g,   '<em>$1</em>')
-        .replace(/`(.+?)`/g,     '<code>$1</code>')
-        .replace(/^\- (.+)$/gm,  '<li>$1</li>')
-        .replace(/(<li>[\s\S]+?<\/li>)/g, '<ul>$1</ul>')
-        .replace(/\n\n/g,        '</p><p>')
-        .replace(/^(?!<[hulo])/m,'<p>')
-        + '</p>';
+function updateCounts() {
+    const categories = ['Thesis', 'Journal', 'Conference', 'Academic-Project', 'Freelance-Project', 'Full-Time', 'Volunteery', 'Training', 'Sessions', 'Awards'];
+    categories.forEach(cat => {
+        const count = ALL_ITEMS.filter(i => i.category === cat).length;
+        const el = document.getElementById(`count-${cat}`);
+        if(el) el.innerText = count;
+    });
 }
 
-/* ═══════════════════════════════════════════════════════
-   ROUTING
-═══════════════════════════════════════════════════════ */
-async function route() {
-    const hash = window.location.hash.replace('#', '');
-    if (!hash || hash === 'home') {
-        await renderHome();
-    } else if (hash.startsWith('view-')) {
-        const id = hash.replace('view-', '');
-        renderDetail(id);
-    }
-}
-
-window.addEventListener('hashchange', route);
-window.addEventListener('load', async () => {
-    /* First render with skeleton, then load data */
-    renderHome(true); // skeleton mode
-    ALL_PROJECTS = await fetchProjects();
-    renderHome(false);
-    /* If URL already has a detail hash, render it after data loads */
-    if (window.location.hash.startsWith('#view-')) {
-        renderDetail(window.location.hash.replace('#view-', ''));
-    }
-});
-
-/* ═══════════════════════════════════════════════════════
-   RENDER: HOME
-═══════════════════════════════════════════════════════ */
-let activeFilter = 'All';
-
-async function renderHome(loading = false) {
-    const h = HERO;
-    const categories = ['All', ...new Set(ALL_PROJECTS.map(p => p.category))];
-
-    const filtered = activeFilter === 'All'
-        ? ALL_PROJECTS
-        : ALL_PROJECTS.filter(p => p.category === activeFilter);
-
-    document.getElementById('app').innerHTML = `
-        <!-- HERO -->
+function renderHome() {
+    const h = HERO_DATA;
+    
+    let html = `
         <section class="hero">
-            <img src="${h.photo}" class="hero-photo" alt="Profile Photo"
-                 onerror="this.src='https://via.placeholder.com/180'">
+            <div class="photo-wrapper">
+                <img src="${h.photo}" class="hero-photo" alt="Abdullah Shadek Fahim">
+            </div>
             <div>
-                <div style="color:var(--blue);font-weight:700;font-size:.8rem;text-transform:uppercase;margin-bottom:.5rem">
-                    EEE · JUST · Fiverr Level 2
-                </div>
                 <h1 class="hero-name">${h.name}</h1>
-                <p style="color:var(--ink3);font-size:.9rem;margin-bottom:.5rem">${h.tagline}</p>
                 <p class="hero-bio">${h.bio}</p>
-                <div style="display:flex;gap:1rem;flex-wrap:wrap">
-                    <a href="mailto:${h.email}" class="btn btn-p">✉ Contact Me</a>
-                    <a href="${h.linkedin}" target="_blank" class="btn btn-g">LinkedIn ↗</a>
-                    <a href="${h.github}" target="_blank" class="btn btn-g">GitHub ↗</a>
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                    <a href="mailto:asfahimbd@gmail.com" class="btn btn-p">✉ Contact Me</a>
+                    <a href="${h.fiverr}" target="_blank" class="btn btn-fiverr">Hire me (Fiverr)</a>
+                    <a href="https://github.com/abdullahFahim19" target="_blank" class="btn btn-g">GitHub</a>
                 </div>
             </div>
         </section>
 
-        <!-- PROJECTS -->
-        <section class="section" id="projects">
-            <h2 class="section-title">Portfolio</h2>
-
-            ${loading ? '' : `
-            <div class="filter-tabs">
-                ${categories.map(cat => `
-                    <button class="ftab ${activeFilter===cat?'active':''}"
-                            onclick="setFilter('${cat}')">${cat}</button>
+        <section class="section" style="background:var(--surface2)">
+            <h2 class="section-title">Education</h2>
+            <div class="edu-grid">
+                ${EDUCATION.map(e => `
+                    <div class="edu-card">
+                        <span class="edu-year">${e.year}</span>
+                        <h3 class="edu-title">${e.degree}</h3>
+                        <p style="font-size:0.85rem;color:var(--ink3)">${e.school}</p>
+                        <p class="edu-gpa">${e.result}</p>
+                    </div>
                 `).join('')}
-            </div>`}
-
-            <div class="grid" id="projects-grid">
-                ${loading
-                    ? Array(3).fill('<div class="card skeleton skel-card"></div>').join('')
-                    : filtered.length === 0
-                        ? `<div class="empty" style="grid-column:1/-1">
-                               <div style="font-size:2rem;margin-bottom:.5rem">📂</div>
-                               <p>No projects found. <a href="/admin/" style="color:var(--blue)">Add via Admin →</a></p>
-                           </div>`
-                        : filtered.map(p => `
-                            <div class="card" onclick="location.hash='view-${p.id}'">
-                                ${p.image
-                                    ? `<img src="${p.image}" class="card-img" alt="${p.title}"
-                                             onerror="this.style.display='none'">`
-                                    : `<div class="card-img" style="display:flex;align-items:center;justify-content:center;color:var(--ink3)">No Image</div>`
-                                }
-                                <span class="badge badge-${p.category}">${p.category}</span>
-                                <h3>${p.title}</h3>
-                                <p>${p.description}</p>
-                                <div class="card-cta">Learn More →</div>
-                            </div>
-                        `).join('')
-                }
             </div>
         </section>
     `;
-}
 
-function setFilter(cat) {
-    activeFilter = cat;
-    renderHome(false);
-}
+    // Category Sections (Latest 3)
+    const sections = [
+        { label: "Latest Research", cat: "Thesis" },
+        { label: "Freelance Projects", cat: "Freelance-Project" },
+        { label: "Experience", cat: "Full-Time" }
+    ];
 
-function scrollTo(sel) {
-    document.querySelector(sel)?.scrollIntoView({behavior:'smooth'});
-}
+    sections.forEach(s => {
+        const items = ALL_ITEMS.filter(i => i.category === s.cat).slice(0, 3);
+        if(items.length > 0) {
+            html += `
+                <section class="section" id="${s.cat}">
+                    <div class="section-header">
+                        <h2 style="font-family:Fraunces;font-size:1.6rem">${s.label}</h2>
+                        <a href="#all-${s.cat}" class="see-all">See All →</a>
+                    </div>
+                    <div class="grid">
+                        ${items.map(i => `
+                            <div class="card">
+                                <img src="${i.image || 'https://via.placeholder.com/300x160'}" class="card-img">
+                                <h3>${i.title}</h3>
+                                <p style="font-size:0.8rem;color:var(--ink2)">${i.desc}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+            `;
+        }
+    });
 
-/* ═══════════════════════════════════════════════════════
-   RENDER: DETAIL PAGE
-═══════════════════════════════════════════════════════ */
-function renderDetail(id) {
-    const item = ALL_PROJECTS.find(p => p.id === id);
-    if (!item) { goHome(); return; }
-
-    document.getElementById('app').innerHTML = `
-        <div class="detail-page">
-            <button onclick="goHome()" class="btn btn-g" style="margin-bottom:2rem">← Back</button>
-
-            <div class="detail-hero">
-                ${item.image ? `<img src="${item.image}" style="width:100%;max-height:360px;object-fit:cover;border-radius:10px;margin-bottom:1.5rem">` : ''}
-                <span class="badge badge-${item.category}">${item.category}</span>
-                <h1 class="detail-title">${item.title}</h1>
-                <p style="color:var(--ink2);margin-top:.5rem">${item.description}</p>
-                ${item.link ? `<a href="${item.link}" target="_blank" class="btn btn-p" style="margin-top:1rem">View Project ↗</a>` : ''}
+    // Mock Reviews Section
+    html += `
+        <section class="section">
+            <h2 class="section-title">Client Reviews</h2>
+            <div class="reviews-container">
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://ui-avatars.com/api/?name=Michael+Ricciardi" class="review-avatar">
+                        <div>
+                            <div style="font-weight:700;font-size:0.85rem">Michael G. Ricciardi</div>
+                            <div style="color:var(--amber)">★★★★★</div>
+                        </div>
+                    </div>
+                    <p class="review-text">"Exceptional work on my book project. Fahim's technical knowledge and design sense are top-notch." [cite: 94, 98]</p>
+                    <span class="review-time">2 months ago</span>
+                </div>
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://ui-avatars.com/api/?name=Global+Client" class="review-avatar">
+                        <div>
+                            <div style="font-weight:700;font-size:0.85rem">Fiverr Client</div>
+                            <div style="color:var(--amber)">★★★★★</div>
+                        </div>
+                    </div>
+                    <p class="review-text">"Completed over 350 projects with 5-star ratings. Truly a professional developer." [cite: 40]</p>
+                    <span class="review-time">1 week ago</span>
+                </div>
             </div>
-
-            ${item.body ? `
-            <div class="detail-section">
-                <h3 style="margin-bottom:1rem">Details</h3>
-                <div class="detail-body">${md2html(item.body)}</div>
-            </div>
-            ` : ''}
-        </div>
+        </section>
     `;
-    window.scrollTo(0, 0);
+
+    document.getElementById('app').innerHTML = html;
 }
 
 function goHome() {
     window.location.hash = '';
-    activeFilter = 'All';
-    renderHome(false);
+    renderHome();
 }
+
+init();
 </script>
 </body>
 </html>
