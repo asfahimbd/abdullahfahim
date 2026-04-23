@@ -1,0 +1,933 @@
+---
+title: mahirrf df;lsd;
+category: Conference
+image: /assets/images/img_4369.jpg
+description: >-
+  ;lf<!DOCTYPE html>
+
+  <html lang="en">
+
+  <head>
+
+  <meta charset="UTF-8"/>
+
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+
+  <title>Abdullah Shadek Fahim | EEE Researcher & Professional</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+  :root{
+    --bg:#f8f7f3;--surface:#fff;--surface2:#f2efe9;
+    --border:#e6e1d9;--border2:#d5cfc6;
+    --ink:#1a1714;--ink2:#4a453e;--ink3:#8a837a;
+    --blue:#1d5aff;--blue-l:#e8eeff;--blue-m:#c5d3ff;
+    --teal:#00897b;--teal-l:#e0f4f1;--teal-d:#006b5f;
+    --amber:#b87000;--amber-l:#fef3e0;
+    --rose:#c0335a;--rose-l:#fde8ef;
+    --green:#2e7d32;--green-l:#e8f5e9;
+    --purple:#6c35c9;--purple-l:#f0eaff;
+    --shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.06);
+    --shadow-lg:0 4px 6px rgba(0,0,0,.05),0 16px 48px rgba(0,0,0,.12);
+    --r:14px;--r-sm:8px;
+  }
+
+  html{scroll-behavior:smooth}
+
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
+
+
+  /* ══════════════ NAV ══════════════ */
+
+  nav{
+    position:sticky;top:0;z-index:200;
+    background:rgba(248,247,243,.95);backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 5vw;height:58px;gap:1rem;
+  }
+
+  .nav-logo{font-family:'Fraunces',serif;font-weight:700;font-size:1.1rem;color:var(--ink);cursor:pointer;white-space:nowrap}
+
+  .nav-logo span{color:var(--blue)}
+
+
+  /* Nav Items with Dropdown */
+
+  .nav-links{display:flex;gap:0;list-style:none;align-items:center}
+
+  .nav-item{position:relative}
+
+  .nav-item>a{
+    display:flex;align-items:center;gap:.3rem;
+    color:var(--ink3);text-decoration:none;
+    font-size:.82rem;font-weight:500;
+    padding:.5rem .7rem;border-radius:6px;
+    transition:all .18s;white-space:nowrap;
+    cursor:pointer;
+  }
+
+  .nav-item>a:hover,.nav-item:hover>a{color:var(--blue);background:var(--blue-l)}
+
+  .nav-arrow{font-size:.55rem;opacity:.6;transition:transform .18s}
+
+  .nav-item:hover .nav-arrow{transform:rotate(180deg)}
+
+
+  /* Count Badge in Nav */
+
+  .nav-cnt{
+    background:var(--blue);color:#fff;
+    border-radius:999px;padding:.05rem .38rem;
+    font-size:.6rem;font-weight:700;min-width:18px;text-align:center;
+    display:inline-block;
+  }
+
+
+  /* Dropdown Menu */
+
+  .dropdown{
+    display:none;position:absolute;top:calc(100% + 6px);left:0;
+    background:var(--surface);
+    border:1px solid var(--border);border-radius:12px;
+    min-width:210px;box-shadow:var(--shadow-lg);
+    padding:.4rem;z-index:300;
+    animation:dropIn .16s ease;
+  }
+
+  @keyframes dropIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+
+  .nav-item:hover .dropdown{display:block}
+
+  .dropdown a{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:.48rem .75rem;border-radius:7px;
+    color:var(--ink2);text-decoration:none;
+    font-size:.8rem;font-weight:500;
+    transition:all .14s;
+  }
+
+  .dropdown a:hover{background:var(--blue-l);color:var(--blue)}
+
+  .dd-cnt{
+    background:var(--blue-l);color:var(--blue);
+    border-radius:999px;padding:.05rem .42rem;
+    font-size:.65rem;font-weight:700;
+  }
+
+  .dropdown-div{height:1px;background:var(--border);margin:.3rem .4rem}
+
+  .nav-hire{
+    font-size:.78rem;font-weight:700;padding:.38rem .9rem;
+    border-radius:7px;border:none;background:var(--teal);color:#fff;
+    cursor:pointer;transition:all .18s;text-decoration:none;
+    white-space:nowrap;
+  }
+
+  .nav-hire:hover{background:var(--teal-d);transform:translateY(-1px)}
+
+
+  /* ══════════════ HERO ══════════════ */
+
+  .hero{
+    max-width:1100px;margin:0 auto;padding:4rem 5vw 2.5rem;
+    display:grid;grid-template-columns:auto 1fr;gap:3.5rem;align-items:center;
+  }
+
+
+  /* Photo with glass wave */
+
+  .photo-wrap{
+    position:relative;display:inline-block;
+    border-radius:24px;
+    box-shadow:var(--shadow-lg);
+    overflow:hidden;
+    flex-shrink:0;
+  }
+
+  .hero-photo{
+    width:180px;height:180px;
+    border-radius:24px;object-fit:cover;
+    display:block;border:4px solid var(--surface);
+  }
+
+  /* Glassy wave sweep */
+
+  .photo-wrap::after{
+    content:'';position:absolute;
+    top:-20%;left:-80%;
+    width:55%;height:140%;
+    background:linear-gradient(
+      105deg,
+      transparent 30%,
+      rgba(255,255,255,.08) 45%,
+      rgba(255,255,255,.45) 50%,
+      rgba(255,255,255,.08) 55%,
+      transparent 70%
+    );
+    transform:skewX(-12deg);
+    animation:glassWave 3.8s cubic-bezier(.45,0,.55,1) infinite;
+    pointer-events:none;border-radius:24px;
+  }
+
+  @keyframes glassWave{
+    0%   {left:-80%}
+    55%,100%{left:130%}
+  }
+
+  /* Subtle border glow ring */
+
+  .photo-wrap::before{
+    content:'';position:absolute;inset:-1px;
+    border-radius:26px;
+    background:linear-gradient(135deg,rgba(29,90,255,.35),rgba(0,137,123,.25),transparent 60%);
+    z-index:-1;
+  }
+
+
+  .hero-eyebrow{color:var(--blue);font-weight:700;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem}
+
+  .hero-name{font-family:'Fraunces',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:.5rem}
+
+  .hero-name em{font-style:italic;color:var(--blue)}
+
+  .hero-sub{font-size:.88rem;color:var(--ink3);margin-bottom:.7rem;font-weight:500}
+
+  .hero-bio{font-size:.95rem;color:var(--ink2);max-width:560px;line-height:1.8;margin-bottom:1.4rem}
+
+  .hero-btns{display:flex;gap:.75rem;flex-wrap:wrap}
+
+
+  /* Buttons */
+
+  .btn{
+    display:inline-flex;align-items:center;gap:.4rem;
+    padding:.6rem 1.25rem;border-radius:var(--r-sm);
+    font-size:.83rem;font-weight:600;text-decoration:none;
+    cursor:pointer;border:none;transition:all .2s;
+    font-family:inherit;
+  }
+
+  .btn-p{background:var(--blue);color:#fff}
+
+  .btn-p:hover{background:#1449d6;transform:translateY(-1px)}
+
+  .btn-hire{background:var(--teal);color:#fff}
+
+  .btn-hire:hover{background:var(--teal-d);transform:translateY(-1px)}
+
+  .btn-g{background:var(--surface);color:var(--ink2);border:1px solid var(--border2)}
+
+  .btn-g:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-1px)}
+
+
+  /* ══════════════ EDUCATION ══════════════ */
+
+  .edu-section{max-width:1100px;margin:0 auto;padding:2.5rem 5vw}
+
+  .section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1.4rem}
+
+  .section-title{font-family:'Fraunces',serif;font-size:1.6rem}
+
+  .see-all{color:var(--blue);font-size:.8rem;font-weight:600;text-decoration:none;cursor:pointer}
+
+  .see-all:hover{text-decoration:underline}
+
+  .edu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.1rem}
+
+  .edu-card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--r);padding:1.4rem;
+    display:flex;gap:1rem;align-items:flex-start;
+    transition:all .2s;
+  }
+
+  .edu-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px);border-color:var(--blue-m)}
+
+  .edu-icon{
+    font-size:1.6rem;width:48px;height:48px;
+    border-radius:12px;display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+
+  .edu-level{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin-bottom:.2rem}
+
+  .edu-inst{font-size:.9rem;font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:.25rem}
+
+  .edu-degree{font-size:.78rem;color:var(--ink2);margin-bottom:.5rem}
+
+  .edu-meta{display:flex;gap:.5rem;flex-wrap:wrap}
+
+  .edu-pill{
+    padding:.18rem .55rem;border-radius:999px;font-size:.68rem;font-weight:600;
+    background:var(--surface2);color:var(--ink3);border:1px solid var(--border);
+  }
+
+
+  /* ══════════════ SECTION PREVIEW (Latest 3) ══════════════ */
+
+  .preview-section{max-width:1100px;margin:0 auto;padding:2rem 5vw}
+
+  .preview-divider{width:100%;height:1px;background:var(--border);margin:1rem 0 2.5rem}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+    padding:1.4rem;cursor:pointer;transition:all .22s;
+    display:flex;flex-direction:column;overflow:hidden;
+  }
+
+  .card:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px);border-color:var(--blue-m)}
+
+  .card-img{width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:.9rem;background:var(--surface2)}
+
+  .card h3{font-size:.95rem;font-weight:700;margin-bottom:.4rem;line-height:1.35}
+
+  .card p{font-size:.8rem;color:var(--ink2);flex:1;line-height:1.6}
+
+  .card-cta{margin-top:.8rem;color:var(--blue);font-weight:700;font-size:.78rem}
+
+  .card-footer{margin-top:.8rem;display:flex;align-items:center;justify-content:space-between}
+
+
+  /* Badges */
+
+  .badge{
+    display:inline-block;padding:.18rem .55rem;border-radius:999px;
+    font-size:.66rem;font-weight:700;margin-bottom:.5rem;
+  }
+
+  .badge-Thesis,.badge-Journal,.badge-Conference{background:var(--blue-l);color:var(--blue)}
+
+  .badge-AcademicProject,.badge-FreelanceProject{background:var(--teal-l);color:var(--teal)}
+
+  .badge-FullTime,.badge-Voluntary{background:var(--amber-l);color:var(--amber)}
+
+  .badge-Certificate,.badge-Session,.badge-Award{background:var(--rose-l);color:var(--rose)}
+
+
+  /* see all row */
+
+  .see-all-row{
+    display:flex;align-items:center;justify-content:center;
+    margin-top:1.2rem;
+  }
+
+  .see-all-btn{
+    padding:.55rem 1.8rem;border-radius:999px;
+    border:1.5px solid var(--blue-m);background:var(--blue-l);
+    color:var(--blue);font-size:.8rem;font-weight:700;
+    cursor:pointer;transition:all .2s;
+  }
+
+  .see-all-btn:hover{background:var(--blue);color:#fff}
+
+
+  /* ══════════════ REVIEWS ══════════════ */
+
+  .reviews-section{max-width:1100px;margin:0 auto;padding:2rem 5vw}
+
+  .reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.1rem}
+
+  .review-card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--r);padding:1.4rem;
+    border-left:4px solid var(--amber);
+    transition:all .2s;
+  }
+
+  .review-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px)}
+
+  .review-top{display:flex;align-items:center;gap:.75rem;margin-bottom:.9rem}
+
+  .review-avatar{
+    width:44px;height:44px;border-radius:50%;object-fit:cover;
+    border:2px solid var(--amber-l);background:var(--surface2);flex-shrink:0;
+  }
+
+  .review-name{font-weight:700;font-size:.88rem}
+
+  .review-platform{font-size:.7rem;color:var(--ink3)}
+
+  .review-stars{color:#f59e0b;font-size:.9rem;margin-bottom:.6rem;letter-spacing:.05em}
+
+  .review-text{font-size:.83rem;color:var(--ink2);line-height:1.65;font-style:italic}
+
+  .review-time{font-size:.7rem;color:var(--ink3);margin-top:.6rem}
+
+
+  /* ══════════════ DETAIL PAGE ══════════════ */
+
+  .detail-page{max-width:860px;margin:0 auto;padding:2rem 5vw 4rem}
+
+  .detail-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:2.5rem;margin-bottom:1.5rem;box-shadow:var(--shadow)}
+
+  .detail-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.8rem;margin-bottom:1.2rem}
+
+  .detail-title{font-family:'Fraunces',serif;font-size:2rem;margin-bottom:.5rem}
+
+  .detail-body{line-height:1.85;color:var(--ink2)}
+
+  .detail-body h1,.detail-body h2,.detail-body h3{font-family:'Fraunces',serif;margin:1.2rem 0 .6rem;color:var(--ink)}
+
+  .detail-body p{margin-bottom:.85rem}
+
+  .detail-body ul,.detail-body ol{margin-left:1.4rem;margin-bottom:.85rem}
+
+  .detail-body strong{color:var(--ink)}
+
+
+  /* ══════════════ ALL PAGE ══════════════ */
+
+  .filter-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
+
+  .ftab{padding:.38rem .95rem;border-radius:999px;font-size:.76rem;font-weight:600;border:1.5px solid var(--border2);background:var(--surface);color:var(--ink3);cursor:pointer;transition:all .18s}
+
+  .ftab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+
+  /* ══════════════ SKELETON ══════════════ */
+
+  .skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--border) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px}
+
+  @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+  .skel-card{height:260px}
+
+  .empty{text-align:center;padding:3rem;color:var(--ink3);background:var(--surface);border:1px dashed var(--border2);border-radius:var(--r)}
+
+
+  footer{text-align:center;padding:3rem;color:var(--ink3);border-top:1px solid var(--border);margin-top:3rem}
+
+  @media(max-width:700px){
+    .hero{grid-template-columns:1fr;text-align:center}
+    .photo-wrap{margin:0 auto}
+    .hero-btns{justify-content:center}
+    .nav-links{gap:0}
+    .nav-item>a{padding:.5rem .45rem;font-size:.75rem}
+  }
+
+  </style>
+
+  </head>
+
+  <body>
+
+
+  <!-- ════════════════ NAV ════════════════ -->
+
+  <nav>
+    <div class="nav-logo" onclick="goHome()">A.S.<span>FAHIM</span></div>
+
+    <ul class="nav-links" id="main-nav">
+      <!-- Populated by JS after data loads so counts are accurate -->
+    </ul>
+
+    <a href="https://www.fiverr.com/YOUR_FIVERR_USERNAME" target="_blank" class="nav-hire">🛒 Hire on Fiverr</a>
+  </nav>
+
+
+  <div id="app"></div>
+
+
+  <footer>© 2026 Abdullah Shadek Fahim · Jashore University of Science and Technology</footer>
+
+
+  <script>
+
+  /* ══════════════════════════════════════════════════
+     CONFIG — শুধু এই সেকশন এডিট করো
+  ══════════════════════════════════════════════════ */
+
+  const REPO   = 'asfahimbd/abdullahfahim';
+
+  const BRANCH = 'main';
+
+  const CONTENT_PATH = 'content/projects';
+
+
+  const HERO = {
+    name: "Abdullah Shadek Fahim",
+    tagline: "Electrical & Electronic Engineer · Level 2 Fiverr Seller",
+    bio: "Specializing in Semiconductor Research (Ion Implantation) and Full-stack Web Development. Undergraduate at JUST with a passion for Machine Learning in Physics.",
+    photo: "https://i.imgur.com/YOUR_PHOTO.jpg", // ← তোমার Imgur photo link দাও
+    email: "asfahimbd@gmail.com",
+    github: "https://github.com/abdullahFahim19",
+    linkedin: "https://linkedin.com/in/abdullah-fahim7640",
+    fiverr: "https://www.fiverr.com/YOUR_FIVERR_USERNAME"
+  };
+
+
+  const EDUCATION = [
+    {
+      level: "University",
+      institution: "Jashore University of Science and Technology",
+      degree: "B.Sc. in Electrical & Electronic Engineering",
+      passing: "2025",
+      gpa: "3.XX / 4.00",
+      icon: "🎓",
+      color: "#e8eeff",
+      iconBg: "var(--blue-l)"
+    },
+    {
+      level: "College",
+      institution: "Your College Name Here",     // ← Edit korো
+      degree: "HSC · Science Group",
+      passing: "2019",
+      gpa: "5.00 / 5.00",
+      icon: "🏫",
+      iconBg: "var(--teal-l)"
+    },
+    {
+      level: "School",
+      institution: "Your School Name Here",      // ← Edit korো
+      degree: "SSC · Science Group",
+      passing: "2017",
+      gpa: "5.00 / 5.00",
+      icon: "📚",
+      iconBg: "var(--amber-l)"
+    }
+  ];
+
+
+  /* Client Reviews — নতুন review add করতে এই array তে push করো */
+
+  const REVIEWS = [
+    {
+      name: "Client Name",
+      photo: "",               // Imgur/direct image URL দাও
+      platform: "Fiverr",
+      stars: 5,
+      text: "Excellent work! Delivered on time and went beyond expectations. Highly recommend!",
+      time: "April 2025"
+    },
+    // আরো reviews এখানে add করো
+  ];
+
+
+  /* Category grouping — CMS category নামের সাথে match করতে হবে */
+
+  const GROUPS = {
+    Research: {
+      label: "Research",
+      icon: "🔬",
+      subcats: ["Thesis", "Journal", "Conference"],
+      color: "blue"
+    },
+    Projects: {
+      label: "Projects",
+      icon: "💻",
+      subcats: ["Academic Project", "Freelance Project"],
+      color: "teal"
+    },
+    Experiences: {
+      label: "Experiences",
+      icon: "💼",
+      subcats: ["Full Time", "Voluntary"],
+      color: "amber"
+    },
+    More: {
+      label: "More",
+      icon: "✨",
+      subcats: ["Certificate", "Session", "Award"],
+      color: "rose"
+    }
+  };
+
+
+  /* ══════════════════════════════════════════════════
+     DATA LAYER
+  ══════════════════════════════════════════════════ */
+
+  let ALL_PROJECTS = [];
+
+
+  async function fetchProjects() {
+    try {
+      const res = await fetch(
+        `https://api.github.com/repos/${REPO}/contents/${CONTENT_PATH}?ref=${BRANCH}`,
+        { headers: { Accept: 'application/vnd.github+json' } }
+      );
+      if (!res.ok) return [];
+      const files = await res.json();
+      const mdFiles = files.filter(f => f.name.endsWith('.md'));
+      const projects = await Promise.all(mdFiles.map(async f => {
+        try {
+          const raw = await fetch(f.download_url);
+          return parseMarkdown(await raw.text(), f.name);
+        } catch { return null; }
+      }));
+      return projects.filter(Boolean);
+    } catch(e) { console.error(e); return []; }
+  }
+
+
+  function parseMarkdown(text, filename) {
+    const m = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
+    if (!m) return null;
+    const fm = m[1], body = m[2].trim();
+    const get = k => { const r = fm.match(new RegExp(`^${k}:\\s*["']?([^"'\\n]+?)["']?\\s*$`,'m')); return r ? r[1].trim() : ''; };
+    let image = get('image');
+    if (image && image.startsWith('/assets/'))
+      image = `https://raw.githubusercontent.com/${REPO}/${BRANCH}${image}`;
+    return {
+      id: filename.replace('.md',''),
+      title: get('title') || 'Untitled',
+      category: get('category') || '',
+      image, description: get('description') || '',
+      link: get('link') || '', body
+    };
+  }
+
+
+  function md2html(md) {
+    if (!md) return '';
+    return md
+      .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+      .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+      .replace(/^# (.+)$/gm,'<h1>$1</h1>')
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g,'<em>$1</em>')
+      .replace(/`(.+?)`/g,'<code>$1</code>')
+      .replace(/^\- (.+)$/gm,'<li>$1</li>')
+      .replace(/(<li>[\s\S]+?<\/li>)/g,'<ul>$1</ul>')
+      .replace(/\n\n/g,'</p><p>').replace(/^([^<])/,'<p>$1') + '</p>';
+  }
+
+
+  /* ══════════════════════════════════════════════════
+     COUNTS HELPER
+  ══════════════════════════════════════════════════ */
+
+  function countGroup(groupKey) {
+    const g = GROUPS[groupKey];
+    return ALL_PROJECTS.filter(p => g.subcats.includes(p.category)).length;
+  }
+
+  function countSubcat(cat) {
+    return ALL_PROJECTS.filter(p => p.category === cat).length;
+  }
+
+
+  /* ══════════════════════════════════════════════════
+     NAV BUILD
+  ══════════════════════════════════════════════════ */
+
+  function buildNav() {
+    const nav = document.getElementById('main-nav');
+    nav.innerHTML = Object.entries(GROUPS).map(([key, g]) => {
+      const total = countGroup(key);
+      return `
+      <li class="nav-item">
+        <a>
+          ${g.label}
+          ${total > 0 ? `<span class="nav-cnt">${total}</span>` : ''}
+          <span class="nav-arrow">▾</span>
+        </a>
+        <div class="dropdown">
+          ${g.subcats.map(cat => `
+            <a onclick="showAll('${key}','${cat}')">
+              ${cat}
+              <span class="dd-cnt">${countSubcat(cat)}</span>
+            </a>
+          `).join('')}
+          <div class="dropdown-div"></div>
+          <a onclick="showAll('${key}',null)" style="font-weight:700">
+            See All ${g.label}
+            <span class="dd-cnt">${total}</span>
+          </a>
+        </div>
+      </li>`;
+    }).join('') + `
+    <li style="margin-left:.3rem">
+      <a href="/admin/" target="_blank" style="color:var(--ink3);text-decoration:none;padding:.5rem .7rem;border-radius:6px;font-size:.82rem;font-weight:500;display:block;transition:all .18s" onmouseover="this.style.color='var(--blue)';this.style.background='var(--blue-l)'" onmouseout="this.style.color='var(--ink3)';this.style.background='transparent'">⚙ Admin</a>
+    </li>`;
+  }
+
+
+  /* ══════════════════════════════════════════════════
+     ROUTING
+  ══════════════════════════════════════════════════ */
+
+  async function init() {
+    renderHome(true);   // show skeleton first
+    ALL_PROJECTS = await fetchProjects();
+    buildNav();
+    route();
+  }
+
+
+  function route() {
+    const hash = window.location.hash.replace('#','');
+    if (!hash || hash === 'home') renderHome(false);
+    else if (hash.startsWith('view-')) renderDetail(hash.replace('view-',''));
+    else if (hash.startsWith('all-')) {
+      const parts = hash.split('-');
+      renderAllPage(parts[1], parts.slice(2).join('-') || null);
+    }
+  }
+
+
+  window.addEventListener('hashchange', route);
+
+  window.addEventListener('load', init);
+
+
+  /* ══════════════════════════════════════════════════
+     HOME PAGE
+  ══════════════════════════════════════════════════ */
+
+  function renderHome(loading = false) {
+    const h = HERO;
+    document.getElementById('app').innerHTML = `
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="photo-wrap">
+        <img src="${h.photo}" class="hero-photo" alt="Abdullah Shadek Fahim"
+             onerror="this.src='https://via.placeholder.com/180/e8eeff/1d5aff?text=ASF'">
+      </div>
+      <div>
+        <div class="hero-eyebrow">Researcher · Engineer · Freelancer</div>
+        <h1 class="hero-name">${h.name}</h1>
+        <p class="hero-sub">${h.tagline}</p>
+        <p class="hero-bio">${h.bio}</p>
+        <div class="hero-btns">
+          <a href="${h.fiverr}" target="_blank" class="btn btn-hire">🛒 Hire Me on Fiverr</a>
+          <a href="mailto:${h.email}" class="btn btn-p">✉ Contact Me</a>
+          <a href="${h.linkedin}" target="_blank" class="btn btn-g">LinkedIn ↗</a>
+          <a href="${h.github}" target="_blank" class="btn btn-g">GitHub ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <div style="max-width:1100px;margin:0 auto;padding:0 5vw"><div class="preview-divider"></div></div>
+
+    <!-- EDUCATION -->
+    <section class="edu-section">
+      <div class="section-header">
+        <h2 class="section-title">🎓 Education</h2>
+      </div>
+      <div class="edu-grid">
+        ${EDUCATION.map(e => `
+        <div class="edu-card">
+          <div class="edu-icon" style="background:${e.iconBg || 'var(--surface2)'}">${e.icon}</div>
+          <div style="flex:1">
+            <div class="edu-level">${e.level}</div>
+            <div class="edu-inst">${e.institution}</div>
+            <div class="edu-degree">${e.degree}</div>
+            <div class="edu-meta">
+              <span class="edu-pill">📅 ${e.passing}</span>
+              <span class="edu-pill">⭐ GPA ${e.gpa}</span>
+            </div>
+          </div>
+        </div>
+        `).join('')}
+      </div>
+    </section>
+
+    <div style="max-width:1100px;margin:0 auto;padding:0 5vw"><div class="preview-divider"></div></div>
+
+    ${loading ? renderSkeletonSections() : renderPreviewSections()}
+
+    <!-- REVIEWS -->
+    ${REVIEWS.length > 0 ? `
+    <div style="max-width:1100px;margin:0 auto;padding:0 5vw"><div class="preview-divider"></div></div>
+    <section class="reviews-section">
+      <div class="section-header">
+        <h2 class="section-title">⭐ Client Reviews</h2>
+        <span style="font-size:.8rem;color:var(--ink3)">${REVIEWS.length} reviews</span>
+      </div>
+      <div class="reviews-grid">
+        ${REVIEWS.map(r => `
+        <div class="review-card">
+          <div class="review-top">
+            <img src="${r.photo || ''}" class="review-avatar"
+                 onerror="this.src='https://via.placeholder.com/44/f2efe9/8a837a?text=${r.name[0]}'">
+            <div>
+              <div class="review-name">${r.name}</div>
+              <div class="review-platform">${r.platform}</div>
+            </div>
+          </div>
+          <div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+          <div class="review-text">"${r.text}"</div>
+          <div class="review-time">${r.time}</div>
+        </div>
+        `).join('')}
+      </div>
+    </section>
+    ` : ''}
+    `;
+  }
+
+
+  /* ══════════════════════════════════════════════════
+     PREVIEW SECTIONS (latest 3 per group)
+  ══════════════════════════════════════════════════ */
+
+  function renderPreviewSections() {
+    return Object.entries(GROUPS).map(([key, g]) => {
+      const items = ALL_PROJECTS
+        .filter(p => g.subcats.includes(p.category))
+        .slice(0, 3);
+
+      if (items.length === 0) return '';
+
+      return `
+      <section class="preview-section">
+        <div class="section-header">
+          <h2 class="section-title">${g.icon} ${g.label}</h2>
+          <a class="see-all" onclick="showAll('${key}',null)">See All (${countGroup(key)}) →</a>
+        </div>
+        <div class="grid">
+          ${items.map(p => cardHTML(p)).join('')}
+        </div>
+        ${countGroup(key) > 3 ? `
+        <div class="see-all-row">
+          <button class="see-all-btn" onclick="showAll('${key}',null)">
+            See All ${g.label} (${countGroup(key)}) →
+          </button>
+        </div>` : ''}
+      </section>
+      <div style="max-width:1100px;margin:0 auto;padding:0 5vw"><div class="preview-divider"></div></div>
+      `;
+    }).join('');
+  }
+
+
+  function renderSkeletonSections() {
+    return Object.entries(GROUPS).map(([key, g]) => `
+      <section class="preview-section">
+        <div class="section-header">
+          <h2 class="section-title">${g.icon} ${g.label}</h2>
+        </div>
+        <div class="grid">
+          ${Array(3).fill('<div class="card skeleton skel-card"></div>').join('')}
+        </div>
+      </section>
+      <div style="max-width:1100px;margin:0 auto;padding:0 5vw"><div class="preview-divider"></div></div>
+    `).join('');
+  }
+
+
+  function cardHTML(p) {
+    const badgeClass = 'badge-' + p.category.replace(/\s+/g,'');
+    return `
+    <div class="card" onclick="location.hash='view-${p.id}'">
+      ${p.image
+        ? `<img src="${p.image}" class="card-img" alt="${p.title}" onerror="this.style.display='none'">`
+        : `<div class="card-img" style="display:flex;align-items:center;justify-content:center;color:var(--ink3);font-size:.8rem">No Image</div>`
+      }
+      <span class="badge ${badgeClass}">${p.category}</span>
+      <h3>${p.title}</h3>
+      <p>${p.description}</p>
+      <div class="card-cta">Learn More →</div>
+    </div>`;
+  }
+
+
+  /* ══════════════════════════════════════════════════
+     ALL PAGE (See All for a group)
+  ══════════════════════════════════════════════════ */
+
+  function showAll(groupKey, subcat) {
+    const encoded = subcat ? `all-${groupKey}-${subcat}` : `all-${groupKey}`;
+    window.location.hash = encoded;
+  }
+
+
+  function renderAllPage(groupKey, subcat) {
+    const g = GROUPS[groupKey];
+    if (!g) { goHome(); return; }
+
+    let items = ALL_PROJECTS.filter(p => g.subcats.includes(p.category));
+    if (subcat) items = items.filter(p => p.category === subcat);
+
+    const activeTab = subcat || 'All';
+
+    document.getElementById('app').innerHTML = `
+    <div class="detail-page">
+      <button onclick="goHome()" class="btn btn-g" style="margin-bottom:1.5rem">← Home</button>
+      <h2 class="section-title" style="margin-bottom:1.2rem">${g.icon} ${g.label}</h2>
+
+      <div class="filter-tabs">
+        <button class="ftab ${activeTab==='All'?'active':''}"
+                onclick="showAll('${groupKey}',null)">All (${countGroup(groupKey)})</button>
+        ${g.subcats.map(cat => `
+          <button class="ftab ${activeTab===cat?'active':''}"
+                  onclick="showAll('${groupKey}','${cat}')">
+            ${cat} (${countSubcat(cat)})
+          </button>
+        `).join('')}
+      </div>
+
+      <div class="grid">
+        ${items.length === 0
+          ? `<div class="empty" style="grid-column:1/-1">
+               <div style="font-size:2rem;margin-bottom:.5rem">📂</div>
+               <p>No items yet. <a href="/admin/" style="color:var(--blue)">Add via Admin →</a></p>
+             </div>`
+          : items.map(p => cardHTML(p)).join('')
+        }
+      </div>
+    </div>`;
+    window.scrollTo(0,0);
+  }
+
+
+  /* ══════════════════════════════════════════════════
+     DETAIL PAGE
+  ══════════════════════════════════════════════════ */
+
+  function renderDetail(id) {
+    const item = ALL_PROJECTS.find(p => p.id === id);
+    if (!item) { goHome(); return; }
+
+    // Find which group this belongs to
+    const groupKey = Object.keys(GROUPS).find(k => GROUPS[k].subcats.includes(item.category)) || '';
+    const badgeClass = 'badge-' + item.category.replace(/\s+/g,'');
+
+    document.getElementById('app').innerHTML = `
+    <div class="detail-page">
+      <div style="display:flex;gap:.6rem;margin-bottom:2rem;flex-wrap:wrap">
+        <button onclick="goHome()" class="btn btn-g">← Home</button>
+        ${groupKey ? `<button onclick="showAll('${groupKey}',null)" class="btn btn-g">← ${GROUPS[groupKey].label}</button>` : ''}
+      </div>
+
+      <div class="detail-hero">
+        ${item.image ? `<img src="${item.image}" style="width:100%;max-height:340px;object-fit:cover;border-radius:10px;margin-bottom:1.5rem">` : ''}
+        <span class="badge ${badgeClass}">${item.category}</span>
+        <h1 class="detail-title">${item.title}</h1>
+        <p style="color:var(--ink2);margin-top:.5rem">${item.description}</p>
+        ${item.link ? `<a href="${item.link}" target="_blank" class="btn btn-p" style="margin-top:1rem">View Project ↗</a>` : ''}
+      </div>
+
+      ${item.body ? `
+      <div class="detail-section">
+        <h3 style="margin-bottom:1rem;font-family:Fraunces,serif">Details</h3>
+        <div class="detail-body">${md2html(item.body)}</div>
+      </div>` : ''}
+    </div>`;
+    window.scrollTo(0,0);
+  }
+
+
+  function goHome() {
+    window.location.hash = '';
+    renderHome(false);
+  }
+
+  </script>
+
+  </body>
+
+  </html>
+---
+c cz
