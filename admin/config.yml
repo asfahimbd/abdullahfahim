@@ -1,9 +1,10 @@
 backend:
   name: github
-  repo: asfahimbd/abdullahfahim
+  repo: abdullahfahim19/abdullahfahim
   branch: main
-  client_id: Ov23liPSGiyh6XED26AR
-  client_secret: 1c95cf1cc4b0af9a06830204bc7971d4fc75a7fb
+  site_domain: abdullahfahim.pages.dev
+  base_url: https://abdullahfahim.pages.dev
+  auth_endpoint: /api/auth # Eita Cloudflare-er auth handle korbe
 
 media_folder: "assets/images"
 public_folder: "/assets/images"
