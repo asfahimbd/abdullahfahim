@@ -1,93 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Abdullah Shadek Fahim | Researcher & Level 2 Seller</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;1,400&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <style>
-    :root { --bg: #f8f7f3; --blue: #1d5aff; }
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #1a1714; }
-    .heading { font-family: 'Fraunces', serif; }
-    .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid #e6e1d9; }
-    .project-card { transition: all 0.3s ease; }
-    .project-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abdullah Shadek Fahim | Researcher & Level 2 Seller</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;1,400&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+        :root { --bg: #f8f7f3; --blue: #1d5aff; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #1a1714; }
+        .heading { font-family: 'Fraunces', serif; }
+        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid #e6e1d9; }
+        .project-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .project-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(29, 90, 255, 0.15); }
+    </style>
 </head>
 <body>
 
-  <nav class="sticky top-0 z-50 glass px-6 py-4 flex justify-between items-center">
-    <div class="heading text-xl font-bold text-blue-600">A.S. FAHIM</div>
-    <div class="flex gap-4">
-      <a href="/admin/" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md">Dashboard</a>
-    </div>
-  </nav>
+    <nav class="sticky top-0 z-50 glass px-6 py-4 flex justify-between items-center">
+        <div class="heading text-xl font-bold text-blue-600 tracking-tighter">A.S. FAHIM</div>
+        <div class="flex gap-4">
+            <a href="#projects" class="text-sm font-bold hover:text-blue-600 transition">Works</a>
+            <a href="/admin/" class="bg-blue-600 text-white px-5 py-2 rounded-xl text-sm font-bold shadow-lg hover:bg-blue-700 transition">Dashboard</a>
+        </div>
+    </nav>
 
-  <header class="max-w-6xl mx-auto px-6 py-16 text-center">
-    <h1 class="heading text-5xl md:text-7xl mb-6 leading-tight">Researcher & <br/><span class="text-blue-600 italic">Level 2 Seller.</span></h1>
-    <p class="text-gray-600 text-lg max-w-2xl mx-auto">EEE Graduate from JUST. Researcher in Ion Implantation & Website Architecture.</p>
-  </header>
+    <header class="max-w-6xl mx-auto px-6 py-16 text-center">
+        <div class="inline-block bg-blue-100 text-blue-600 px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6">Available for PhD Fall 2027</div>
+        <h1 class="heading text-5xl md:text-7xl mb-6 leading-tight">Researcher & <br><span class="text-blue-600 italic">Level 2 Seller.</span></h1>
+        <p class="text-gray-500 text-lg max-w-2xl mx-auto leading-relaxed">
+            EEE Graduate from JUST. Researcher in Ion Implantation & Digital Web Architecture. 
+            Completed 350+ projects globally.
+        </p>
+    </header>
 
-  <section id="projects" class="max-w-6xl mx-auto px-6 py-10">
-    <h2 class="heading text-3xl mb-10 border-l-4 border-blue-600 pl-4 uppercase tracking-tighter">Selected Projects</h2>
-    <div id="item-list" class="grid md:grid-cols-3 gap-8">
-      <div class="col-span-full text-center py-10 text-gray-400">Syncing with GitHub...</div>
-    </div>
-  </section>
-
-  <script>
-    // Netlify Identity Logic
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", user => { if (!user) window.netlifyIdentity.on("login", () => document.location.href = "/admin/"); });
-    }
-
-    async function loadProjects() {
-      const container = document.getElementById('item-list');
-      const user = "abdullahfahim19";
-      const repo = "abdullahfahim";
-      
-      try {
-        const res = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/content/projects`);
-        const files = await res.json();
+    <section id="projects" class="max-w-6xl mx-auto px-6 py-12">
+        <h2 class="heading text-3xl mb-12 border-l-4 border-blue-600 pl-4 uppercase tracking-tighter italic">Selected Projects</h2>
         
-        if (!files || files.length === 0) {
-          container.innerHTML = `<p class="col-span-full text-center text-gray-500 italic">Go to Dashboard and add your first project!</p>`;
-          return;
+        <div id="item-list" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="col-span-full text-center py-20 text-gray-400 italic">
+                Syncing with your latest updates...
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-16 text-center text-gray-400 text-xs border-t mt-20">
+        © 2026 Abdullah Shadek Fahim. Built for Global Impact.
+    </footer>
+
+    <script>
+        // Netlify Identity Initialization
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) window.netlifyIdentity.on("login", () => document.location.href = "/admin/");
+            });
         }
 
-        container.innerHTML = ''; // Clear container
-
-        for (const file of files) {
-          if (file.name.endsWith('.md')) {
-            const raw = await fetch(file.download_url);
-            const text = await raw.text();
+        // SMART DATA LOADER
+        async function fetchContent() {
+            const container = document.getElementById('item-list');
+            const repoOwner = "abdullahfahim19";
+            const repoName = "abdullahfahim";
             
-            // Basic Markdown Parsing
-            const title = text.match(/title:\s*"(.*)"/)?.[1] || "Project";
-            const category = text.match(/category:\s*(.*)/)?.[1] || "Work";
-            const image = text.match(/image:\s*(.*)/)?.[1] || "https://via.placeholder.com/400x300";
-            const desc = text.match(/description:\s*(.*)/)?.[1] || "";
+            try {
+                // Fetch list of files from GitHub
+                const res = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/content/projects`);
+                const files = await res.json();
 
-            container.innerHTML += `
-              <div class="project-card glass p-5 rounded-3xl shadow-sm">
-                <div class="h-44 w-full rounded-2xl overflow-hidden mb-4 bg-gray-100">
-                  <img src="${image}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x300'">
-                </div>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-blue-600 bg-blue-50 px-2 py-1 rounded">${category}</span>
-                <h3 class="heading text-xl mt-3 mb-2">${title}</h3>
-                <p class="text-gray-500 text-sm line-clamp-2">${desc}</p>
-              </div>
-            `;
-          }
+                if (!Array.isArray(files) || files.length === 0) {
+                    container.innerHTML = `<div class="col-span-full text-center py-10 glass rounded-3xl text-gray-400">Your portfolio is ready! Start adding items from the Dashboard.</div>`;
+                    return;
+                }
+
+                container.innerHTML = ''; // Clear loader
+
+                for (const file of files) {
+                    if (file.name.endsWith('.md')) {
+                        const rawResponse = await fetch(file.download_url);
+                        const text = await rawResponse.text();
+                        
+                        // Extract Data using Regex
+                        const title = text.match(/title:\s*"(.*)"/)?.[1] || "Untitled Project";
+                        const category = text.match(/category:\s*(.*)/)?.[1] || "Development";
+                        const image = text.match(/image:\s*"(.*)"/)?.[1] || text.match(/image:\s*(.*)/)?.[1] || "https://via.placeholder.com/600x400";
+                        const desc = text.match(/description:\s*(.*)/)?.[1] || "A detailed look into an impactful project.";
+
+                        container.innerHTML += `
+                            <div class="project-card glass p-6 rounded-[2.5rem] flex flex-col">
+                                <div class="h-52 w-full rounded-[1.5rem] overflow-hidden mb-6 bg-gray-100 border border-white shadow-inner">
+                                    <img src="${image}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/600x400'">
+                                </div>
+                                <span class="self-start text-[9px] font-bold uppercase tracking-[0.2em] text-blue-600 bg-blue-50 px-3 py-1 rounded-full mb-4">${category}</span>
+                                <h3 class="heading text-xl mb-3 pr-4">${title}</h3>
+                                <p class="text-gray-500 text-sm leading-relaxed mb-8 flex-grow">${desc}</p>
+                                <div class="pt-4 border-t border-gray-100 flex justify-between items-center">
+                                    <span class="text-xs font-bold text-gray-400 italic">Case Study</span>
+                                    <button class="text-blue-600 font-bold text-sm hover:translate-x-2 transition-transform tracking-tighter">View Story →</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            } catch (err) {
+                container.innerHTML = `<div class="col-span-full text-center py-10 glass rounded-3xl text-red-400 font-bold">Connecting to repository... Please ensure your GitHub repo is public.</div>`;
+            }
         }
-      } catch (err) {
-        container.innerHTML = `<p class="col-span-full text-center text-red-400">Failed to load projects. Please check your GitHub Repo.</p>`;
-      }
-    }
 
-    loadProjects();
-  </script>
+        fetchContent();
+    </script>
 </body>
 </html>
