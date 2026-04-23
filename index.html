@@ -385,7 +385,8 @@ function fixImg(p) {
 /* ══════════════════════════════════════════
    GITHUB API — with debug logging
 ══════════════════════════════════════════ */
-const GH_HEADERS = {headers:{Accept:'application/vnd.github+json'}};
+const GH_TOKEN = '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';
+const GH_HEADERS = {headers:{Accept:'application/vnd.github+json',Authorization:`Bearer ${GH_TOKEN}`}};
 
 async function ghList(path) {
   const url = `https://api.github.com/repos/${REPO}/contents/${path}?ref=${BRANCH}`;
