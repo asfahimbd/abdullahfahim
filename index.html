@@ -385,23 +385,19 @@ function fixImg(p) {
 /* ══════════════════════════════════════════
    GITHUB API — with debug logging
 ══════════════════════════════════════════ */
-const GH_TOKEN = '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';
-const GH_HEADERS = {headers:{Accept:'application/vnd.github+json',Authorization:`Bearer ${GH_TOKEN}`}};
+const PROXY = 'https://oauth-proxy.asfahimbd.workers.dev/gh';
+const GH_HEADERS = {};
 
 async function ghList(path) {
-  const url = `https://api.github.com/repos/${REPO}/contents/${path}?ref=${BRANCH}`;
+  const url = `${PROXY}/repos/asfahimbd/abdullahfahim/contents/${path}?ref=main`;
   try {
-    const r = await fetch(url, GH_HEADERS);
-    if (r.status === 404) { dbg(`${path}: folder not found (no content yet)`, 'warn'); return null; }
-    if (r.status === 403) { dbg(`${path}: API rate limit hit!`, 'err'); return null; }
+    const r = await fetch(url);
+    if (r.status === 404) { dbg(`${path}: not found`, 'warn'); return null; }
     if (!r.ok) { dbg(`${path}: HTTP ${r.status}`, 'err'); return null; }
     const data = await r.json();
     dbg(`${path}: found ${Array.isArray(data) ? data.length : 0} files`, 'ok');
     return Array.isArray(data) ? data : null;
-  } catch(e) {
-    dbg(`${path}: ${e.message}`, 'err');
-    return null;
-  }
+  } catch(e) { dbg(`${path}: ${e.message}`, 'err'); return null; }
 }
 
 async function ghRaw(downloadUrl) {
@@ -420,7 +416,7 @@ async function ghRaw(downloadUrl) {
 ══════════════════════════════════════════ */
 async function fetchSettings() {
   try {
-    const url = `https://api.github.com/repos/${REPO}/contents/content/settings/hero.md?ref=${BRANCH}`;
+    const url = `${PROXY}/repos/asfahimbd/abdullahfahim/contents/content/settings/hero.md?ref=main`;
     const r = await fetch(url, GH_HEADERS);
     if (!r.ok) { dbg(`settings: HTTP ${r.status}`, r.status===404?'warn':'err'); return; }
     const j = await r.json();
