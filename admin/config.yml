@@ -2,5 +2,19 @@ backend:
   name: github
   repo: asfahimbd/abdullahfahim
   branch: main
-  base_url: https://abdullahfahim.vercel.app
-  auth_endpoint: /api/auth
+
+media_folder: "assets/images"
+public_folder: "/assets/images"
+
+collections:
+  - name: "projects"
+    label: "Portfolio Items"
+    folder: "content/projects"
+    create: true
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Category", name: "category", widget: "select", options: ["Fiverr", "Research", "Session", "Award"]}
+      - {label: "Featured Image", name: "image", widget: "image"}
+      - {label: "Short Description", name: "description", widget: "text"}
+      - {label: "Full Story/Details", name: "body", widget: "markdown"}
+      - {label: "External Link", name: "link", widget: "string", required: false}
