@@ -48,7 +48,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .nav-hire{font-size:.73rem;font-weight:700;padding:.33rem .75rem;border-radius:7px;border:none;background:var(--teal);color:#fff;cursor:pointer;transition:all .17s;text-decoration:none;white-space:nowrap;flex-shrink:0}
 .nav-hire:hover{background:var(--teal-d)}
 .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;flex-shrink:0}
-.hamburger span{display:block;width:22px;height:2px;background:var(--ink);border-radius:2px;transition:all .24s}
+.hamburger span{display:block;width:22px;height:2px;background:var(--ink);border-radius:2px}
 
 /* DRAWER */
 .drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;backdrop-filter:blur(3px)}
@@ -117,7 +117,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 @keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(10px)}to{opacity:1;transform:none}}
 .modal-img{width:100%;height:190px;object-fit:cover;border-radius:18px 18px 0 0;display:block}
 .modal-body{padding:1.65rem}
-.modal-close{float:right;background:var(--surface2);border:none;cursor:pointer;font-size:.8rem;padding:.27rem .58rem;border-radius:7px;color:var(--ink3);font-weight:700;transition:all .13s}
+.modal-close{float:right;background:var(--surface2);border:none;cursor:pointer;font-size:.8rem;padding:.27rem .58rem;border-radius:7px;color:var(--ink3);font-weight:700}
 .modal-close:hover{background:var(--rose-l);color:var(--rose)}
 .modal-badge{display:inline-block;padding:.15rem .5rem;border-radius:999px;font-size:.63rem;font-weight:700;margin-bottom:.52rem;background:var(--blue-l);color:var(--blue)}
 .modal-title{font-family:'Fraunces',serif;font-size:1.4rem;margin-bottom:.22rem}
@@ -146,7 +146,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .see-all-link{color:var(--blue);font-size:.76rem;font-weight:700;cursor:pointer;padding:.26rem .66rem;border-radius:6px;transition:all .14s;white-space:nowrap}
 .see-all-link:hover{background:var(--blue-l)}
 
-/* REVIEWS SLIDER */
+/* REVIEWS */
 .reviews-track{display:flex;gap:1rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:0 5vw .5rem;scroll-padding-left:5vw}
 .reviews-track::-webkit-scrollbar{display:none}
 .review-card{scroll-snap-align:start;flex:0 0 298px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;border-left:4px solid var(--amber);transition:box-shadow .19s}
@@ -189,6 +189,14 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .skel-card{height:225px}
 .empty{text-align:center;padding:3rem;color:var(--ink3);background:var(--surface);border:1px dashed var(--border2);border-radius:var(--r)}
 
+/* DEBUG PANEL */
+#debug-panel{display:none;position:fixed;bottom:1rem;right:1rem;z-index:999;background:#1a1714;color:#e8f5e9;border-radius:12px;padding:1rem;max-width:320px;max-height:60vh;overflow-y:auto;font-size:.72rem;font-family:monospace;box-shadow:var(--shadow-lg)}
+#debug-panel h4{color:#81c784;margin-bottom:.5rem}
+#debug-panel .ok{color:#81c784}
+#debug-panel .err{color:#ef9a9a}
+#debug-panel .warn{color:#ffe082}
+#debug-close{float:right;background:none;border:none;color:#ef9a9a;cursor:pointer;font-size:.9rem}
+
 footer{text-align:center;padding:2.2rem;color:var(--ink3);border-top:1px solid var(--border);margin-top:3rem;font-size:.8rem}
 
 @media(max-width:800px){
@@ -203,7 +211,7 @@ footer{text-align:center;padding:2.2rem;color:var(--ink3);border-top:1px solid v
 <body>
 
 <nav>
-  <div class="nav-logo" onclick="goHome()">
+  <div class="nav-logo" id="nav-logo-btn" onclick="goHome()">
     <div class="nav-photo-wrap" id="nav-photo-wrap" style="display:none">
       <img id="nav-photo-img" class="nav-photo" src="" alt=""/>
     </div>
@@ -236,15 +244,38 @@ footer{text-align:center;padding:2.2rem;color:var(--ink3);border-top:1px solid v
   <div class="modal-box" id="edu-modal-box"></div>
 </div>
 
+<!-- DEBUG PANEL: nav-logo তে 5 বার click করলে খুলবে -->
+<div id="debug-panel">
+  <button id="debug-close" onclick="document.getElementById('debug-panel').style.display='none'">✕</button>
+  <h4>🔍 Debug Info</h4>
+  <div id="debug-log"></div>
+</div>
+
 <footer>© 2026 Abdullah Shadek Fahim · Jashore University of Science and Technology</footer>
 
 <script>
-/* ══════════════════════════════════════════
-   CONFIG — Fallback (Dashboard থেকে override হবে)
-══════════════════════════════════════════ */
-const REPO         = 'asfahimbd/abdullahfahim';
-const BRANCH       = 'main';
+const REPO   = 'asfahimbd/abdullahfahim';
+const BRANCH = 'main';
 
+/* Debug logger */
+let _dbgClicks = 0;
+document.getElementById('nav-logo-btn').addEventListener('click', () => {
+  _dbgClicks++;
+  if (_dbgClicks >= 5) { document.getElementById('debug-panel').style.display='block'; _dbgClicks=0; }
+  setTimeout(()=>{ if(_dbgClicks < 5) _dbgClicks=0; }, 3000);
+});
+function dbg(msg, type='ok') {
+  const el = document.getElementById('debug-log');
+  if (!el) return;
+  const d = new Date(); const t = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+  el.innerHTML += `<div class="${type}">[${t}] ${msg}</div>`;
+  el.scrollTop = el.scrollHeight;
+  console.log(`[${type.toUpperCase()}] ${msg}`);
+}
+
+/* ══════════════════════════════════════════
+   FALLBACK DATA
+══════════════════════════════════════════ */
 let HERO = {
   name:"Abdullah Shadek Fahim",
   tagline:"Electrical & Electronic Engineer · Level 2 Fiverr Seller",
@@ -256,12 +287,13 @@ let HERO = {
 };
 
 let EDUCATION_DATA = [
-  {level:"University",institution:"Jashore University of Science and Technology",degree:"B.Sc. in Electrical & Electronic Engineering",passing:"2025",gpa:"3.XX / 4.00",icon:"🎓",iconBg:"var(--blue-l)",photo:"",description:"Completed undergraduate studies focusing on Semiconductor devices, Power systems, and Machine Learning applications in Physics.",subjects:"Digital Electronics,Electromagnetics,Signal Processing,VLSI Design,Power Systems,Machine Learning,Ion Implantation,Microprocessors,Control Systems,Optical Fiber Communication"},
+  {level:"University",institution:"Jashore University of Science and Technology",degree:"B.Sc. in Electrical & Electronic Engineering",passing:"2025",gpa:"3.XX / 4.00",icon:"🎓",iconBg:"var(--blue-l)",photo:"",description:"Completed undergraduate studies focusing on Semiconductor devices, Power systems, and Machine Learning in Physics.",subjects:"Digital Electronics,Electromagnetics,Signal Processing,VLSI Design,Power Systems,Machine Learning,Ion Implantation,Microprocessors,Control Systems,Optical Fiber Communication"},
   {level:"College",institution:"Your College Name Here",degree:"HSC · Science Group",passing:"2019",gpa:"5.00 / 5.00",icon:"🏫",iconBg:"var(--teal-l)",photo:"",description:"Completed Higher Secondary Certificate with distinction.",subjects:"Physics,Chemistry,Mathematics,Biology,English,ICT"},
   {level:"School",institution:"Your School Name Here",degree:"SSC · Science Group",passing:"2017",gpa:"5.00 / 5.00",icon:"📚",iconBg:"var(--amber-l)",photo:"",description:"Completed Secondary School Certificate with Golden A+.",subjects:"Physics,Chemistry,Mathematics,Biology,General Science,English,Bangla"}
 ];
 
 let REVIEWS_DATA = [];
+let ALL_PROJECTS = [];
 
 let GROUPS = {
   Research:{label:"Research",icon:"🔬",subcats:["Thesis","Journal","Conference"],hasDropdown:true},
@@ -272,76 +304,131 @@ let GROUPS = {
   Awards:{label:"Awards",icon:"🏆",subcats:["Award"],hasDropdown:false}
 };
 
-let ALL_PROJECTS = [];
-
 /* ══════════════════════════════════════════
-   ✅ FIXED YAML PARSER
-   multiline text, block scalars সব handle করে
+   ✅ ROBUST YAML PARSER
+   Handles: | > |- >- |+ >+ quoted strings
 ══════════════════════════════════════════ */
-function parseFM(text) {
-  const m = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
-  if (!m) return {fm:{}, body:''};
-  const raw = m[1], body = m[2].trim();
+function parseFM(rawText) {
+  /* Normalize line endings */
+  const text = rawText.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const m = text.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
+  if (!m) {
+    dbg('parseFM: no frontmatter found', 'warn');
+    return {fm:{}, body: text.trim()};
+  }
+
+  const raw = m[1];
+  const body = m[2].trim();
   const fm = {};
   const lines = raw.split('\n');
   let i = 0;
+
   while (i < lines.length) {
     const line = lines[i];
-    const kv = line.match(/^([\w][\w_-]*):\s*(.*)$/);
+
+    /* Skip empty lines and comments */
+    if (!line.trim() || line.trim().startsWith('#')) { i++; continue; }
+
+    /* Match key: value */
+    const kv = line.match(/^([\w][\w_-]*):\s*(.*)\s*$/);
     if (!kv) { i++; continue; }
+
     const key = kv[1];
     let val = kv[2].trim();
 
-    /* Block scalar: key: | or key: > */
-    if (val === '|' || val === '>') {
-      const fold = val === '>';
+    /* Block scalar: |, >, |-, >-, |+, >+ */
+    if (/^[|>][+\-]?$/.test(val)) {
+      const fold = val.startsWith('>');   /* > folds newlines to spaces */
+      const strip = val.endsWith('-');    /* - strips trailing newlines */
       i++;
-      const block = [];
-      while (i < lines.length && (lines[i].match(/^\s+/) || lines[i] === '')) {
-        block.push(lines[i].replace(/^  /, ''));
+      const blockLines = [];
+
+      while (i < lines.length) {
+        const bl = lines[i];
+        /* Block ends when we hit a non-indented line that has content */
+        if (bl !== '' && !bl.startsWith(' ') && !bl.startsWith('\t')) break;
+        /* Remove exactly 2 spaces of indentation */
+        blockLines.push(bl.replace(/^  /, '').replace(/^\t/, ''));
         i++;
       }
+
+      /* Strip trailing empty lines if '-' modifier */
+      if (strip) { while (blockLines.length && !blockLines[blockLines.length-1].trim()) blockLines.pop(); }
+
       fm[key] = fold
-        ? block.join(' ').replace(/\n/g,' ').trim()
-        : block.join('\n').trim();
+        ? blockLines.join(' ').replace(/\s+/g,' ').trim()
+        : blockLines.join('\n').trim();
       continue;
     }
 
-    /* Quoted string */
-    val = val.replace(/^"([\s\S]*)"$/, '$1').replace(/^'([\s\S]*)'$/, '$1');
+    /* Remove surrounding quotes */
+    if ((val.startsWith('"') && val.endsWith('"')) ||
+        (val.startsWith("'") && val.endsWith("'"))) {
+      val = val.slice(1, -1);
+    }
+
     fm[key] = val;
     i++;
   }
+
   return {fm, body};
 }
 
 function fixImg(p) {
-  if (!p) return '';
+  if (!p || p.trim() === '') return '';
+  p = p.trim();
   if (p.startsWith('/assets/')) return `https://raw.githubusercontent.com/${REPO}/${BRANCH}${p}`;
-  return p;
-}
-
-const GH = {headers:{Accept:'application/vnd.github+json'}};
-async function ghList(path) {
-  const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}?ref=${BRANCH}`,GH);
-  return r.ok ? r.json() : null;
-}
-async function ghRaw(downloadUrl) {
-  const r = await fetch(downloadUrl);
-  return r.ok ? r.text() : null;
+  if (p.startsWith('http')) return p;
+  return `https://raw.githubusercontent.com/${REPO}/${BRANCH}/${p}`;
 }
 
 /* ══════════════════════════════════════════
-   FETCH SETTINGS
+   GITHUB API — with debug logging
+══════════════════════════════════════════ */
+const GH_HEADERS = {headers:{Accept:'application/vnd.github+json'}};
+
+async function ghList(path) {
+  const url = `https://api.github.com/repos/${REPO}/contents/${path}?ref=${BRANCH}`;
+  try {
+    const r = await fetch(url, GH_HEADERS);
+    if (r.status === 404) { dbg(`${path}: folder not found (no content yet)`, 'warn'); return null; }
+    if (r.status === 403) { dbg(`${path}: API rate limit hit!`, 'err'); return null; }
+    if (!r.ok) { dbg(`${path}: HTTP ${r.status}`, 'err'); return null; }
+    const data = await r.json();
+    dbg(`${path}: found ${Array.isArray(data) ? data.length : 0} files`, 'ok');
+    return Array.isArray(data) ? data : null;
+  } catch(e) {
+    dbg(`${path}: ${e.message}`, 'err');
+    return null;
+  }
+}
+
+async function ghRaw(downloadUrl) {
+  try {
+    const r = await fetch(downloadUrl);
+    if (!r.ok) { dbg(`raw fetch failed: ${r.status}`, 'err'); return null; }
+    return r.text();
+  } catch(e) {
+    dbg(`raw fetch error: ${e.message}`, 'err');
+    return null;
+  }
+}
+
+/* ══════════════════════════════════════════
+   FETCH FUNCTIONS
 ══════════════════════════════════════════ */
 async function fetchSettings() {
   try {
-    const r = await fetch(`https://api.github.com/repos/${REPO}/contents/content/settings/hero.md?ref=${BRANCH}`,GH);
-    if (!r.ok) return;
+    const url = `https://api.github.com/repos/${REPO}/contents/content/settings/hero.md?ref=${BRANCH}`;
+    const r = await fetch(url, GH_HEADERS);
+    if (!r.ok) { dbg(`settings: HTTP ${r.status}`, r.status===404?'warn':'err'); return; }
     const j = await r.json();
     const text = await ghRaw(j.download_url);
     if (!text) return;
+
     const {fm} = parseFM(text);
+    dbg(`settings parsed: name="${fm.name}" bio="${(fm.bio||'').slice(0,30)}..."`, 'ok');
+
     if (fm.name)     HERO.name     = fm.name;
     if (fm.tagline)  HERO.tagline  = fm.tagline;
     if (fm.bio)      HERO.bio      = fm.bio;
@@ -350,9 +437,89 @@ async function fetchSettings() {
     if (fm.github)   HERO.github   = fm.github;
     if (fm.linkedin) HERO.linkedin = fm.linkedin;
     if (fm.fiverr)   HERO.fiverr   = fm.fiverr;
-    document.getElementById('nav-fiverr-btn').href = HERO.fiverr;
+
+    document.getElementById('nav-fiverr-btn').href = HERO.fiverr || '#';
     if (HERO.photo) updateNavPhoto(HERO.photo);
-  } catch(e) { console.warn('Settings:', e); }
+  } catch(e) { dbg(`settings error: ${e.message}`, 'err'); }
+}
+
+async function fetchEducation() {
+  const files = await ghList('content/education');
+  if (!files) return;
+  const items = await Promise.all(files.filter(f=>f.name.endsWith('.md')).map(async f => {
+    const text = await ghRaw(f.download_url);
+    if (!text) return null;
+    const {fm} = parseFM(text);
+    dbg(`edu: ${fm.institution||f.name}`, 'ok');
+    return {
+      level:fm.level||'', institution:fm.institution||'', degree:fm.degree||'',
+      passing:fm.passing||'', gpa:fm.gpa||'', icon:fm.icon||'🎓',
+      iconBg:fm.icon_bg||'var(--blue-l)', photo:fixImg(fm.photo||''),
+      description:fm.description||'', subjects:fm.subjects||'',
+      order:parseInt(fm.order||99)
+    };
+  }));
+  const sorted = items.filter(Boolean).sort((a,b)=>a.order-b.order);
+  if (sorted.length > 0) { EDUCATION_DATA = sorted; dbg(`education: loaded ${sorted.length} entries`, 'ok'); }
+}
+
+async function fetchReviews() {
+  const files = await ghList('content/reviews');
+  if (!files) return;
+  const items = await Promise.all(files.filter(f=>f.name.endsWith('.md')).map(async f => {
+    const text = await ghRaw(f.download_url);
+    if (!text) return null;
+    const {fm} = parseFM(text);
+    dbg(`review: ${fm.name||f.name}`, 'ok');
+    return {
+      name:fm.name||'Client', photo:fixImg(fm.photo||''),
+      platform:fm.platform||'Fiverr',
+      stars:parseInt(fm.stars||5),
+      text:fm.text||'', time:fm.time||''
+    };
+  }));
+  const valid = items.filter(Boolean);
+  if (valid.length > 0) { REVIEWS_DATA = valid; dbg(`reviews: loaded ${valid.length}`, 'ok'); }
+}
+
+async function fetchCategories() {
+  const files = await ghList('content/categories');
+  if (!files) return;
+  const cats = await Promise.all(files.filter(f=>f.name.endsWith('.md')).map(async f => {
+    const text = await ghRaw(f.download_url);
+    if (!text) return null;
+    const {fm} = parseFM(text);
+    return {name:fm.name||'', icon:fm.icon||'📌', parent:fm.parent_group||'Standalone'};
+  }));
+  cats.filter(Boolean).forEach(cat => {
+    if (!cat.name) return;
+    if (cat.parent==='Standalone') {
+      if (!GROUPS[cat.name]) GROUPS[cat.name]={label:cat.name,icon:cat.icon,subcats:[cat.name],hasDropdown:false,dynamic:true};
+    } else if (GROUPS[cat.parent] && !GROUPS[cat.parent].subcats.includes(cat.name)) {
+      GROUPS[cat.parent].subcats.push(cat.name);
+      if (GROUPS[cat.parent].subcats.length > 1) GROUPS[cat.parent].hasDropdown = true;
+    }
+  });
+}
+
+async function fetchProjects() {
+  const files = await ghList('content/projects');
+  if (!files) return [];
+  const items = await Promise.all(files.filter(f=>f.name.endsWith('.md')).map(async f => {
+    const text = await ghRaw(f.download_url);
+    if (!text) return null;
+    const {fm, body} = parseFM(text);
+    dbg(`project: "${fm.title||f.name}" cat="${fm.category}"`, 'ok');
+    return {
+      id:f.name.replace('.md',''),
+      title:fm.title||'Untitled',
+      category:fm.custom_category||fm.category||'',
+      image:fixImg(fm.image||''),
+      description:fm.description||'',
+      link:fm.link||'', youtube:fm.youtube||'', body
+    };
+  }));
+  return items.filter(Boolean);
 }
 
 function updateNavPhoto(url) {
@@ -360,131 +527,23 @@ function updateNavPhoto(url) {
     const w = document.getElementById(id); if (!w) return;
     w.style.display = 'inline-block';
     const img = w.querySelector('img');
-    if (img) { img.src = url; img.onerror = () => w.style.display='none'; }
+    if (img) { img.src=url; img.onerror=()=>{ w.style.display='none'; }; }
   });
-}
-
-/* ══════════════════════════════════════════
-   FETCH EDUCATION
-══════════════════════════════════════════ */
-async function fetchEducation() {
-  try {
-    const files = await ghList('content/education');
-    if (!files || !Array.isArray(files)) return;
-    const items = await Promise.all(
-      files.filter(f => f.name.endsWith('.md')).map(async f => {
-        const text = await ghRaw(f.download_url);
-        if (!text) return null;
-        const {fm} = parseFM(text);
-        return {
-          level: fm.level||'', institution: fm.institution||'',
-          degree: fm.degree||'', passing: fm.passing||'', gpa: fm.gpa||'',
-          icon: fm.icon||'🎓', iconBg: fm.icon_bg||'var(--blue-l)',
-          photo: fixImg(fm.photo||''),
-          description: fm.description||'',
-          subjects: fm.subjects||'',
-          order: parseInt(fm.order||99)
-        };
-      })
-    );
-    const sorted = items.filter(Boolean).sort((a,b) => a.order - b.order);
-    if (sorted.length > 0) EDUCATION_DATA = sorted;
-  } catch(e) { console.warn('Education:', e); }
-}
-
-/* ══════════════════════════════════════════
-   FETCH REVIEWS ← নতুন
-══════════════════════════════════════════ */
-async function fetchReviews() {
-  try {
-    const files = await ghList('content/reviews');
-    if (!files || !Array.isArray(files)) return;
-    const items = await Promise.all(
-      files.filter(f => f.name.endsWith('.md')).map(async f => {
-        const text = await ghRaw(f.download_url);
-        if (!text) return null;
-        const {fm} = parseFM(text);
-        return {
-          name: fm.name||'Client', photo: fixImg(fm.photo||''),
-          platform: fm.platform||'Fiverr',
-          stars: parseInt(fm.stars||5),
-          text: fm.text||'', time: fm.time||''
-        };
-      })
-    );
-    const valid = items.filter(Boolean);
-    if (valid.length > 0) REVIEWS_DATA = valid;
-  } catch(e) { console.warn('Reviews:', e); }
-}
-
-/* ══════════════════════════════════════════
-   FETCH CATEGORIES
-══════════════════════════════════════════ */
-async function fetchCategories() {
-  try {
-    const files = await ghList('content/categories');
-    if (!files || !Array.isArray(files)) return;
-    const cats = await Promise.all(
-      files.filter(f => f.name.endsWith('.md')).map(async f => {
-        const text = await ghRaw(f.download_url);
-        if (!text) return null;
-        const {fm} = parseFM(text);
-        return {name: fm.name||'', icon: fm.icon||'📌', parent: fm.parent_group||'Standalone'};
-      })
-    );
-    cats.filter(Boolean).forEach(cat => {
-      if (!cat.name) return;
-      if (cat.parent === 'Standalone') {
-        if (!GROUPS[cat.name]) GROUPS[cat.name] = {label:cat.name, icon:cat.icon, subcats:[cat.name], hasDropdown:false, dynamic:true};
-      } else if (GROUPS[cat.parent] && !GROUPS[cat.parent].subcats.includes(cat.name)) {
-        GROUPS[cat.parent].subcats.push(cat.name);
-        if (GROUPS[cat.parent].subcats.length > 1) GROUPS[cat.parent].hasDropdown = true;
-      }
-    });
-  } catch(e) { console.warn('Categories:', e); }
-}
-
-/* ══════════════════════════════════════════
-   FETCH PROJECTS
-══════════════════════════════════════════ */
-async function fetchProjects() {
-  try {
-    const files = await ghList('content/projects');
-    if (!files || !Array.isArray(files)) return [];
-    const items = await Promise.all(
-      files.filter(f => f.name.endsWith('.md')).map(async f => {
-        const text = await ghRaw(f.download_url);
-        if (!text) return null;
-        const {fm, body} = parseFM(text);
-        return {
-          id: f.name.replace('.md',''),
-          title: fm.title||'Untitled',
-          category: fm.custom_category||fm.category||'',
-          image: fixImg(fm.image||''),
-          description: fm.description||'',
-          link: fm.link||'',
-          youtube: fm.youtube||'',
-          body
-        };
-      })
-    );
-    return items.filter(Boolean);
-  } catch(e) { console.error(e); return []; }
 }
 
 /* ══════════════════════════════════════════
    COUNTS & NAV
 ══════════════════════════════════════════ */
-function countGroup(k) { return ALL_PROJECTS.filter(p => GROUPS[k]?.subcats.includes(p.category)).length; }
-function countCat(c)   { return ALL_PROJECTS.filter(p => p.category === c).length; }
+function countGroup(k) { return ALL_PROJECTS.filter(p=>GROUPS[k]?.subcats.includes(p.category)).length; }
+function countCat(c)   { return ALL_PROJECTS.filter(p=>p.category===c).length; }
 
 function buildNav() {
-  document.getElementById('main-nav').innerHTML = Object.entries(GROUPS).map(([key,g]) => {
-    const tot = countGroup(key);
-    if (g.hasDropdown) {
-      return `<li class="nav-item"><a>${g.icon} ${g.label}${tot>0?` <span class="nav-cnt">${tot}</span>`:''} <span class="nav-arrow">▾</span></a><div class="dropdown">${g.subcats.map(cat=>`<a onclick="showAll('${key}','${cat}')">${cat} <span class="dd-cnt">${countCat(cat)}</span></a>`).join('')}<div class="dropdown-div"></div><a onclick="showAll('${key}',null)" style="font-weight:700">All ${g.label} <span class="dd-cnt">${tot}</span></a></div></li>`;
-    } else {
-      return `<li class="nav-item"><a onclick="showAll('${key}',null)">${g.icon} ${g.label}${tot>0?` <span class="nav-cnt">${tot}</span>`:''}</a></li>`;
+  document.getElementById('main-nav').innerHTML = Object.entries(GROUPS).map(([key,g])=>{
+    const tot=countGroup(key);
+    if(g.hasDropdown){
+      return`<li class="nav-item"><a>${g.icon} ${g.label}${tot>0?` <span class="nav-cnt">${tot}</span>`:''} <span class="nav-arrow">▾</span></a><div class="dropdown">${g.subcats.map(cat=>`<a onclick="showAll('${key}','${cat}')">${cat} <span class="dd-cnt">${countCat(cat)}</span></a>`).join('')}<div class="dropdown-div"></div><a onclick="showAll('${key}',null)" style="font-weight:700">All ${g.label} <span class="dd-cnt">${tot}</span></a></div></li>`;
+    }else{
+      return`<li class="nav-item"><a onclick="showAll('${key}',null)">${g.icon} ${g.label}${tot>0?` <span class="nav-cnt">${tot}</span>`:''}</a></li>`;
     }
   }).join('');
   buildDrawer();
@@ -492,33 +551,31 @@ function buildNav() {
 
 function buildDrawer() {
   document.getElementById('drawer-body').innerHTML =
-    Object.entries(GROUPS).map(([key,g]) => {
-      const tot = countGroup(key);
-      if (g.hasDropdown) {
-        return `<div><button class="dg-btn" onclick="toggleDG('dg-${key}','dga-${key}')">${g.icon} ${g.label}<span class="dg-right">${tot>0?`<span class="nav-cnt">${tot}</span>`:''}<span id="dga-${key}" style="font-size:.55rem;transition:transform .2s">▾</span></span></button><div class="drawer-sub" id="dg-${key}">${g.subcats.map(cat=>`<a onclick="drawerGo('${key}','${cat}')">${cat} <span class="dd-cnt">${countCat(cat)}</span></a>`).join('')}<a onclick="drawerGo('${key}',null)" style="font-weight:700">All ${g.label} <span class="dd-cnt">${tot}</span></a></div></div>`;
-      } else {
-        return `<div class="drawer-direct" onclick="drawerGo('${key}',null)">${g.icon} ${g.label}${tot>0?`<span class="nav-cnt">${tot}</span>`:''}</div>`;
+    Object.entries(GROUPS).map(([key,g])=>{
+      const tot=countGroup(key);
+      if(g.hasDropdown){
+        return`<div><button class="dg-btn" onclick="toggleDG('dg-${key}','dga-${key}')">${g.icon} ${g.label}<span class="dg-right">${tot>0?`<span class="nav-cnt">${tot}</span>`:''}<span id="dga-${key}" style="font-size:.55rem;transition:transform .2s">▾</span></span></button><div class="drawer-sub" id="dg-${key}">${g.subcats.map(cat=>`<a onclick="drawerGo('${key}','${cat}')">${cat} <span class="dd-cnt">${countCat(cat)}</span></a>`).join('')}<a onclick="drawerGo('${key}',null)" style="font-weight:700">All ${g.label} <span class="dd-cnt">${tot}</span></a></div></div>`;
+      }else{
+        return`<div class="drawer-direct" onclick="drawerGo('${key}',null)">${g.icon} ${g.label}${tot>0?`<span class="nav-cnt">${tot}</span>`:''}</div>`;
       }
     }).join('')
-    + `<div class="drawer-divider"></div><a href="${HERO.fiverr}" target="_blank" class="drawer-hire">🛒 Hire Me on Fiverr</a><div class="drawer-direct" style="margin-top:.15rem" onclick="window.location.href='mailto:${HERO.email}';closeDrawer()">✉ Contact Me</div>`;
+    +`<div class="drawer-divider"></div><a href="${HERO.fiverr||'#'}" target="_blank" class="drawer-hire">🛒 Hire Me on Fiverr</a><div class="drawer-direct" style="margin-top:.15rem" onclick="window.location.href='mailto:${HERO.email}';closeDrawer()">✉ Contact Me</div>`;
 }
 
-function toggleDG(id,aid) {
-  const el=document.getElementById(id), ar=document.getElementById(aid);
-  const o=el.classList.toggle('open');
-  if(ar) ar.style.transform=o?'rotate(180deg)':'';
-}
+function toggleDG(id,aid){const el=document.getElementById(id),ar=document.getElementById(aid);const o=el.classList.toggle('open');if(ar)ar.style.transform=o?'rotate(180deg)':'';}
 function drawerGo(k,s){closeDrawer();setTimeout(()=>showAll(k,s),300);}
 function openDrawer(){document.getElementById('side-drawer').classList.add('open');document.getElementById('drawer-overlay').classList.add('open');document.body.style.overflow='hidden';}
 function closeDrawer(){document.getElementById('side-drawer').classList.remove('open');document.getElementById('drawer-overlay').classList.remove('open');document.body.style.overflow='';}
 
 /* ══════════════════════════════════════════
-   INIT & ROUTING
+   INIT
 ══════════════════════════════════════════ */
 async function init() {
+  dbg('Starting data fetch...', 'ok');
   renderHome(true);
   await Promise.all([fetchSettings(), fetchEducation(), fetchCategories(), fetchReviews()]);
   ALL_PROJECTS = await fetchProjects();
+  dbg(`Total projects loaded: ${ALL_PROJECTS.length}`, ALL_PROJECTS.length>0?'ok':'warn');
   buildNav();
   if (HERO.photo) updateNavPhoto(HERO.photo);
   route();
@@ -526,27 +583,25 @@ async function init() {
 
 function route() {
   const hash = window.location.hash.replace('#','');
-  if (!hash || hash==='home') renderHome(false);
+  if (!hash||hash==='home') renderHome(false);
   else if (hash.startsWith('view-')) renderDetail(hash.replace('view-',''));
   else if (hash.startsWith('all-')) {
-    const rest = hash.slice(4);
-    const key = Object.keys(GROUPS).find(k => rest===k || rest.startsWith(k+'-'));
-    if (key) {
-      const sub = rest.length > key.length ? rest.slice(key.length+1).replace(/-/g,' ') : null;
-      renderAllPage(key, sub);
-    } else renderHome(false);
+    const rest=hash.slice(4);
+    const key=Object.keys(GROUPS).find(k=>rest===k||rest.startsWith(k+'-'));
+    if(key){const sub=rest.length>key.length?rest.slice(key.length+1).replace(/-/g,' '):null;renderAllPage(key,sub);}
+    else renderHome(false);
   }
 }
 
-window.addEventListener('hashchange', route);
-window.addEventListener('load', init);
+window.addEventListener('hashchange',route);
+window.addEventListener('load',init);
 
 /* ══════════════════════════════════════════
-   HOME
+   RENDER HOME
 ══════════════════════════════════════════ */
 function renderHome(loading=false) {
-  const h = HERO;
-  document.getElementById('app').innerHTML = `
+  const h=HERO;
+  document.getElementById('app').innerHTML=`
   <section class="hero">
     <div class="photo-wrap">
       <img src="${h.photo||'https://via.placeholder.com/178/e8eeff/1d5aff?text=ASF'}" class="hero-photo" alt="${h.name}"
@@ -558,10 +613,10 @@ function renderHome(loading=false) {
       <p class="hero-sub">${h.tagline}</p>
       <p class="hero-bio">${h.bio}</p>
       <div class="hero-btns">
-        <a href="${h.fiverr}" target="_blank" class="btn btn-hire">🛒 Hire Me on Fiverr</a>
+        <a href="${h.fiverr||'#'}" target="_blank" class="btn btn-hire">🛒 Hire Me on Fiverr</a>
         <a href="mailto:${h.email}" class="btn btn-p">✉ Contact</a>
-        <a href="${h.linkedin}" target="_blank" class="btn btn-g">LinkedIn ↗</a>
-        <a href="${h.github}" target="_blank" class="btn btn-g">GitHub ↗</a>
+        <a href="${h.linkedin||'#'}" target="_blank" class="btn btn-g">LinkedIn ↗</a>
+        <a href="${h.github||'#'}" target="_blank" class="btn btn-g">GitHub ↗</a>
       </div>
     </div>
   </section>
@@ -574,7 +629,7 @@ function renderHome(loading=false) {
       <span style="font-size:.73rem;color:var(--ink3)">Click for details</span>
     </div>
     <div class="edu-grid">
-      ${EDUCATION_DATA.map((e,i) => `
+      ${EDUCATION_DATA.map((e,i)=>`
       <div class="edu-card" onclick="openEduModal(${i})">
         <div class="edu-icon" style="background:${e.iconBg||'var(--surface2)'}">${e.icon}</div>
         <div style="flex:1;min-width:0">
@@ -592,9 +647,9 @@ function renderHome(loading=false) {
   </section>
 
   <div class="divider"><hr></div>
-  ${loading ? renderSkeletons() : renderPreviews()}
+  ${loading?renderSkeletons():renderPreviews()}
 
-  ${REVIEWS_DATA.length > 0 ? `
+  ${REVIEWS_DATA.length>0?`
   <div class="divider"><hr></div>
   <section class="section">
     <div class="section-header">
@@ -603,7 +658,7 @@ function renderHome(loading=false) {
     </div>
     <div style="overflow:hidden">
       <div class="reviews-track" id="reviews-track">
-        ${REVIEWS_DATA.map(r => `
+        ${REVIEWS_DATA.map(r=>`
         <div class="review-card">
           <div class="review-top">
             <img src="${r.photo||''}" class="review-avatar"
@@ -619,165 +674,119 @@ function renderHome(loading=false) {
     <div class="slider-controls">
       <button class="slider-btn" onclick="scrollRevs(-1)">‹</button>
       <div class="slider-dots" id="rev-dots">
-        ${REVIEWS_DATA.map((_,i) => `<div class="dot ${i===0?'active':''}" onclick="scrollToRev(${i})"></div>`).join('')}
+        ${REVIEWS_DATA.map((_,i)=>`<div class="dot ${i===0?'active':''}" onclick="scrollToRev(${i})"></div>`).join('')}
       </div>
       <button class="slider-btn" onclick="scrollRevs(1)">›</button>
     </div>
-  </section>` : ''}
+  </section>`:''}
   `;
-  if (REVIEWS_DATA.length > 0) setupRevSlider();
+  if(REVIEWS_DATA.length>0) setupRevSlider();
 }
 
-function renderPreviews() {
-  return Object.entries(GROUPS).map(([key,g]) => {
-    const items = ALL_PROJECTS.filter(p => g.subcats.includes(p.category)).slice(0,3);
-    if (!items.length) return '';
-    const tot = countGroup(key);
-    return `<section class="section">
-      <div class="section-header">
-        <h2 class="section-title">${g.icon} ${g.label}</h2>
-        <span class="see-all-link" onclick="showAll('${key}',null)">See All (${tot}) →</span>
-      </div>
-      <div class="grid">${items.map(p => cardHTML(p)).join('')}</div>
-      ${tot>3?`<div class="see-all-row"><button class="see-all-btn" onclick="showAll('${key}',null)">See All ${g.label} (${tot}) →</button></div>`:''}
-    </section><div class="divider"><hr></div>`;
+function renderPreviews(){
+  return Object.entries(GROUPS).map(([key,g])=>{
+    const items=ALL_PROJECTS.filter(p=>g.subcats.includes(p.category)).slice(0,3);
+    if(!items.length)return'';
+    const tot=countGroup(key);
+    return`<section class="section"><div class="section-header"><h2 class="section-title">${g.icon} ${g.label}</h2><span class="see-all-link" onclick="showAll('${key}',null)">See All (${tot}) →</span></div><div class="grid">${items.map(p=>cardHTML(p)).join('')}</div>${tot>3?`<div class="see-all-row"><button class="see-all-btn" onclick="showAll('${key}',null)">See All ${g.label} (${tot}) →</button></div>`:''}</section><div class="divider"><hr></div>`;
   }).join('');
 }
 
-function renderSkeletons() {
-  return Object.entries(GROUPS).slice(0,4).map(([key,g]) =>
+function renderSkeletons(){
+  return Object.entries(GROUPS).slice(0,4).map(([key,g])=>
     `<section class="section"><h2 class="section-title" style="margin-bottom:1.1rem">${g.icon} ${g.label}</h2><div class="grid">${Array(3).fill('<div class="card skeleton skel-card"></div>').join('')}</div></section><div class="divider"><hr></div>`
   ).join('');
 }
 
-function cardHTML(p) {
-  const known = ['Thesis','Journal','Conference','Academic Project','Freelance Project','Full Time','Voluntary','Certificate','Session','Award'];
-  const bc = known.includes(p.category) ? 'badge-'+p.category.replace(/\s+/g,'') : 'badge-dynamic';
-  return `<div class="card" onclick="location.hash='view-${p.id}'">
-    ${p.image ? `<img src="${p.image}" class="card-img" alt="${p.title}" onerror="this.style.display='none'">` : `<div class="card-img" style="display:flex;align-items:center;justify-content:center;color:var(--ink3);font-size:.72rem">No Image</div>`}
+function cardHTML(p){
+  const known=['Thesis','Journal','Conference','Academic Project','Freelance Project','Full Time','Voluntary','Certificate','Session','Award'];
+  const bc=known.includes(p.category)?'badge-'+p.category.replace(/\s+/g,''):'badge-dynamic';
+  return`<div class="card" onclick="location.hash='view-${p.id}'">
+    ${p.image?`<img src="${p.image}" class="card-img" alt="${p.title}" onerror="this.style.display='none'">`:`<div class="card-img" style="display:flex;align-items:center;justify-content:center;color:var(--ink3);font-size:.72rem">No Image</div>`}
     <span class="badge ${bc}">${p.category}</span>
     <h3>${p.title}</h3><p>${p.description}</p>
     <div class="card-cta">Learn More →</div>
   </div>`;
 }
 
-/* REVIEWS SLIDER */
-let revTimer = null;
-function setupRevSlider() {
+/* ══════════════════════════════════════════
+   REVIEWS SLIDER
+══════════════════════════════════════════ */
+let revTimer=null;
+function setupRevSlider(){
   clearInterval(revTimer);
-  const t = document.getElementById('reviews-track');
-  if (!t) return;
-  t.addEventListener('scroll', updateRevDots, {passive:true});
-  revTimer = setInterval(() => { if(document.getElementById('reviews-track')) scrollRevs(1); else clearInterval(revTimer); }, 5000);
+  const t=document.getElementById('reviews-track');if(!t)return;
+  t.addEventListener('scroll',updateRevDots,{passive:true});
+  revTimer=setInterval(()=>{if(document.getElementById('reviews-track'))scrollRevs(1);else clearInterval(revTimer);},5000);
 }
-function scrollRevs(dir) {
-  const t = document.getElementById('reviews-track'); if (!t) return;
-  const w = (t.querySelector('.review-card')?.offsetWidth||298)+16;
-  t.scrollBy({left:dir*w,behavior:'smooth'}); setTimeout(updateRevDots,420);
-}
-function scrollToRev(i) {
-  const t = document.getElementById('reviews-track'); if (!t) return;
-  const w = (t.querySelector('.review-card')?.offsetWidth||298)+16;
-  t.scrollTo({left:i*w,behavior:'smooth'}); setTimeout(updateRevDots,420);
-}
-function updateRevDots() {
-  const t = document.getElementById('reviews-track'), dots = document.getElementById('rev-dots');
-  if (!t||!dots) return;
-  const w = (t.querySelector('.review-card')?.offsetWidth||298)+16;
-  const idx = Math.min(Math.round(t.scrollLeft/w), REVIEWS_DATA.length-1);
-  dots.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active',i===idx));
-}
+function scrollRevs(dir){const t=document.getElementById('reviews-track');if(!t)return;const w=(t.querySelector('.review-card')?.offsetWidth||298)+16;t.scrollBy({left:dir*w,behavior:'smooth'});setTimeout(updateRevDots,420);}
+function scrollToRev(i){const t=document.getElementById('reviews-track');if(!t)return;const w=(t.querySelector('.review-card')?.offsetWidth||298)+16;t.scrollTo({left:i*w,behavior:'smooth'});setTimeout(updateRevDots,420);}
+function updateRevDots(){const t=document.getElementById('reviews-track'),dots=document.getElementById('rev-dots');if(!t||!dots)return;const w=(t.querySelector('.review-card')?.offsetWidth||298)+16;const idx=Math.min(Math.round(t.scrollLeft/w),REVIEWS_DATA.length-1);dots.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===idx));}
 
 /* EDUCATION MODAL */
-function openEduModal(i) {
-  const e = EDUCATION_DATA[i];
-  const subs = (e.subjects||'').split(',').map(s=>s.trim()).filter(Boolean);
-  document.getElementById('edu-modal-box').innerHTML = `
-    ${e.photo ? `<img src="${e.photo}" class="modal-img" onerror="this.style.display='none'">` : ''}
+function openEduModal(i){
+  const e=EDUCATION_DATA[i];
+  const subs=(e.subjects||'').split(',').map(s=>s.trim()).filter(Boolean);
+  document.getElementById('edu-modal-box').innerHTML=`
+    ${e.photo?`<img src="${e.photo}" class="modal-img" onerror="this.style.display='none'">`:''}
     <div class="modal-body">
       <button class="modal-close" onclick="document.getElementById('edu-modal').classList.remove('open');document.body.style.overflow=''">✕ Close</button>
       <span class="modal-badge">${e.level}</span>
       <h2 class="modal-title">${e.institution}</h2>
       <p class="modal-sub">${e.degree} · Passing: ${e.passing} · GPA: ${e.gpa}</p>
-      ${e.description ? `<p class="modal-desc">${e.description}</p>` : ''}
-      ${subs.length ? `<h4 style="font-size:.75rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.52rem">Subjects Studied</h4><div class="subjects-grid">${subs.map(s=>`<span class="subject-tag">${s}</span>`).join('')}</div>` : ''}
+      ${e.description?`<p class="modal-desc">${e.description}</p>`:''}
+      ${subs.length?`<h4 style="font-size:.75rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.52rem">Subjects Studied</h4><div class="subjects-grid">${subs.map(s=>`<span class="subject-tag">${s}</span>`).join('')}</div>`:''}
     </div>`;
   document.getElementById('edu-modal').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow='hidden';
 }
-function closeEduModal(e) {
-  if (e && e.target !== document.getElementById('edu-modal')) return;
-  document.getElementById('edu-modal').classList.remove('open');
-  document.body.style.overflow = '';
-}
+function closeEduModal(e){if(e&&e.target!==document.getElementById('edu-modal'))return;document.getElementById('edu-modal').classList.remove('open');document.body.style.overflow='';}
 
 /* ALL PAGE */
-function showAll(key, sub) {
-  const slug = sub ? sub.replace(/\s+/g,'-') : '';
-  window.location.hash = slug ? `all-${key}-${slug}` : `all-${key}`;
-}
-function renderAllPage(key, sub) {
-  const g = GROUPS[key]; if (!g) { goHome(); return; }
-  let items = ALL_PROJECTS.filter(p => g.subcats.includes(p.category));
-  const active = sub||'All';
-  if (sub) items = items.filter(p => p.category===sub);
-  document.getElementById('app').innerHTML = `
+function showAll(key,sub){const slug=sub?sub.replace(/\s+/g,'-'):'';window.location.hash=slug?`all-${key}-${slug}`:`all-${key}`;}
+function renderAllPage(key,sub){
+  const g=GROUPS[key];if(!g){goHome();return;}
+  let items=ALL_PROJECTS.filter(p=>g.subcats.includes(p.category));
+  const active=sub||'All';if(sub)items=items.filter(p=>p.category===sub);
+  document.getElementById('app').innerHTML=`
   <div class="detail-page">
     <button onclick="goHome()" class="btn btn-g" style="margin-bottom:1.1rem">← Home</button>
     <h2 class="section-title" style="margin-bottom:1rem">${g.icon} ${g.label}</h2>
-    ${g.hasDropdown ? `<div class="filter-tabs">
-      <button class="ftab ${active==='All'?'active':''}" onclick="showAll('${key}',null)">All (${countGroup(key)})</button>
-      ${g.subcats.map(cat => `<button class="ftab ${active===cat?'active':''}" onclick="showAll('${key}','${cat}')">${cat} (${countCat(cat)})</button>`).join('')}
-    </div>` : ''}
-    <div class="grid">
-      ${items.length===0
-        ? `<div class="empty" style="grid-column:1/-1"><div style="font-size:2rem;margin-bottom:.5rem">📂</div><p>No items yet. <a href="/admin/" style="color:var(--blue)">Add via Admin →</a></p></div>`
-        : items.map(p => cardHTML(p)).join('')}
-    </div>
+    ${g.hasDropdown?`<div class="filter-tabs"><button class="ftab ${active==='All'?'active':''}" onclick="showAll('${key}',null)">All (${countGroup(key)})</button>${g.subcats.map(cat=>`<button class="ftab ${active===cat?'active':''}" onclick="showAll('${key}','${cat}')">${cat} (${countCat(cat)})</button>`).join('')}</div>`:''}
+    <div class="grid">${items.length===0?`<div class="empty" style="grid-column:1/-1"><div style="font-size:2rem;margin-bottom:.5rem">📂</div><p>No items yet. <a href="/admin/" style="color:var(--blue)">Add via Admin →</a></p></div>`:items.map(p=>cardHTML(p)).join('')}</div>
   </div>`;
   window.scrollTo(0,0);
 }
 
-/* DETAIL PAGE */
-function md2html(md) {
-  if (!md) return '';
-  return md.replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>')
-    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`(.+?)`/g,'<code>$1</code>')
-    .replace(/^\- (.+)$/gm,'<li>$1</li>').replace(/(<li>[\s\S]+?<\/li>)/g,'<ul>$1</ul>')
-    .replace(/\n\n/g,'</p><p>') + '</p>';
-}
-function getYtId(url) { const m=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/); return m?m[1]:url; }
+/* DETAIL */
+function md2html(md){if(!md)return'';return md.replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`(.+?)`/g,'<code>$1</code>').replace(/^\- (.+)$/gm,'<li>$1</li>').replace(/(<li>[\s\S]+?<\/li>)/g,'<ul>$1</ul>').replace(/\n\n/g,'</p><p>')+'</p>';}
+function getYtId(url){const m=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);return m?m[1]:url;}
 
-function renderDetail(id) {
-  const item = ALL_PROJECTS.find(p => p.id===id);
-  if (!item) { goHome(); return; }
-  const gKey = Object.keys(GROUPS).find(k => GROUPS[k].subcats.includes(item.category))||'';
-  const known = ['Thesis','Journal','Conference','Academic Project','Freelance Project','Full Time','Voluntary','Certificate','Session','Award'];
-  const bc = known.includes(item.category) ? 'badge-'+item.category.replace(/\s+/g,'') : 'badge-dynamic';
-  document.getElementById('app').innerHTML = `
+function renderDetail(id){
+  const item=ALL_PROJECTS.find(p=>p.id===id);if(!item){goHome();return;}
+  const gKey=Object.keys(GROUPS).find(k=>GROUPS[k].subcats.includes(item.category))||'';
+  const known=['Thesis','Journal','Conference','Academic Project','Freelance Project','Full Time','Voluntary','Certificate','Session','Award'];
+  const bc=known.includes(item.category)?'badge-'+item.category.replace(/\s+/g,''):'badge-dynamic';
+  document.getElementById('app').innerHTML=`
   <div class="detail-page">
     <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.65rem">
       <button onclick="goHome()" class="btn btn-g">← Home</button>
-      ${gKey ? `<button onclick="showAll('${gKey}',null)" class="btn btn-g">← ${GROUPS[gKey].label}</button>` : ''}
+      ${gKey?`<button onclick="showAll('${gKey}',null)" class="btn btn-g">← ${GROUPS[gKey].label}</button>`:''}
     </div>
     <div class="detail-hero">
-      ${item.image ? `<img src="${item.image}" style="width:100%;max-height:300px;object-fit:cover;border-radius:10px;margin-bottom:1.3rem;display:block">` : ''}
+      ${item.image?`<img src="${item.image}" style="width:100%;max-height:300px;object-fit:cover;border-radius:10px;margin-bottom:1.3rem;display:block">`:''}
       <span class="badge ${bc}">${item.category}</span>
       <h1 class="detail-title">${item.title}</h1>
       <p style="color:var(--ink2);margin-top:.4rem;font-size:.87rem">${item.description}</p>
-      ${item.link ? `<a href="${item.link}" target="_blank" class="btn btn-p" style="margin-top:.85rem">View Project ↗</a>` : ''}
+      ${item.link?`<a href="${item.link}" target="_blank" class="btn btn-p" style="margin-top:.85rem">View Project ↗</a>`:''}
     </div>
-    ${item.youtube ? `<div class="detail-section"><h3 style="font-family:Fraunces,serif;margin-bottom:.4rem">📹 Video</h3><div class="yt-wrap"><iframe src="https://www.youtube.com/embed/${getYtId(item.youtube)}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture" allowfullscreen></iframe></div></div>` : ''}
-    ${item.body ? `<div class="detail-section"><h3 style="font-family:Fraunces,serif;margin-bottom:.82rem">Details</h3><div class="detail-body">${md2html(item.body)}</div></div>` : ''}
+    ${item.youtube?`<div class="detail-section"><h3 style="font-family:Fraunces,serif;margin-bottom:.4rem">📹 Video</h3><div class="yt-wrap"><iframe src="https://www.youtube.com/embed/${getYtId(item.youtube)}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture" allowfullscreen></iframe></div></div>`:''}
+    ${item.body?`<div class="detail-section"><h3 style="font-family:Fraunces,serif;margin-bottom:.82rem">Details</h3><div class="detail-body">${md2html(item.body)}</div></div>`:''}
   </div>`;
   window.scrollTo(0,0);
 }
 
-function goHome() {
-  clearInterval(revTimer);
-  window.location.hash = '';
-  renderHome(false);
-}
+function goHome(){clearInterval(revTimer);window.location.hash='';renderHome(false);}
 </script>
 </body>
 </html>
