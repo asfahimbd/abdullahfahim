@@ -133,7 +133,8 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .exp-card-logo{width:100%;height:130px;display:flex;align-items:center;justify-content:center;background:var(--surface2);padding:1rem}
 .exp-card-logo img{max-width:100%;max-height:100%;object-fit:contain;border-radius:4px}
 .exp-card-body{padding:1rem 1.1rem;flex:1;display:flex;flex-direction:column}
-.exp-org-name{font-size:.83rem;font-weight:700;color:var(--ink);margin-bottom:.55rem}
+.exp-org-name{font-size:.83rem;font-weight:700;color:var(--ink);margin-bottom:.22rem}
+.exp-location{font-size:.68rem;color:var(--ink3);margin-bottom:.48rem}
 .exp-role-row{display:flex;align-items:center;gap:.42rem;margin-bottom:.18rem;flex-wrap:wrap}
 .exp-role-title{font-size:.88rem;font-weight:700;color:var(--ink)}
 .exp-role-date{font-size:.67rem;color:var(--ink3);margin-bottom:.35rem}
@@ -835,7 +836,8 @@ function renderExpCard(p,idx){
     return`<div class="exp-card-wrap ${isCur?'is-current':''}" onclick="location.hash='view-exp-${p.id}'">
       ${p.logo?`<div class="exp-card-logo"><img src="${p.logo}" alt="${p.organization}" onerror="this.parentElement.style.display='none'"></div>`:''}
       <div class="exp-card-body">
-        <div class="exp-org-name">${p.organization}${p.location?` · <span style="font-weight:400;color:var(--ink3)">${p.location}</span>`:''}</div>
+        <div class="exp-org-name">${p.organization}</div>
+        ${p.location?`<div class="exp-location">📍 ${p.location}</div>`:''}
         ${p.roles.map((r,i)=>{
           const tc=typeClass(r.employment_type||r.type||'');
           const rEnd=r.end_date||'';const rCur=!rEnd||rEnd==='';
@@ -845,8 +847,7 @@ function renderExpCard(p,idx){
             <span class="exp-type ${tc}">${r.employment_type||r.type||''}</span>
             <span class="exp-role-title">${r.role||''}</span>
           </div>
-          ${dateStr?`<div class="exp-role-date">${dateStr}</div>`:''}
-          ${r.description?`<div style="font-size:.73rem;color:var(--ink2);line-height:1.5;margin-bottom:.15rem">${truncate(r.description,18)}</div>`:''}`;
+          ${dateStr?`<div class="exp-role-date">${dateStr}</div>`:''}`;
         }).join('')}
         <div class="exp-cta">Details →</div>
       </div>
@@ -858,13 +859,13 @@ function renderExpCard(p,idx){
   return`<div class="exp-card-wrap ${isCur?'is-current':''}" onclick="location.hash='view-exp-${p.id}'">
     ${p.logo?`<div class="exp-card-logo"><img src="${p.logo}" alt="${p.organization}" onerror="this.parentElement.style.display='none'"></div>`:''}
     <div class="exp-card-body">
-      <div class="exp-org-name">${p.organization}${p.location?` · <span style="font-weight:400;color:var(--ink3)">${p.location}</span>`:''}</div>
+      <div class="exp-org-name">${p.organization}</div>
+      ${p.location?`<div class="exp-location">📍 ${p.location}</div>`:''}
       <div class="exp-role-row">
         <span class="exp-type ${tc}">${p.type||''}</span>
         <span class="exp-role-title">${p.role}</span>
       </div>
       ${dateStr?`<div class="exp-role-date">${dateStr}</div>`:''}
-      ${p.description?`<p style="font-size:.74rem;color:var(--ink2);line-height:1.55;flex:1">${truncate(p.description,22)}</p>`:''}
       <div class="exp-cta">Details →</div>
     </div>
   </div>`;
