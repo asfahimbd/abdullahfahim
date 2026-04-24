@@ -125,49 +125,25 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .edu-pill{padding:.12rem .44rem;border-radius:999px;font-size:.62rem;font-weight:600;background:var(--surface2);color:var(--ink3);border:1px solid var(--border)}
 .edu-arr{color:var(--blue);font-size:.68rem;opacity:0;transition:all .19s;align-self:center;flex-shrink:0;margin-left:auto}
 
-/* ════ EXPERIENCE TIMELINE (horizontal) ════ */
-.exp-timeline-wrap{position:relative;overflow-x:auto;overflow-y:visible;padding:0 5vw 1rem;scrollbar-width:none}
-.exp-timeline-wrap::-webkit-scrollbar{display:none}
-.exp-timeline-wrap-inline{overflow-x:auto;scrollbar-width:none;margin-top:.5rem}
-.exp-timeline-wrap-inline::-webkit-scrollbar{display:none}
-.exp-timeline{display:flex;gap:0;align-items:flex-start;position:relative;min-width:max-content;padding:2rem 0 .5rem}
-/* horizontal connector line */
-.exp-timeline::before{
-  content:'';position:absolute;top:28px;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--blue-m),var(--border2));
-  z-index:0;
-}
-.exp-item{
-  position:relative;display:flex;flex-direction:column;align-items:center;
-  width:240px;flex-shrink:0;padding:0 1rem;
-}
-/* dot on line */
-.exp-dot{
-  width:14px;height:14px;border-radius:50%;background:var(--blue);
-  border:3px solid var(--surface);box-shadow:0 0 0 2px var(--blue-m);
-  z-index:1;flex-shrink:0;margin-bottom:.75rem;
-}
-.exp-dot.current{background:var(--teal);box-shadow:0 0 0 2px var(--teal-l)}
-.exp-card{
-  background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
-  padding:1rem;width:100%;transition:all .19s;cursor:pointer;
-}
-.exp-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px);border-color:var(--blue-m)}
-.exp-card-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem}
-.exp-logo{width:28px;height:28px;object-fit:contain;border-radius:6px;flex-shrink:0;border:1px solid var(--border)}
-.exp-org{font-size:.72rem;color:var(--ink3);font-weight:600}
-.exp-role{font-size:.88rem;font-weight:700;color:var(--ink);margin-bottom:.2rem;line-height:1.3}
-.exp-type{display:inline-block;padding:.1rem .4rem;border-radius:4px;font-size:.62rem;font-weight:600;margin-bottom:.3rem}
+/* ════ EXPERIENCE CARDS ════ */
+.exp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.1rem}
+.exp-card-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .21s;display:flex;flex-direction:column}
+.exp-card-wrap:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px);border-color:var(--blue-m)}
+.exp-card-wrap.is-current{border-color:var(--teal);box-shadow:0 2px 0 var(--teal)}
+.exp-card-logo{width:100%;height:130px;display:flex;align-items:center;justify-content:center;background:var(--surface2);padding:1rem}
+.exp-card-logo img{max-width:100%;max-height:100%;object-fit:contain;border-radius:4px}
+.exp-card-body{padding:1rem 1.1rem;flex:1;display:flex;flex-direction:column}
+.exp-org-name{font-size:.83rem;font-weight:700;color:var(--ink);margin-bottom:.55rem}
+.exp-role-row{display:flex;align-items:center;gap:.42rem;margin-bottom:.18rem;flex-wrap:wrap}
+.exp-role-title{font-size:.88rem;font-weight:700;color:var(--ink)}
+.exp-role-date{font-size:.67rem;color:var(--ink3);margin-bottom:.35rem}
+.exp-type{display:inline-block;padding:.1rem .42rem;border-radius:4px;font-size:.62rem;font-weight:600;flex-shrink:0}
 .exp-type.fulltime{background:var(--blue-l);color:var(--blue)}
 .exp-type.voluntary{background:var(--teal-l);color:var(--teal)}
-.exp-type.internship{background:var(--amber-l);color:var(--amber)}
-.exp-date{font-size:.68rem;color:var(--ink3);margin-bottom:.35rem}
-.exp-desc{font-size:.74rem;color:var(--ink2);line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-/* continuation arrow */
-.exp-continuation{
-  display:flex;align-items:center;padding:0 .5rem;align-self:center;
-  padding-top:2rem;color:var(--blue);font-size:1.2rem;flex-shrink:0;
-}
+.exp-type.internship,.exp-type.parttime{background:var(--amber-l);color:var(--amber)}
+.exp-type.research{background:var(--purple-l);color:var(--purple)}
+.exp-role-divider{height:1px;background:var(--border);margin:.4rem 0}
+.exp-cta{margin-top:auto;padding-top:.6rem;color:var(--blue);font-weight:700;font-size:.76rem}
 
 /* ════ CARDS / GRID ════ */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(278px,1fr));gap:1rem}
@@ -306,14 +282,8 @@ footer{text-align:center;padding:2.2rem;color:var(--ink3);border-top:1px solid v
   .hero-bio-full{text-align:justify !important;text-justify:inter-word !important;width:100%}
   .skills-grid{grid-template-columns:1fr}
   .review-card{flex:0 0 82vw}
-  /* Experience: vertical on mobile */
-  .exp-timeline{flex-direction:column;min-width:unset;padding:1rem 0;gap:.8rem}
-  .exp-timeline::before{display:none}
-  .exp-item{width:100%;padding:0;flex-direction:row;gap:.75rem;align-items:flex-start}
-  .exp-item.is-current{margin-top:0}
-  .exp-dot-wrap{align-items:center;flex-direction:column;padding-top:.15rem;flex-shrink:0}
-  .exp-dot{width:12px;height:12px}
-  .exp-card{flex:1}
+  /* Experience: stacks naturally on mobile as grid */
+  .exp-grid{grid-template-columns:1fr}
 }
 @media(max-width:460px){.review-card{flex:0 0 90vw}}
 </style>
@@ -860,61 +830,42 @@ function buildYearLabel(startDate, endDate, isCurrent){
 
 function renderExpCard(p,idx){
   const isCur=p.isCurrent;
-  const dotClass=isCur?'dot-current':'dot-past';
-  const cardClass=isCur?'card-current':'card-past';
-  const itemClass=isCur?'is-current':'';
-
+  // Card grid version
   if(p.isMultiRole&&p.roles&&p.roles.length>0){
-    const topRole=p.roles[0];
-    const startYear=getYear(p.roles[p.roles.length-1]&&p.roles[p.roles.length-1].start_date||'');
-    const yearLabel=buildYearLabel(p.roles[p.roles.length-1]&&p.roles[p.roles.length-1].start_date||'', p.roles[0]&&p.roles[0].end_date||'', isCur);
-    return`<div class="exp-item ${itemClass}">
-      <div class="exp-dot-wrap">
-        <div class="exp-dot ${dotClass}"></div>
-        ${yearLabel?`<div class="exp-dot-year">${yearLabel}</div>`:''}
-      </div>
-      <div class="exp-card ${cardClass}" onclick="location.hash='view-exp-${p.id}'">
-        <div class="exp-card-header">
-          ${p.logo?`<img src="${p.logo}" class="exp-logo" onerror="this.style.display='none'">`:''}
-          <div class="exp-org">${p.organization}</div>
-        </div>
-        ${p.location?`<div style="font-size:.64rem;color:var(--ink3);margin-bottom:.25rem">${p.location}</div>`:''}
-        <div class="exp-roles-list">
-          ${p.roles.map(r=>{
-            const tc=typeClass(r.employment_type||r.type||'');
-            const rEnd=r.end_date||'';const rIsCur=!rEnd||rEnd==='';
-            const dateStr=(r.start_date||'')+(rIsCur?' – Present':rEnd?' – '+rEnd:'');
-            return`<div class="exp-role-item">
-              <div class="exp-role-name">${r.role||''}</div>
-              <div class="exp-role-meta">
-                <span class="exp-type ${tc}">${r.employment_type||r.type||''}</span>
-                ${dateStr?`<span>${dateStr}</span>`:''}
-              </div>
-              ${r.description?`<div class="exp-role-desc">${r.description}</div>`:''}
-            </div>`;
-          }).join('')}
-        </div>
+    return`<div class="exp-card-wrap ${isCur?'is-current':''}" onclick="location.hash='view-exp-${p.id}'">
+      ${p.logo?`<div class="exp-card-logo"><img src="${p.logo}" alt="${p.organization}" onerror="this.parentElement.style.display='none'"></div>`:''}
+      <div class="exp-card-body">
+        <div class="exp-org-name">${p.organization}${p.location?` · <span style="font-weight:400;color:var(--ink3)">${p.location}</span>`:''}</div>
+        ${p.roles.map((r,i)=>{
+          const tc=typeClass(r.employment_type||r.type||'');
+          const rEnd=r.end_date||'';const rCur=!rEnd||rEnd==='';
+          const dateStr=(r.start_date||'')+(rCur?' – Present':rEnd?' – '+rEnd:'');
+          return`${i>0?'<div class="exp-role-divider"></div>':''}
+          <div class="exp-role-row">
+            <span class="exp-type ${tc}">${r.employment_type||r.type||''}</span>
+            <span class="exp-role-title">${r.role||''}</span>
+          </div>
+          ${dateStr?`<div class="exp-role-date">${dateStr}</div>`:''}
+          ${r.description?`<div style="font-size:.73rem;color:var(--ink2);line-height:1.5;margin-bottom:.15rem">${truncate(r.description,18)}</div>`:''}`;
+        }).join('')}
+        <div class="exp-cta">Details →</div>
       </div>
     </div>`;
   }
-
   // Single role
-  const dateStr=(p.startDate||'')+(p.isCurrent?' – Present':p.endDate?' – '+p.endDate:'');
-  const yearLabel=buildYearLabel(p.startDate||'',p.endDate||'',isCur);
-  return`<div class="exp-item ${itemClass}">
-    <div class="exp-dot-wrap">
-      <div class="exp-dot ${dotClass}"></div>
-      ${yearLabel?`<div class="exp-dot-year">${yearLabel}</div>`:''}
-    </div>
-    <div class="exp-card ${cardClass}" onclick="location.hash='view-exp-${p.id}'">
-      <div class="exp-card-header">
-        ${p.logo?`<img src="${p.logo}" class="exp-logo" onerror="this.style.display='none'">`:''}
-        <div class="exp-org">${p.organization}</div>
+  const tc=typeClass(p.type||'');
+  const dateStr=(p.startDate||'')+(isCur?' – Present':p.endDate?' – '+p.endDate:'');
+  return`<div class="exp-card-wrap ${isCur?'is-current':''}" onclick="location.hash='view-exp-${p.id}'">
+    ${p.logo?`<div class="exp-card-logo"><img src="${p.logo}" alt="${p.organization}" onerror="this.parentElement.style.display='none'"></div>`:''}
+    <div class="exp-card-body">
+      <div class="exp-org-name">${p.organization}${p.location?` · <span style="font-weight:400;color:var(--ink3)">${p.location}</span>`:''}</div>
+      <div class="exp-role-row">
+        <span class="exp-type ${tc}">${p.type||''}</span>
+        <span class="exp-role-title">${p.role}</span>
       </div>
-      <div class="exp-role">${p.role}</div>
-      <span class="exp-type ${typeClass(p.type)}">${p.type}</span>
-      ${dateStr?`<div class="exp-date">${dateStr}</div>`:''}
-      <p class="exp-desc">${p.description}</p>
+      ${dateStr?`<div class="exp-role-date">${dateStr}</div>`:''}
+      ${p.description?`<p style="font-size:.74rem;color:var(--ink2);line-height:1.55;flex:1">${truncate(p.description,22)}</p>`:''}
+      <div class="exp-cta">Details →</div>
     </div>
   </div>`;
 }
@@ -926,7 +877,7 @@ function renderExpSection(loading=false){
   if(loading){
     return`<section class="section">
       <div class="section-header"><h2 class="section-title">Experiences</h2></div>
-      <div style="display:flex;gap:1rem;overflow:hidden;padding:1rem 0">${Array(3).fill('<div class="skeleton" style="width:220px;height:180px;flex-shrink:0;border-radius:14px"></div>').join('')}</div>
+      <div class="exp-grid">${Array(3).fill('<div class="exp-card-wrap skeleton" style="height:240px"></div>').join('')}</div>
     </section>`;
   }
   if(!expItems.length)return'';
@@ -935,11 +886,8 @@ function renderExpSection(loading=false){
       <h2 class="section-title">Experiences</h2>
       ${hasMore?`<span class="see-all-link" onclick="location.hash='all-exp'">See All (${expItems.length}) →</span>`:''}
     </div>
-    <div class="exp-timeline-wrap-inline">
-      <div class="exp-timeline">
-        ${shown.map((p,idx)=>renderExpCard(p,idx)).join('')}
-        ${hasMore?`<div class="exp-continuation" onclick="location.hash='all-exp'" title="See all">→</div>`:''}
-      </div>
+    <div class="exp-grid">
+      ${shown.map(p=>renderExpCard(p)).join('')}
     </div>
     ${hasMore?`<div class="see-all-row"><button class="see-all-btn" onclick="location.hash='all-exp'">See All Experiences (${expItems.length}) →</button></div>`:''}
   </section>`;
@@ -1176,38 +1124,10 @@ function renderAllExpPage(typeFilter){
       <button class="ftab ${!typeFilter?'active':''}" onclick="renderAllExpPage(null)">All (${ALL_EXPERIENCES.length})</button>
       ${expTypes.map(t=>`<button class="ftab ${typeFilter===t?'active':''}" onclick="renderAllExpPage('${t}')">${t} (${countCat(t)})</button>`).join('')}
     </div>
-    <div class="grid">
+    <div class="exp-grid">
       ${items.length===0
         ?`<div class="empty" style="grid-column:1/-1"><p>No items found.</p></div>`
-        :items.map(e=>{
-          if(e.isMultiRole&&e.roles&&e.roles.length>0){
-            const topRole=e.roles[0];
-            const tc=typeClass(topRole.employment_type||topRole.type||'');
-            const isCur=!topRole.end_date||topRole.end_date==='';
-            return`<div class="card" onclick="location.hash='view-exp-${e.id}'">
-              ${e.logo?`<img src="${e.logo}" class="card-img" style="object-fit:contain;padding:.6rem" onerror="this.style.display='none'">`:''}
-              <div style="font-size:.72rem;color:var(--ink3);font-weight:700;margin-bottom:.2rem">${e.organization}</div>
-              ${e.roles.map(r=>`
-                <div style="margin-bottom:.35rem">
-                  <span class="exp-type ${typeClass(r.employment_type||r.type||'')}">${r.employment_type||r.type||''}</span>
-                  <strong style="font-size:.84rem">${r.role}</strong>
-                  <div style="font-size:.66rem;color:var(--ink3)">${r.start_date||''}${(!r.end_date||r.end_date==='')?(' – Present'):r.end_date?' – '+r.end_date:''}</div>
-                </div>`).join('')}
-              <div class="card-cta">Details →</div>
-            </div>`;
-          }
-          const tc=typeClass(e.type||'');
-          const dateStr=(e.startDate||'')+(e.isCurrent?' – Present':e.endDate?' – '+e.endDate:'');
-          return`<div class="card" onclick="location.hash='view-exp-${e.id}'">
-            ${e.logo?`<img src="${e.logo}" class="card-img" style="object-fit:contain;padding:.6rem" onerror="this.style.display='none'">`:''}
-            <span class="exp-type ${tc}">${e.type}</span>
-            <div style="font-size:.72rem;color:var(--ink3);font-weight:700;margin-bottom:.2rem">${e.organization}</div>
-            <h3>${e.role}</h3>
-            ${dateStr?`<div style="font-size:.68rem;color:var(--ink3);margin-bottom:.3rem">${dateStr}</div>`:''}
-            <p>${truncate(e.description,25)}</p>
-            <div class="card-cta">Details →</div>
-          </div>`;
-        }).join('')}
+        :items.map(e=>renderExpCard(e)).join('')}
     </div>
   </div>`;
   window.scrollTo(0,0);
@@ -1216,8 +1136,36 @@ function renderAllExpPage(typeFilter){
 function renderExpDetail(id){
   const item=ALL_EXPERIENCES.find(e=>e.id===id);
   if(!item){goHome();return;}
-  const typeClass=item.type==='Full Time'?'fulltime':item.type==='Voluntary'?'voluntary':'internship';
-  const dateStr=item.startDate?(item.startDate+(item.isCurrent?' – Present':item.endDate?' – '+item.endDate:'')):'';
+
+  let rolesHTML='';
+  if(item.isMultiRole&&item.roles&&item.roles.length>0){
+    rolesHTML=item.roles.map((r,i)=>{
+      const tc=typeClass(r.employment_type||r.type||'');
+      const rEnd=r.end_date||'';const rCur=!rEnd||rEnd==='';
+      const dateStr=(r.start_date||'')+(rCur?' – Present':rEnd?' – '+rEnd:'');
+      return`<div style="padding:.85rem 0;${i>0?'border-top:1px solid var(--border)':''}">
+        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.3rem">
+          <span class="exp-type ${tc}">${r.employment_type||r.type||''}</span>
+          <strong style="font-size:1rem;color:var(--ink)">${r.role||''}</strong>
+        </div>
+        ${dateStr?`<div style="font-size:.78rem;color:var(--ink3);margin-bottom:.4rem">📅 ${dateStr}</div>`:''}
+        ${r.description?`<p style="font-size:.86rem;color:var(--ink2);line-height:1.7">${r.description}</p>`:''}
+      </div>`;
+    }).join('');
+  } else {
+    const tc=typeClass(item.type||'');
+    const dateStr=(item.startDate||'')+(item.isCurrent?' – Present':item.endDate?' – '+item.endDate:'');
+    rolesHTML=`<div style="padding:.85rem 0">
+      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.35rem">
+        <span class="exp-type ${tc}">${item.type||''}</span>
+        <strong style="font-size:1rem;color:var(--ink)">${item.role||''}</strong>
+      </div>
+      ${dateStr?`<div style="font-size:.78rem;color:var(--ink3);margin-bottom:.4rem">📅 ${dateStr}</div>`:''}
+      ${item.location?`<div style="font-size:.8rem;color:var(--ink3);margin-bottom:.5rem">📍 ${item.location}</div>`:''}
+      ${item.description?`<p style="font-size:.87rem;color:var(--ink2);line-height:1.7">${item.description}</p>`:''}
+    </div>`;
+  }
+
   document.getElementById('app').innerHTML=`
   <div class="detail-page">
     <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.6rem">
@@ -1225,15 +1173,16 @@ function renderExpDetail(id){
       <button onclick="location.hash='all-exp'" class="btn btn-g">← Experiences</button>
     </div>
     <div class="detail-hero">
-      ${item.logo?`<img src="${item.logo}" style="width:60px;height:60px;object-fit:contain;border-radius:10px;margin-bottom:1rem;display:block" onerror="this.style.display='none'">`:''}
-      <div style="font-size:.8rem;color:var(--ink3);margin-bottom:.3rem">${item.organization}</div>
-      <h1 class="detail-title">${item.role}</h1>
-      <span class="exp-type ${typeClass}">${item.type}</span>
-      ${dateStr?`<div style="font-size:.8rem;color:var(--ink3);margin-top:.4rem">${dateStr}</div>`:''}
-      ${item.location?`<div style="font-size:.8rem;color:var(--ink3)">${item.location}</div>`:''}
-      <p style="color:var(--ink2);margin-top:.8rem;font-size:.87rem">${item.description}</p>
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.1rem;flex-wrap:wrap">
+        ${item.logo?`<img src="${item.logo}" style="width:72px;height:72px;object-fit:contain;border-radius:12px;border:1px solid var(--border);padding:4px" onerror="this.style.display='none'">`:''}
+        <div>
+          <h1 style="font-family:Fraunces,serif;font-size:1.7rem;line-height:1.2;margin-bottom:.2rem">${item.organization}</h1>
+          ${item.location?`<div style="font-size:.8rem;color:var(--ink3)">📍 ${item.location}</div>`:''}
+        </div>
+      </div>
+      ${rolesHTML}
     </div>
-    ${item.body?`<div class="detail-section"><h3 style="font-family:Fraunces,serif;margin-bottom:.82rem">Details</h3><div class="detail-body">${md2html(item.body)}</div></div>`:''}
+    ${item.body?`<div class="detail-section"><h3 style="font-family:Fraunces,serif;margin-bottom:.85rem">Full Details</h3><div class="detail-body">${md2html(item.body)}</div></div>`:''}
   </div>`;
   window.scrollTo(0,0);
 }
