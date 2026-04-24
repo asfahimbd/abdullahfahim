@@ -26,8 +26,7 @@ collections:
           - {label: "Email",         name: "email",    widget: "string"}
           - {label: "LinkedIn URL",  name: "linkedin", widget: "string", required: false}
           - {label: "GitHub URL",    name: "github",   widget: "string", required: false}
-          - {label: "ORCID ID",      name: "orcid",    widget: "string", required: false,
-             hint: "শুধু ID — e.g. 0000-0001-2345-6789"}
+          - {label: "ORCID ID",      name: "orcid",    widget: "string", required: false}
           - {label: "Fiverr URL",    name: "fiverr",   widget: "string", required: false}
 
   # ══════════════════════════════
@@ -61,55 +60,54 @@ collections:
       - {label: "Institution Photo", name: "photo",       widget: "image",  required: false}
       - {label: "Description",       name: "description", widget: "string", required: false}
       - {label: "Subjects (comma separated)", name: "subjects", widget: "string", required: false}
-      - label: "Duration (e.g. 2017 – 2021)"
-        name: "duration"
-        widget: "string"
-        required: false
 
   # ══════════════════════════════
-  # 3. EXPERIENCES ← নতুন dedicated collection
+  # 3. EXPERIENCES
   # ══════════════════════════════
   - name: "experiences"
     label: "💼 Experiences"
     folder: "content/experiences"
     create: true
     slug: "{{year}}{{month}}{{day}}-{{slug}}"
-    summary: "{{role}} at {{organization}}"
+    summary: "{{organization}}"
     fields:
-      - {label: "Organization/Company", name: "organization", widget: "string",
-         hint: "e.g. IEEE JUST Student Branch"}
-      - {label: "Role/Position",        name: "role",         widget: "string",
-         hint: "e.g. Chairperson, Mentor, Research Assistant"}
-      - label: "Employment Type"
-        name: "employment_type"
-        widget: "select"
-        options:
-          - {label: "Full Time",  value: "Full Time"}
-          - {label: "Part Time",  value: "Part Time"}
-          - {label: "Voluntary",  value: "Voluntary"}
-          - {label: "Internship", value: "Internship"}
-          - {label: "Research",   value: "Research"}
-        default: "Full Time"
-      - label: "Start Date"
-        name: "start_date"
-        widget: "datetime"
-        format: "DD MMMM, YYYY"
-        date_format: "DD MMMM, YYYY"
-        time_format: false
-      - label: "End Date"
-        name: "end_date"
-        widget: "datetime"
-        format: "DD MMMM, YYYY"
-        date_format: "DD MMMM, YYYY"
-        time_format: false
-        required: false
-        hint: "খালি রাখলে 'Present' দেখাবে"
-      - {label: "Location",   name: "location",   widget: "string", required: false,
-         hint: "e.g. Jessore, Bangladesh"}
-      - {label: "Short Description", name: "description", widget: "string",
-         hint: "Timeline card এ দেখাবে"}
-      - {label: "Organization Logo",  name: "logo",        widget: "image",  required: false}
-      - {label: "Full Details",       name: "body",        widget: "markdown", required: false}
+      - {label: "Organization/Company", name: "organization", widget: "string"}
+      - {label: "Organization Logo",    name: "logo",         widget: "image",  required: false}
+      - {label: "Location",             name: "location",     widget: "string", required: false}
+
+      - label: "Roles / Positions"
+        name: "roles"
+        widget: "list"
+        hint: "একই company তে একাধিক role add করো। সবচেয়ে নতুনটা আগে রাখো।"
+        fields:
+          - {label: "Role/Position", name: "role", widget: "string"}
+          - label: "Employment Type"
+            name: "employment_type"
+            widget: "select"
+            options:
+              - {label: "Full Time",  value: "Full Time"}
+              - {label: "Part Time",  value: "Part Time"}
+              - {label: "Voluntary",  value: "Voluntary"}
+              - {label: "Internship", value: "Internship"}
+              - {label: "Research",   value: "Research"}
+            default: "Full Time"
+          - label: "Start Date"
+            name: "start_date"
+            widget: "datetime"
+            format: "DD MMMM, YYYY"
+            date_format: "DD MMMM, YYYY"
+            time_format: false
+          - label: "End Date"
+            name: "end_date"
+            widget: "datetime"
+            format: "DD MMMM, YYYY"
+            date_format: "DD MMMM, YYYY"
+            time_format: false
+            required: false
+            hint: "খালি রাখলে 'Present' দেখাবে"
+          - {label: "Short Description", name: "description", widget: "string", required: false}
+
+      - {label: "Full Details (optional)", name: "body", widget: "markdown", required: false}
 
   # ══════════════════════════════
   # 4. SKILLS
@@ -130,11 +128,10 @@ collections:
           - {label: "Research Tools",  value: "Research"}
           - {label: "Freelance Tools", value: "Freelance"}
         default: "Academic"
-      - {label: "Software Logo",     name: "logo",        widget: "image",  required: false,
-         hint: "Transparent PNG সবচেয়ে ভালো"}
+      - {label: "Software Logo",     name: "logo",        widget: "image",  required: false}
       - {label: "Short Description", name: "description", widget: "string", required: false,
          hint: "Hover করলে দেখাবে। খালি রাখলে hover কাজ করবে না।"}
-      - {label: "Order",             name: "order",       widget: "number", default: 10}
+      - {label: "Order", name: "order", widget: "number", default: 10}
 
   # ══════════════════════════════
   # 5. CLIENT REVIEWS
@@ -204,14 +201,21 @@ collections:
           - {label: "🏆 Award",               value: "Award"}
           - {label: "✏️ Custom (fill below)",  value: "Custom"}
         default: "Freelance Project"
-      - {label: "Custom Category",  name: "custom_category", widget: "string",  required: false}
+      - {label: "Custom Category",   name: "custom_category", widget: "string",   required: false}
       - label: "📌 Pin to top"
         name: "pinned"
         widget: "boolean"
         default: false
-        hint: "Homepage এ এই item টা সবার আগে দেখাবে (সব category তে কাজ করে)"
-      - {label: "Featured Image",   name: "image",           widget: "image",   required: false}
-      - {label: "Short Description",name: "description",     widget: "string"}
-      - {label: "Full Details",     name: "body",            widget: "markdown"}
-      - {label: "YouTube Video URL",name: "youtube",         widget: "string",  required: false}
-      - {label: "External Link",    name: "link",            widget: "string",  required: false}
+      - label: "Date"
+        name: "date"
+        widget: "datetime"
+        format: "DD MMMM, YYYY"
+        date_format: "DD MMMM, YYYY"
+        time_format: false
+        required: false
+        hint: "Publication, submission বা completion date"
+      - {label: "Featured Image",    name: "image",       widget: "image",    required: false}
+      - {label: "Short Description", name: "description", widget: "string"}
+      - {label: "Full Details",      name: "body",        widget: "markdown"}
+      - {label: "YouTube Video URL", name: "youtube",     widget: "string",   required: false}
+      - {label: "External Link",     name: "link",        widget: "string",   required: false}
