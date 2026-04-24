@@ -443,40 +443,39 @@ function parseFM(rawText){
 
 /* Parse YAML list (roles under same org) */
 function parseRolesList(rawText){
-  const text=rawText.replace(/
-/g,'
-');
-  const m=text.match(/^---
-([\s\S]*?)
----/);
-  if(!m)return[];
-  const yaml=m[1];
-  // Find roles: section
-  const ri=yaml.indexOf('\nroles:');
-  if(ri===-1)return[];
-  const section=yaml.slice(ri+8); // after "roles:
-"
-  const items=[];let cur=null;
-  for(const line of section.split('
-')){
-    const listItem=line.match(/^\s*-\s*(\w.*?):\s*["']?(.*?)["']?\s*$/);
-    const listStart=line.match(/^\s*-\s*$/)||line.match(/^\s*-(?:\s*)$/);
-    const plain=line.match(/^(\s+)([\w_]+):\s*["']?(.*?)["']?\s*$/);
+  // Find "roles:" block in YAML frontmatter
+  const fmMatch = rawText.match(/^---[\s\S]*?---/);
+  if(!fmMatch) return [];
+  const yaml = fmMatch[0];
+  const rolesIdx = yaml.indexOf('\nroles:');
+  if(rolesIdx === -1) return [];
+
+  const afterRoles = yaml.slice(rolesIdx + 8); // skip "\nroles:\n"
+  const items = [];
+  let cur = null;
+
+  for(const line of afterRoles.split('\n')){
+    // New list item starts with "  - " or "- "
     if(line.match(/^\s*-\s+role:/)){
-      if(cur)items.push(cur);cur={};
-      const rv=line.match(/role:\s*["']?([^"'\n]+?)["']?\s*$/);
-      if(rv)cur.role=rv[1].trim();
-    }else if(line.match(/^\s*-\s*$/)&&cur){
-      items.push(cur);cur={};
-    }else if(cur&&plain){
-      cur[plain[2]]=plain[3].trim().replace(/^["']|["']$/g,'');
-    }else if(!line.trim()&&cur&&Object.keys(cur).length>0){
-      // could still be in list
-    }else if(line.match(/^\w/)&&cur){
-      items.push(cur);cur=null;break;
+      if(cur) items.push(cur);
+      cur = {};
+      const rv = line.match(/role:\s*["']?([^"'\n]+?)["']?\s*$/);
+      if(rv) cur.role = rv[1].trim();
+    } else if(line.match(/^\s*-\s*$/) && cur){
+      // bare dash - new item  
+      items.push(cur); cur = {};
+    } else if(cur !== null && line.match(/^\s+\w/)){
+      // field inside current item
+      const kv = line.match(/^\s+([\w_]+):\s*["']?(.*?)["']?\s*$/);
+      if(kv) cur[kv[1]] = kv[2].trim();
+    } else if(!line.trim() && cur){
+      // empty line - continue
+    } else if(line.match(/^\w/) && cur){
+      // back to root level - stop
+      break;
     }
   }
-  if(cur&&Object.keys(cur).length>0)items.push(cur);
+  if(cur && Object.keys(cur).length > 0) items.push(cur);
   return items;
 }
 
