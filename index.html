@@ -441,38 +441,37 @@ function parseFM(rawText){
   return{fm,body};
 }
 
-/* Parse YAML list (roles under same org) */
+/* Parse YAML list (roles under same org) — robust version */
 function parseRolesList(rawText){
-  // Find "roles:" block in YAML frontmatter
-  const fmMatch = rawText.match(/^---[\s\S]*?---/);
-  if(!fmMatch) return [];
-  const yaml = fmMatch[0];
-  const rolesIdx = yaml.indexOf('\nroles:');
-  if(rolesIdx === -1) return [];
+  // Normalize line endings using split/join (no regex needed)
+  const txt = rawText.split('\r\n').join('\n').split('\r').join('\n');
+  if(txt.indexOf('\nroles:') === -1) return [];
 
-  const afterRoles = yaml.slice(rolesIdx + 8); // skip "\nroles:\n"
+  const lines = txt.split('\n');
   const items = [];
   let cur = null;
+  let inRoles = false;
+  let listIndent = -1;
 
-  for(const line of afterRoles.split('\n')){
-    // New list item starts with "  - " or "- "
-    if(line.match(/^\s*-\s+role:/)){
-      if(cur) items.push(cur);
+  for(let i=0;i<lines.length;i++){
+    const line = lines[i];
+    if(!inRoles){
+      if(line.trim() === 'roles:') inRoles = true;
+      continue;
+    }
+    if(!line.trim()) continue;
+    const indent = line.search(/\S/);
+    if(indent === 0 && /^\w/.test(line)) break; // back to root
+    const isDash = /^\s+-/.test(line);
+    if(isDash && (listIndent === -1 || indent === listIndent)){
+      if(listIndent === -1) listIndent = indent;
+      if(cur && Object.keys(cur).length > 0) items.push(cur);
       cur = {};
-      const rv = line.match(/role:\s*["']?([^"'\n]+?)["']?\s*$/);
-      if(rv) cur.role = rv[1].trim();
-    } else if(line.match(/^\s*-\s*$/) && cur){
-      // bare dash - new item  
-      items.push(cur); cur = {};
-    } else if(cur !== null && line.match(/^\s+\w/)){
-      // field inside current item
+      const inline = line.match(/^\s+-\s+([\w_]+):\s*["']?(.*?)["']?\s*$/);
+      if(inline) cur[inline[1]] = inline[2].trim();
+    } else if(cur !== null && indent > listIndent){
       const kv = line.match(/^\s+([\w_]+):\s*["']?(.*?)["']?\s*$/);
       if(kv) cur[kv[1]] = kv[2].trim();
-    } else if(!line.trim() && cur){
-      // empty line - continue
-    } else if(line.match(/^\w/) && cur){
-      // back to root level - stop
-      break;
     }
   }
   if(cur && Object.keys(cur).length > 0) items.push(cur);
@@ -646,8 +645,17 @@ function updateNavPhoto(url){
 }
 
 /* ══ COUNTS ══ */
-function countGroup(k){return ALL_PROJECTS.filter(p=>GROUPS[k]?.subcats.includes(p.category)).length;}
-function countCat(c){return ALL_PROJECTS.filter(p=>p.category===c).length;}
+function countGroup(k){
+  if(k==='Experiences') return ALL_EXPERIENCES.length;
+  return ALL_PROJECTS.filter(p=>GROUPS[k]?.subcats.includes(p.category)).length;
+}
+function countCat(cat){
+  if(['Full Time','Part Time','Voluntary','Internship','Research'].includes(cat))
+    return ALL_EXPERIENCES.filter(e=>e.isMultiRole
+      ? e.roles&&e.roles.some(r=>(r.employment_type||r.type||'')===(cat))
+      : (e.type||'')===(cat)).length;
+  return ALL_PROJECTS.filter(p=>p.category===cat).length;
+}
 
 /* ══ NAV ══ */
 function buildNav(){
@@ -691,7 +699,8 @@ async function init(){
 function route(){
   const hash=window.location.hash.replace('#','');
   if(!hash||hash==='home')renderHome(false);
-  else if(hash==='all-exp'){renderAllExpPage();}
+  else if(hash==='all-exp'){renderAllExpPage(null);}
+  else if(hash.startsWith('all-exp-')){renderAllExpPage(hash.replace('all-exp-','').replace(/-/g,' '));}
   else if(hash.startsWith('view-exp-')){renderExpDetail(hash.replace('view-exp-',''));}
   else if(hash.startsWith('view-'))renderDetail(hash.replace('view-',''));
   else if(hash.startsWith('all-')){
@@ -840,6 +849,14 @@ function getYear(dateStr){
   if(!dateStr)return'';
   const m=(dateStr||'').match(/\b(\d{4})\b/);return m?m[1]:'';
 }
+function buildYearLabel(startDate, endDate, isCurrent){
+  const sy=getYear(startDate||'');
+  const ey=isCurrent?'':getYear(endDate||'');
+  if(!sy)return'';
+  if(ey&&ey!==sy)return sy+' – '+ey;
+  if(isCurrent)return sy+' –';
+  return sy;
+}
 
 function renderExpCard(p,idx){
   const isCur=p.isCurrent;
@@ -849,9 +866,8 @@ function renderExpCard(p,idx){
 
   if(p.isMultiRole&&p.roles&&p.roles.length>0){
     const topRole=p.roles[0];
-    const startYear=getYear(p.roles[p.roles.length-1].start_date||'');
-    const endYear=isCur?'Now':getYear(p.roles[0].end_date||'');
-    const yearLabel=startYear+(endYear&&startYear!==endYear?' – '+endYear:'');
+    const startYear=getYear(p.roles[p.roles.length-1]&&p.roles[p.roles.length-1].start_date||'');
+    const yearLabel=buildYearLabel(p.roles[p.roles.length-1]&&p.roles[p.roles.length-1].start_date||'', p.roles[0]&&p.roles[0].end_date||'', isCur);
     return`<div class="exp-item ${itemClass}">
       <div class="exp-dot-wrap">
         <div class="exp-dot ${dotClass}"></div>
@@ -884,9 +900,7 @@ function renderExpCard(p,idx){
 
   // Single role
   const dateStr=(p.startDate||'')+(p.isCurrent?' – Present':p.endDate?' – '+p.endDate:'');
-  const yr=isCur?'Now':getYear(p.endDate||p.startDate||'');
-  const startYr=getYear(p.startDate||'');
-  const yearLabel=startYr+(yr&&startYr!==yr?' – '+yr:'');
+  const yearLabel=buildYearLabel(p.startDate||'',p.endDate||'',isCur);
   return`<div class="exp-item ${itemClass}">
     <div class="exp-dot-wrap">
       <div class="exp-dot ${dotClass}"></div>
@@ -1096,6 +1110,10 @@ function closeEduModal(e){if(e&&e.target!==document.getElementById('edu-modal'))
 
 /* ══ ALL PAGE ══ */
 function showAll(key,sub){
+  if(key==='Experiences'){
+    window.location.hash=sub?`all-exp-${sub.replace(/\s+/g,'-')}`:'all-exp';
+    return;
+  }
   const slug=sub?sub.replace(/\s+/g,'-'):'';
   window.location.hash=slug?`all-${key}-${slug}`:`all-${key}`;
 }
@@ -1141,25 +1159,55 @@ function renderDetail(id){
   </div>`;
   window.scrollTo(0,0);
 }
-function renderAllExpPage(){
+function renderAllExpPage(typeFilter){
+  const expTypes=['Full Time','Part Time','Voluntary','Internship','Research'];
+  let items=ALL_EXPERIENCES;
+  if(typeFilter){
+    items=ALL_EXPERIENCES.filter(e=>{
+      if(e.isMultiRole&&e.roles) return e.roles.some(r=>(r.employment_type||r.type||'')===typeFilter);
+      return (e.type||'')===typeFilter;
+    });
+  }
   document.getElementById('app').innerHTML=`
   <div class="detail-page">
     <button onclick="goHome()" class="btn btn-g" style="margin-bottom:1.1rem">← Home</button>
-    <h2 class="section-title" style="margin-bottom:1.2rem">All Experiences</h2>
+    <h2 class="section-title" style="margin-bottom:1rem">Experiences</h2>
+    <div class="filter-tabs">
+      <button class="ftab ${!typeFilter?'active':''}" onclick="renderAllExpPage(null)">All (${ALL_EXPERIENCES.length})</button>
+      ${expTypes.map(t=>`<button class="ftab ${typeFilter===t?'active':''}" onclick="renderAllExpPage('${t}')">${t} (${countCat(t)})</button>`).join('')}
+    </div>
     <div class="grid">
-      ${ALL_EXPERIENCES.map(p=>{
-        const typeClass=p.type==='Full Time'?'fulltime':p.type==='Voluntary'?'voluntary':'internship';
-        const dateStr=p.startDate?(p.startDate+(p.isCurrent?' – Present':p.endDate?' – '+p.endDate:'')):'';
-        return`<div class="card" onclick="location.hash='view-exp-${p.id}'">
-          ${p.logo?`<img src="${p.logo}" class="card-img" style="object-fit:contain;padding:.5rem" onerror="this.style.display='none'">`:'<div class="card-img" style="display:flex;align-items:center;justify-content:center;color:var(--ink3);font-size:.72rem">No Logo</div>'}
-          <span class="exp-type ${typeClass}" style="margin-bottom:.4rem">${p.type}</span>
-          <div style="font-size:.72rem;color:var(--ink3);margin-bottom:.15rem">${p.organization}</div>
-          <h3>${p.role}</h3>
-          ${dateStr?`<div style="font-size:.7rem;color:var(--ink3);margin-bottom:.3rem">${dateStr}</div>`:''}
-          <p>${p.description}</p>
-          <div class="card-cta">Details →</div>
-        </div>`;
-      }).join('')}
+      ${items.length===0
+        ?`<div class="empty" style="grid-column:1/-1"><p>No items found.</p></div>`
+        :items.map(e=>{
+          if(e.isMultiRole&&e.roles&&e.roles.length>0){
+            const topRole=e.roles[0];
+            const tc=typeClass(topRole.employment_type||topRole.type||'');
+            const isCur=!topRole.end_date||topRole.end_date==='';
+            return`<div class="card" onclick="location.hash='view-exp-${e.id}'">
+              ${e.logo?`<img src="${e.logo}" class="card-img" style="object-fit:contain;padding:.6rem" onerror="this.style.display='none'">`:''}
+              <div style="font-size:.72rem;color:var(--ink3);font-weight:700;margin-bottom:.2rem">${e.organization}</div>
+              ${e.roles.map(r=>`
+                <div style="margin-bottom:.35rem">
+                  <span class="exp-type ${typeClass(r.employment_type||r.type||'')}">${r.employment_type||r.type||''}</span>
+                  <strong style="font-size:.84rem">${r.role}</strong>
+                  <div style="font-size:.66rem;color:var(--ink3)">${r.start_date||''}${(!r.end_date||r.end_date==='')?(' – Present'):r.end_date?' – '+r.end_date:''}</div>
+                </div>`).join('')}
+              <div class="card-cta">Details →</div>
+            </div>`;
+          }
+          const tc=typeClass(e.type||'');
+          const dateStr=(e.startDate||'')+(e.isCurrent?' – Present':e.endDate?' – '+e.endDate:'');
+          return`<div class="card" onclick="location.hash='view-exp-${e.id}'">
+            ${e.logo?`<img src="${e.logo}" class="card-img" style="object-fit:contain;padding:.6rem" onerror="this.style.display='none'">`:''}
+            <span class="exp-type ${tc}">${e.type}</span>
+            <div style="font-size:.72rem;color:var(--ink3);font-weight:700;margin-bottom:.2rem">${e.organization}</div>
+            <h3>${e.role}</h3>
+            ${dateStr?`<div style="font-size:.68rem;color:var(--ink3);margin-bottom:.3rem">${dateStr}</div>`:''}
+            <p>${truncate(e.description,25)}</p>
+            <div class="card-cta">Details →</div>
+          </div>`;
+        }).join('')}
     </div>
   </div>`;
   window.scrollTo(0,0);
