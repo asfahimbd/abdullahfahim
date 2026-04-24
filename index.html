@@ -303,9 +303,17 @@ footer{text-align:center;padding:2.2rem;color:var(--ink3);border-top:1px solid v
   .hero-inner{grid-template-columns:1fr;text-align:center;gap:1.5rem}
   .photo-wrap{margin:0 auto}
   .hero-icon-btns{justify-content:center}
-  .hero-bio-full{text-align:left;width:100%}
+  .hero-bio-full{text-align:justify !important;text-justify:inter-word !important;width:100%}
   .skills-grid{grid-template-columns:1fr}
   .review-card{flex:0 0 82vw}
+  /* Experience: vertical on mobile */
+  .exp-timeline{flex-direction:column;min-width:unset;padding:1rem 0;gap:.8rem}
+  .exp-timeline::before{display:none}
+  .exp-item{width:100%;padding:0;flex-direction:row;gap:.75rem;align-items:flex-start}
+  .exp-item.is-current{margin-top:0}
+  .exp-dot-wrap{align-items:center;flex-direction:column;padding-top:.15rem;flex-shrink:0}
+  .exp-dot{width:12px;height:12px}
+  .exp-card{flex:1}
 }
 @media(max-width:460px){.review-card{flex:0 0 90vw}}
 </style>
@@ -433,6 +441,45 @@ function parseFM(rawText){
   return{fm,body};
 }
 
+/* Parse YAML list (roles under same org) */
+function parseRolesList(rawText){
+  const text=rawText.replace(/
+/g,'
+');
+  const m=text.match(/^---
+([\s\S]*?)
+---/);
+  if(!m)return[];
+  const yaml=m[1];
+  // Find roles: section
+  const ri=yaml.indexOf('\nroles:');
+  if(ri===-1)return[];
+  const section=yaml.slice(ri+8); // after "roles:
+"
+  const items=[];let cur=null;
+  for(const line of section.split('
+')){
+    const listItem=line.match(/^\s*-\s*(\w.*?):\s*["']?(.*?)["']?\s*$/);
+    const listStart=line.match(/^\s*-\s*$/)||line.match(/^\s*-(?:\s*)$/);
+    const plain=line.match(/^(\s+)([\w_]+):\s*["']?(.*?)["']?\s*$/);
+    if(line.match(/^\s*-\s+role:/)){
+      if(cur)items.push(cur);cur={};
+      const rv=line.match(/role:\s*["']?([^"'\n]+?)["']?\s*$/);
+      if(rv)cur.role=rv[1].trim();
+    }else if(line.match(/^\s*-\s*$/)&&cur){
+      items.push(cur);cur={};
+    }else if(cur&&plain){
+      cur[plain[2]]=plain[3].trim().replace(/^["']|["']$/g,'');
+    }else if(!line.trim()&&cur&&Object.keys(cur).length>0){
+      // could still be in list
+    }else if(line.match(/^\w/)&&cur){
+      items.push(cur);cur=null;break;
+    }
+  }
+  if(cur&&Object.keys(cur).length>0)items.push(cur);
+  return items;
+}
+
 function fixImg(p){
   if(!p||p.trim()==='')return'';p=p.trim();
   if(p.startsWith('/assets/'))return`https://raw.githubusercontent.com/${REPO}/${BRANCH}${p}`;
@@ -532,6 +579,27 @@ async function fetchExperiences(){
   const items=await Promise.all(files.filter(f=>f.name.endsWith('.md')).map(async f=>{
     const text=await ghRaw(f.download_url);if(!text)return null;
     const{fm,body}=parseFM(text);
+    // Try to parse multi-role list
+    const roles=parseRolesList(text);
+    if(roles.length>0){
+      // Multi-role entry (promotions/continuations)
+      const sortedRoles=roles.sort((a,b)=>{
+        const aEnd=a.end_date||'';const bEnd=b.end_date||'';
+        if(!aEnd)return-1;if(!bEnd)return 1;
+        return 0;
+      });
+      return{
+        id:f.name.replace('.md',''),
+        organization:fm.organization||'',
+        logo:fixImg(fm.logo||''),
+        location:fm.location||'',
+        roles:sortedRoles,
+        isMultiRole:true,
+        isCurrent:!sortedRoles[0].end_date||sortedRoles[0].end_date===''||sortedRoles[0].end_date.toLowerCase().includes('present'),
+        body
+      };
+    }
+    // Single role entry
     const endDate=fm.end_date||'';
     const isCurrent=!endDate||endDate.toLowerCase().includes('present');
     return{
@@ -540,16 +608,17 @@ async function fetchExperiences(){
       role:fm.role||fm.title||'',
       type:fm.employment_type||'Full Time',
       startDate:fm.start_date||'',
-      endDate:endDate,
-      isCurrent,
+      endDate:endDate,isCurrent,
       location:fm.location||'',
       description:fm.description||'',
       logo:fixImg(fm.logo||''),
-      body,
-      order:fm.end_date?new Date(fm.end_date||'').getTime()||0:Date.now()
+      isMultiRole:false,body
     };
   }));
-  const v=items.filter(Boolean).sort((a,b)=>b.order-a.order);
+  const v=items.filter(Boolean).sort((a,b)=>{
+    const aC=a.isCurrent?1:0,bC=b.isCurrent?1:0;
+    return bC-aC;
+  });
   if(v.length>0){ALL_EXPERIENCES=v;dbg(`experiences: ${v.length}`,'ok');}
 }
 
@@ -758,6 +827,85 @@ function renderHome(loading=false){
 }
 
 /* ── Experience horizontal timeline ── */
+function typeClass(t){
+  t=(t||'').toLowerCase();
+  if(t.includes('full'))return'fulltime';
+  if(t.includes('volunt'))return'voluntary';
+  if(t.includes('intern'))return'internship';
+  if(t.includes('part'))return'parttime';
+  if(t.includes('research'))return'research';
+  return'fulltime';
+}
+
+function getYear(dateStr){
+  if(!dateStr)return'';
+  const m=(dateStr||'').match(/\b(\d{4})\b/);return m?m[1]:'';
+}
+
+function renderExpCard(p,idx){
+  const isCur=p.isCurrent;
+  const dotClass=isCur?'dot-current':'dot-past';
+  const cardClass=isCur?'card-current':'card-past';
+  const itemClass=isCur?'is-current':'';
+
+  if(p.isMultiRole&&p.roles&&p.roles.length>0){
+    const topRole=p.roles[0];
+    const startYear=getYear(p.roles[p.roles.length-1].start_date||'');
+    const endYear=isCur?'Now':getYear(p.roles[0].end_date||'');
+    const yearLabel=startYear+(endYear&&startYear!==endYear?' – '+endYear:'');
+    return`<div class="exp-item ${itemClass}">
+      <div class="exp-dot-wrap">
+        <div class="exp-dot ${dotClass}"></div>
+        ${yearLabel?`<div class="exp-dot-year">${yearLabel}</div>`:''}
+      </div>
+      <div class="exp-card ${cardClass}" onclick="location.hash='view-exp-${p.id}'">
+        <div class="exp-card-header">
+          ${p.logo?`<img src="${p.logo}" class="exp-logo" onerror="this.style.display='none'">`:''}
+          <div class="exp-org">${p.organization}</div>
+        </div>
+        ${p.location?`<div style="font-size:.64rem;color:var(--ink3);margin-bottom:.25rem">${p.location}</div>`:''}
+        <div class="exp-roles-list">
+          ${p.roles.map(r=>{
+            const tc=typeClass(r.employment_type||r.type||'');
+            const rEnd=r.end_date||'';const rIsCur=!rEnd||rEnd==='';
+            const dateStr=(r.start_date||'')+(rIsCur?' – Present':rEnd?' – '+rEnd:'');
+            return`<div class="exp-role-item">
+              <div class="exp-role-name">${r.role||''}</div>
+              <div class="exp-role-meta">
+                <span class="exp-type ${tc}">${r.employment_type||r.type||''}</span>
+                ${dateStr?`<span>${dateStr}</span>`:''}
+              </div>
+              ${r.description?`<div class="exp-role-desc">${r.description}</div>`:''}
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // Single role
+  const dateStr=(p.startDate||'')+(p.isCurrent?' – Present':p.endDate?' – '+p.endDate:'');
+  const yr=isCur?'Now':getYear(p.endDate||p.startDate||'');
+  const startYr=getYear(p.startDate||'');
+  const yearLabel=startYr+(yr&&startYr!==yr?' – '+yr:'');
+  return`<div class="exp-item ${itemClass}">
+    <div class="exp-dot-wrap">
+      <div class="exp-dot ${dotClass}"></div>
+      ${yearLabel?`<div class="exp-dot-year">${yearLabel}</div>`:''}
+    </div>
+    <div class="exp-card ${cardClass}" onclick="location.hash='view-exp-${p.id}'">
+      <div class="exp-card-header">
+        ${p.logo?`<img src="${p.logo}" class="exp-logo" onerror="this.style.display='none'">`:''}
+        <div class="exp-org">${p.organization}</div>
+      </div>
+      <div class="exp-role">${p.role}</div>
+      <span class="exp-type ${typeClass(p.type)}">${p.type}</span>
+      ${dateStr?`<div class="exp-date">${dateStr}</div>`:''}
+      <p class="exp-desc">${p.description}</p>
+    </div>
+  </div>`;
+}
+
 function renderExpSection(loading=false){
   const expItems=ALL_EXPERIENCES;
   const shown=expItems.slice(0,3);
@@ -776,23 +924,7 @@ function renderExpSection(loading=false){
     </div>
     <div class="exp-timeline-wrap-inline">
       <div class="exp-timeline">
-        ${shown.map(p=>{
-          const typeClass=p.type==='Full Time'?'fulltime':p.type==='Voluntary'?'voluntary':'internship';
-          const dateStr=p.startDate?(p.startDate+(p.isCurrent?' – Present':p.endDate?' – '+p.endDate:'')):'';
-          return`<div class="exp-item">
-            <div class="exp-dot ${p.isCurrent?'current':''}"></div>
-            <div class="exp-card" onclick="location.hash='view-exp-${p.id}'">
-              <div class="exp-card-header">
-                ${p.logo?`<img src="${p.logo}" class="exp-logo" onerror="this.style.display='none'">`:''}
-                <div class="exp-org">${p.organization}</div>
-              </div>
-              <div class="exp-role">${p.role}</div>
-              <span class="exp-type ${typeClass}">${p.type}</span>
-              ${dateStr?`<div class="exp-date">${dateStr}</div>`:''}
-              <p class="exp-desc">${p.description}</p>
-            </div>
-          </div>`;
-        }).join('')}
+        ${shown.map((p,idx)=>renderExpCard(p,idx)).join('')}
         ${hasMore?`<div class="exp-continuation" onclick="location.hash='all-exp'" title="See all">→</div>`:''}
       </div>
     </div>
@@ -928,6 +1060,7 @@ function cardHTML(p){
   return`<div class="card" onclick="location.hash='view-${p.id}'">
     ${hasImg?`<img src="${p.image}" class="card-img" alt="${p.title}" onerror="this.style.display='none'">`:''}
     <span class="badge ${bc}">${p.category}</span>
+    ${p.date?`<div style="font-size:.64rem;color:var(--ink3);margin-bottom:.25rem">📅 ${p.date}</div>`:''}
     <h3>${p.title}</h3><p>${excerpt}</p>
     <div class="card-cta">Learn More →</div>
   </div>`;
