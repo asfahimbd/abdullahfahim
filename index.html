@@ -267,6 +267,25 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 #debug-panel .warn{color:#ffe082}
 #debug-close{float:right;background:none;border:none;color:#ef9a9a;cursor:pointer;font-size:.9rem}
 
+/* ════ BACK TO TOP ════ */
+#back-to-top{
+  position:fixed;bottom:1.5rem;right:1.5rem;z-index:190;
+  width:42px;height:42px;border-radius:50%;
+  background:var(--blue);color:#fff;border:none;
+  font-size:1.1rem;font-weight:700;cursor:pointer;
+  box-shadow:var(--shadow-lg);transition:all .22s;
+  opacity:0;pointer-events:none;
+  display:flex;align-items:center;justify-content:center;
+}
+#back-to-top.visible{opacity:1;pointer-events:auto}
+#back-to-top:hover{background:#1449d6;transform:translateY(-3px)}
+
+/* Resume btn */
+.resume-btn{cursor:pointer}
+
+/* Exp excerpt */
+.exp-excerpt{font-size:.73rem;color:var(--ink2);line-height:1.5;margin-top:.3rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
 footer{text-align:center;padding:2.2rem;color:var(--ink3);border-top:1px solid var(--border);margin-top:3rem;font-size:.8rem}
 
 /* Buttons */
@@ -331,6 +350,22 @@ footer{text-align:center;padding:2.2rem;color:var(--ink3);border-top:1px solid v
   <div id="debug-log"></div>
 </div>
 
+<!-- RESUME MODAL -->
+<div class="modal-bg" id="resume-modal" onclick="closeResumeModal(event)">
+  <div class="modal-box" style="max-width:720px">
+    <div class="modal-body" style="padding:1.2rem">
+      <button class="modal-close" onclick="document.getElementById('resume-modal').classList.remove('open');document.body.style.overflow=''">✕ Close</button>
+      <h3 style="font-family:Fraunces,serif;margin-bottom:1rem">Resume / CV</h3>
+      <div id="resume-embed" style="width:100%;height:500px;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1rem"></div>
+      <a id="resume-dl-btn" href="#" download class="btn btn-p" target="_blank">⬇ Download PDF</a>
+      <a id="resume-view-btn" href="#" class="btn btn-g" target="_blank" style="margin-left:.5rem">↗ Open in new tab</a>
+    </div>
+  </div>
+</div>
+
+<!-- BACK TO TOP -->
+<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+
 <footer>© 2026 Abdullah Shadek Fahim · Jashore University of Science and Technology</footer>
 
 <script>
@@ -356,7 +391,7 @@ function dbg(msg,type='ok'){
 let HERO={
   name:"Abdullah Shadek Fahim",tagline:"Electrical & Electronic Engineer · Level 2 Fiverr Seller",
   bio:"Specializing in Semiconductor Research (Ion Implantation) and Full-stack Web Development. Undergraduate at JUST with a passion for Machine Learning in Physics.",
-  photo:"",email:"asfahimbd@gmail.com",orcid:"",
+  photo:"",email:"asfahimbd@gmail.com",orcid:"",resume:"",
   github:"https://github.com/abdullahFahim19",
   linkedin:"https://linkedin.com/in/abdullah-fahim7640",
   fiverr:"https://www.fiverr.com/YOUR_USERNAME"
@@ -486,6 +521,7 @@ async function fetchSettings(){
     if(fm.email)HERO.email=fm.email;if(fm.github)HERO.github=fm.github;
     if(fm.linkedin)HERO.linkedin=fm.linkedin;if(fm.fiverr)HERO.fiverr=fm.fiverr;
     if(fm.orcid)HERO.orcid=fm.orcid;
+    if(fm.resume)HERO.resume=fixImg(fm.resume);
     document.getElementById('nav-fiverr-btn').href=HERO.fiverr||'#';
     if(HERO.photo)updateNavPhoto(HERO.photo);
   }catch(e){dbg(`settings: ${e.message}`,'err');}
@@ -581,7 +617,8 @@ async function fetchExperiences(){
       location:fm.location||'',
       description:fm.description||'',
       logo:fixImg(fm.logo||''),
-      isMultiRole:false,body
+      isMultiRole:false,body,
+      showExcerpt:fm.show_excerpt==='true'||fm.show_excerpt===true
     };
   }));
   const v=items.filter(Boolean).sort((a,b)=>{
@@ -689,7 +726,8 @@ const ICONS={
   email:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`,
   linkedin:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>`,
   github:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>`,
-  orcid:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947s-.422.947-.947.947a.95.95 0 0 1-.947-.947c0-.525.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.016-5.325 5.016h-3.919V7.416zm1.444 1.303v7.444h2.297c3.272 0 3.872-2.484 3.872-3.722 0-2.016-1.284-3.722-3.862-3.722h-2.307z"/></svg>`
+  orcid:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947s-.422.947-.947.947a.95.95 0 0 1-.947-.947c0-.525.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.016-5.325 5.016h-3.919V7.416zm1.444 1.303v7.444h2.297c3.272 0 3.872-2.484 3.872-3.722 0-2.016-1.284-3.722-3.862-3.722h-2.307z"/></svg>`,
+  resume:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`
 };
 
 /* ══ HOME ══ */
@@ -699,7 +737,8 @@ function renderHome(loading=false){
     h.email?`<a href="mailto:${h.email}" class="icon-btn" title="Email">${ICONS.email} Email</a>`:'',
     h.linkedin?`<a href="${h.linkedin}" target="_blank" class="icon-btn" title="LinkedIn">${ICONS.linkedin} LinkedIn</a>`:'',
     h.github?`<a href="${h.github}" target="_blank" class="icon-btn" title="GitHub">${ICONS.github} GitHub</a>`:'',
-    h.orcid?`<a href="https://orcid.org/${h.orcid}" target="_blank" class="icon-btn" title="ORCID">${ICONS.orcid} ORCID</a>`:''
+    h.orcid?`<a href="https://orcid.org/${h.orcid}" target="_blank" class="icon-btn" title="ORCID">${ICONS.orcid} ORCID</a>`:'',
+    h.resume?`<div class="icon-btn resume-btn" onclick="openResume('${h.resume}')" title="Resume">${ICONS.resume} Resume</div>`:''
   ].filter(Boolean).join('');
 
   document.getElementById('app').innerHTML=`
@@ -847,7 +886,8 @@ function renderExpCard(p,idx){
             <span class="exp-type ${tc}">${r.employment_type||r.type||''}</span>
             <span class="exp-role-title">${r.role||''}</span>
           </div>
-          ${dateStr?`<div class="exp-role-date">${dateStr}</div>`:''}`;
+          ${dateStr?`<div class="exp-role-date">${dateStr}</div>`:''}
+          ${r.show_excerpt&&r.description?`<div class="exp-excerpt">${truncate(r.description,20)}</div>`:''}`;
         }).join('')}
         <div class="exp-cta">Details →</div>
       </div>
@@ -866,6 +906,7 @@ function renderExpCard(p,idx){
         <span class="exp-role-title">${p.role}</span>
       </div>
       ${dateStr?`<div class="exp-role-date">${dateStr}</div>`:''}
+      ${p.showExcerpt&&p.description?`<div class="exp-excerpt">${truncate(p.description,22)}</div>`:''}
       <div class="exp-cta">Details →</div>
     </div>
   </div>`;
@@ -885,7 +926,7 @@ function renderExpSection(loading=false){
   return`<section class="section">
     <div class="section-header">
       <h2 class="section-title">Experiences</h2>
-      ${hasMore?`<span class="see-all-link" onclick="location.hash='all-exp'">See All (${expItems.length}) →</span>`:''}
+      <span class="see-all-link" onclick="location.hash='all-exp'">See All (${expItems.length}) →</span>
     </div>
     <div class="exp-grid">
       ${shown.map(p=>renderExpCard(p)).join('')}
@@ -1187,6 +1228,31 @@ function renderExpDetail(id){
   </div>`;
   window.scrollTo(0,0);
 }
+
+/* ── Resume Modal ── */
+function openResume(url){
+  const embed=document.getElementById('resume-embed');
+  const dl=document.getElementById('resume-dl-btn');
+  const view=document.getElementById('resume-view-btn');
+  embed.innerHTML=`<iframe src="${url}" style="width:100%;height:100%;border:none"></iframe>`;
+  dl.href=url;
+  view.href=url;
+  document.getElementById('resume-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeResumeModal(e){
+  if(e&&e.target!==document.getElementById('resume-modal'))return;
+  document.getElementById('resume-modal').classList.remove('open');
+  document.getElementById('resume-embed').innerHTML='';
+  document.body.style.overflow='';
+}
+
+/* ── Back to top ── */
+window.addEventListener('scroll',()=>{
+  const btn=document.getElementById('back-to-top');
+  if(!btn)return;
+  btn.classList.toggle('visible',window.scrollY>400);
+},{ passive:true });
 
 function goHome(){clearInterval(revTimer);window.location.hash='';renderHome(false);}
 </script>
