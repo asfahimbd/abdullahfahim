@@ -26,8 +26,17 @@ collections:
           - {label: "Email",         name: "email",    widget: "string"}
           - {label: "LinkedIn URL",  name: "linkedin", widget: "string", required: false}
           - {label: "GitHub URL",    name: "github",   widget: "string", required: false}
-          - {label: "ORCID ID",      name: "orcid",    widget: "string", required: false}
+          - {label: "ORCID ID",      name: "orcid",    widget: "string", required: false,
+             hint: "শুধু ID — e.g. 0000-0001-2345-6789"}
           - {label: "Fiverr URL",    name: "fiverr",   widget: "string", required: false}
+          - label: "Resume / CV (PDF)"
+            name: "resume"
+            widget: "file"
+            required: false
+            hint: "PDF upload করো — homepage এ Resume বাটন দেখাবে, click করলে view ও download করা যাবে"
+            media_library:
+              config:
+                multiple: false
 
   # ══════════════════════════════
   # 2. EDUCATION
@@ -73,12 +82,13 @@ collections:
     fields:
       - {label: "Organization/Company", name: "organization", widget: "string"}
       - {label: "Organization Logo",    name: "logo",         widget: "image",  required: false}
-      - {label: "Location",             name: "location",     widget: "string", required: false}
+      - {label: "Location",             name: "location",     widget: "string", required: false,
+         hint: "e.g. Jessore, Bangladesh"}
 
       - label: "Roles / Positions"
         name: "roles"
         widget: "list"
-        hint: "একই company তে একাধিক role add করো। সবচেয়ে নতুনটা আগে রাখো।"
+        hint: "একই company তে একাধিক role — সবচেয়ে নতুনটা আগে রাখো"
         fields:
           - {label: "Role/Position", name: "role", widget: "string"}
           - label: "Employment Type"
@@ -105,7 +115,12 @@ collections:
             time_format: false
             required: false
             hint: "খালি রাখলে 'Present' দেখাবে"
-          - {label: "Short Description", name: "description", widget: "string", required: false}
+          - {label: "Description", name: "description", widget: "string", required: false}
+          - label: "Show Excerpt on Homepage?"
+            name: "show_excerpt"
+            widget: "boolean"
+            default: false
+            hint: "ON করলে homepage এ এই role এর description এর ছোট অংশ দেখাবে — সব card এর height সমান রাখতে ব্যবহার করো"
 
       - {label: "Full Details (optional)", name: "body", widget: "markdown", required: false}
 
@@ -213,7 +228,6 @@ collections:
         date_format: "DD MMMM, YYYY"
         time_format: false
         required: false
-        hint: "Publication, submission বা completion date"
       - {label: "Featured Image",    name: "image",       widget: "image",    required: false}
       - {label: "Short Description", name: "description", widget: "string"}
       - {label: "Full Details",      name: "body",        widget: "markdown"}
