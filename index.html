@@ -685,13 +685,23 @@ async function fetchProjects(){
     const text=await ghRaw(f.download_url);if(!text)return null;
     const{fm,body}=parseFM(text);
     dbg(`project: "${fm.title||f.name}" cat="${fm.category}"`,'ok');
-    // Parse gallery list (gallery field is YAML list or comma-separated)
+    // Parse gallery — Sveltia CMS saves list fields in frontmatter as:
+    // gallery:\n  - /assets/images/foo.jpg\n  - /assets/images/bar.jpg
     let gallery=[];
-    const gi=text.indexOf('\ngallery:');
-    if(gi>-1&&text.indexOf('\n---',gi)>gi){
-      const gs=text.slice(gi+9,text.indexOf('\n---',gi+1)||text.length);
-      const imgs=gs.match(/^\s*-\s*(.+)$/gm)||[];
-      gallery=imgs.map(l=>fixImg(l.replace(/^\s*-\s*/,'').trim())).filter(Boolean);
+    const lines=text.split('\n');
+    let inFM=false,inGallery=false,fmClosed=0;
+    for(let i=0;i<lines.length;i++){
+      const l=lines[i];
+      if(i===0&&l.trim()==='---'){inFM=true;continue;}
+      if(inFM&&l.trim()==='---'){fmClosed++;if(fmClosed>=1){inFM=false;inGallery=false;break;}}
+      if(!inFM)continue;
+      if(l.match(/^gallery:\s*$/)){inGallery=true;continue;}
+      if(inGallery){
+        if(l.match(/^\s+-\s+/)){
+          const val=l.replace(/^\s+-\s+/,'').trim().replace(/^["']|["']$/g,'');
+          if(val)gallery.push(fixImg(val));
+        } else if(l.match(/^\w/)||l.match(/^[^-\s]/)){inGallery=false;}
+      }
     }
     const focusX=parseInt(fm.focus_x||50);
     const focusY=parseInt(fm.focus_y||30);
@@ -1263,9 +1273,12 @@ function renderDetail(id){
       ${gKey?`<button onclick="showAll('${gKey}',null)" class="btn btn-g">← ${GROUPS[gKey].label}</button>`:''}
     </div>
     <div class="detail-hero">
-      ${item.gallery&&item.gallery.length>1
-        ?renderGallery(item.id,[item.image,...item.gallery].filter(Boolean),item.focusX,item.focusY)
-        :item.image?`<img src="${item.image}" style="width:100%;max-height:320px;object-fit:cover;object-position:${item.focusX||50}% ${item.focusY||30}%;border-radius:10px;margin-bottom:1.3rem;display:block" onerror="this.style.display='none'">`:''}
+      ${(()=>{
+        const allImgs=[item.image,...(item.gallery||[])].filter(Boolean);
+        if(allImgs.length>1)return renderGallery(item.id,allImgs,item.focusX,item.focusY);
+        if(allImgs.length===1)return`<img src="${allImgs[0]}" style="width:100%;max-height:320px;object-fit:cover;object-position:${item.focusX||50}% ${item.focusY||30}%;border-radius:10px;margin-bottom:1.3rem;display:block" onerror="this.style.display='none'">`;
+        return'';
+      })()}
       <span class="badge ${bc}">${item.category}</span>
       <h1 class="detail-title">${item.title}</h1>
       <p style="color:var(--ink2);margin-top:.4rem;font-size:.86rem">${item.description}</p>
@@ -1382,21 +1395,12 @@ window.addEventListener('scroll',()=>{
 
 /* ── Anti-inspect protection ── */
 (function(){
-  // Disable right-click context menu
   document.addEventListener('contextmenu',e=>e.preventDefault());
-  // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
   document.addEventListener('keydown',e=>{
     if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['I','J','C','i','j','c'].includes(e.key))||(e.ctrlKey&&['u','U','s','S'].includes(e.key))){
       e.preventDefault();return false;
     }
   });
-  // Detect devtools open (size-based)
-  const t=120;
-  setInterval(()=>{
-    if(window.outerWidth-window.innerWidth>t||window.outerHeight-window.innerHeight>t){
-      document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#888;font-size:1rem">Please close developer tools to continue.</div>';
-    }
-  },1000);
 })();
 
 /* ── Decimal star renderer ── */
