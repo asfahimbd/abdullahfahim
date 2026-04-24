@@ -29,6 +29,10 @@ collections:
           - {label: "ORCID ID",      name: "orcid",    widget: "string", required: false,
              hint: "শুধু ID — e.g. 0000-0001-2345-6789"}
           - {label: "Fiverr URL",    name: "fiverr",   widget: "string", required: false}
+          - {label: "Facebook URL", name: "facebook",  widget: "string", required: false,
+             hint: "e.g. https://facebook.com/yourpage"}
+          - {label: "YouTube Channel URL", name: "youtube_channel", widget: "string", required: false,
+             hint: "e.g. https://youtube.com/@yourchannel"}
           - label: "Resume / CV (PDF)"
             name: "resume"
             widget: "file"
@@ -100,6 +104,7 @@ collections:
               - {label: "Voluntary",  value: "Voluntary"}
               - {label: "Internship", value: "Internship"}
               - {label: "Research",   value: "Research"}
+              - {label: "Other",      value: "Other"}
             default: "Full Time"
           - label: "Start Date"
             name: "start_date"
@@ -139,9 +144,10 @@ collections:
         name: "category"
         widget: "select"
         options:
-          - {label: "Academic Skills", value: "Academic"}
-          - {label: "Research Tools",  value: "Research"}
-          - {label: "Freelance Tools", value: "Freelance"}
+          - {label: "Academic Skills",      value: "Academic"}
+          - {label: "Research Tools",       value: "Research"}
+          - {label: "Freelance Tools",      value: "Freelance"}
+          - {label: "Professional Skills",  value: "Soft"}
         default: "Academic"
       - {label: "Software Logo",     name: "logo",        widget: "image",  required: false}
       - {label: "Short Description", name: "description", widget: "string", required: false,
@@ -165,7 +171,57 @@ collections:
         widget: "select"
         options: ["Fiverr","Upwork","LinkedIn","Direct","Other"]
         default: "Fiverr"
-      - {label: "Stars (1-5)", name: "stars", widget: "number", min: 1, max: 5, default: 5}
+      - label: "Star Rating"
+        name: "stars"
+        widget: "number"
+        value_type: "float"
+        min: 0
+        max: 5
+        step: 0.1
+        default: 5
+        hint: "0 থেকে 5 এর মধ্যে দাও — e.g. 4.3, 4.7, 5.0"
+      - label: "Country"
+        name: "country"
+        widget: "select"
+        required: false
+        hint: "Client এর দেশ — flag সহ দেখাবে"
+        options:
+          - Bangladesh
+          - USA
+          - United States
+          - UK
+          - United Kingdom
+          - Canada
+          - Australia
+          - India
+          - Germany
+          - France
+          - Japan
+          - China
+          - Saudi Arabia
+          - UAE
+          - Malaysia
+          - Singapore
+          - Netherlands
+          - Sweden
+          - Norway
+          - Pakistan
+          - Turkey
+          - Italy
+          - Spain
+          - Brazil
+          - South Korea
+          - Indonesia
+          - Nigeria
+          - Egypt
+          - Qatar
+          - Kuwait
+          - Jordan
+          - Bahrain
+          - Oman
+          - South Africa
+          - Kenya
+          - Ghana
       - {label: "Review Text", name: "text",  widget: "string"}
       - {label: "Date",        name: "time",  widget: "string", hint: "e.g. April 2025"}
 
@@ -213,7 +269,7 @@ collections:
           - {label: "🔬 Field Work",           value: "Field Work"}
           - {label: "📜 Certificate",          value: "Certificate"}
           - {label: "🎙 Session",              value: "Session"}
-          - {label: "🏆 Award",               value: "Award"}
+          - {label: "🏆 Achievement",         value: "Award"}
           - {label: "✏️ Custom (fill below)",  value: "Custom"}
         default: "Freelance Project"
       - {label: "Custom Category",   name: "custom_category", widget: "string",   required: false}
