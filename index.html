@@ -77,7 +77,8 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .drawer-hire{display:block;margin:.8rem .5rem .25rem;padding:.65rem;border-radius:8px;background:var(--teal);color:#fff;text-align:center;font-weight:700;font-size:.82rem;text-decoration:none}
 
 /* ════ HERO ════ */
-.hero{max-width:1100px;margin:0 auto;padding:3rem 5vw 2.5rem;display:flex;flex-direction:column;gap:0}
+.hero{max-width:1100px;margin:0 auto;padding:3rem 5vw 1rem}
+.hero-bio-section{max-width:1100px;margin:0 auto;padding:0 5vw 2rem}
 .hero-inner{display:grid;grid-template-columns:auto 1fr;gap:2.8rem;align-items:flex-start;margin-bottom:1.4rem;width:100%}
 .photo-wrap{position:relative;display:inline-block;border-radius:24px;box-shadow:var(--shadow-lg);overflow:hidden;flex-shrink:0}
 .hero-photo{width:170px;height:170px;border-radius:24px;object-fit:cover;display:block;border:4px solid var(--surface)}
@@ -101,7 +102,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .hero-bio-full{
   font-size:.91rem;color:var(--ink2);line-height:1.85;
   text-align:justify;text-justify:inter-word;
-  width:100%;display:block;
+  display:block;width:100%;
 }
 
 /* ════ SECTIONS ════ */
@@ -127,6 +128,8 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 /* ════ EXPERIENCE TIMELINE (horizontal) ════ */
 .exp-timeline-wrap{position:relative;overflow-x:auto;overflow-y:visible;padding:0 5vw 1rem;scrollbar-width:none}
 .exp-timeline-wrap::-webkit-scrollbar{display:none}
+.exp-timeline-wrap-inline{overflow-x:auto;scrollbar-width:none;margin-top:.5rem}
+.exp-timeline-wrap-inline::-webkit-scrollbar{display:none}
 .exp-timeline{display:flex;gap:0;align-items:flex-start;position:relative;min-width:max-content;padding:2rem 0 .5rem}
 /* horizontal connector line */
 .exp-timeline::before{
@@ -136,7 +139,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 }
 .exp-item{
   position:relative;display:flex;flex-direction:column;align-items:center;
-  width:220px;flex-shrink:0;padding:0 1rem;
+  width:240px;flex-shrink:0;padding:0 1rem;
 }
 /* dot on line */
 .exp-dot{
@@ -150,7 +153,9 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
   padding:1rem;width:100%;transition:all .19s;cursor:pointer;
 }
 .exp-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px);border-color:var(--blue-m)}
-.exp-org{font-size:.72rem;color:var(--ink3);font-weight:600;margin-bottom:.2rem}
+.exp-card-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem}
+.exp-logo{width:28px;height:28px;object-fit:contain;border-radius:6px;flex-shrink:0;border:1px solid var(--border)}
+.exp-org{font-size:.72rem;color:var(--ink3);font-weight:600}
 .exp-role{font-size:.88rem;font-weight:700;color:var(--ink);margin-bottom:.2rem;line-height:1.3}
 .exp-type{display:inline-block;padding:.1rem .4rem;border-radius:4px;font-size:.62rem;font-weight:600;margin-bottom:.3rem}
 .exp-type.fulltime{background:var(--blue-l);color:var(--blue)}
@@ -618,9 +623,9 @@ async function init(){
 function route(){
   const hash=window.location.hash.replace('#','');
   if(!hash||hash==='home')renderHome(false);
-  else if(hash.startsWith('view-'))renderDetail(hash.replace('view-',''));
   else if(hash==='all-exp'){renderAllExpPage();}
   else if(hash.startsWith('view-exp-')){renderExpDetail(hash.replace('view-exp-',''));}
+  else if(hash.startsWith('view-'))renderDetail(hash.replace('view-',''));
   else if(hash.startsWith('all-')){
     const rest=hash.slice(4);
     const key=Object.keys(GROUPS).find(k=>rest===k||rest.startsWith(k+'-'));
@@ -663,8 +668,10 @@ function renderHome(loading=false){
         <div class="hero-icon-btns">${iconBtns}</div>
       </div>
     </div>
-    <p class="hero-bio-full">${h.bio}</p>
   </section>
+  <div class="hero-bio-section">
+    <p class="hero-bio-full">${h.bio}</p>
+  </div>
 
   <div class="divider"><hr></div>
 
@@ -753,8 +760,8 @@ function renderHome(loading=false){
 /* ── Experience horizontal timeline ── */
 function renderExpSection(loading=false){
   const expItems=ALL_EXPERIENCES;
-  const shown=expItems.slice(0,4);
-  const hasMore=expItems.length>4;
+  const shown=expItems.slice(0,3);
+  const hasMore=expItems.length>3;
   if(loading){
     return`<section class="section">
       <div class="section-header"><h2 class="section-title">Experiences</h2></div>
@@ -767,28 +774,30 @@ function renderExpSection(loading=false){
       <h2 class="section-title">Experiences</h2>
       ${hasMore?`<span class="see-all-link" onclick="location.hash='all-exp'">See All (${expItems.length}) →</span>`:''}
     </div>
-  </section>
-  <div class="exp-timeline-wrap">
-    <div class="exp-timeline">
-      ${shown.map(p=>{
-        const typeClass=p.type==='Full Time'?'fulltime':p.type==='Voluntary'?'voluntary':'internship';
-        const dateStr=p.startDate?(p.startDate+(p.isCurrent?' – Present':p.endDate?' – '+p.endDate:'')):'';
-        return`<div class="exp-item">
-          <div class="exp-dot ${p.isCurrent?'current':''}"></div>
-          <div class="exp-card" onclick="location.hash='view-exp-${p.id}'">
-            ${p.logo?`<img src="${p.logo}" style="width:32px;height:32px;object-fit:contain;border-radius:6px;margin-bottom:.4rem" onerror="this.style.display='none'">`:''}
-            <div class="exp-org">${p.organization}</div>
-            <div class="exp-role">${p.role}</div>
-            <span class="exp-type ${typeClass}">${p.type}</span>
-            ${dateStr?`<div class="exp-date">${dateStr}</div>`:''}
-            <p class="exp-desc">${p.description}</p>
-          </div>
-        </div>`;
-      }).join('')}
-      ${hasMore?`<div class="exp-continuation" onclick="location.hash='all-exp'" title="See all">→</div>`:''}
+    <div class="exp-timeline-wrap-inline">
+      <div class="exp-timeline">
+        ${shown.map(p=>{
+          const typeClass=p.type==='Full Time'?'fulltime':p.type==='Voluntary'?'voluntary':'internship';
+          const dateStr=p.startDate?(p.startDate+(p.isCurrent?' – Present':p.endDate?' – '+p.endDate:'')):'';
+          return`<div class="exp-item">
+            <div class="exp-dot ${p.isCurrent?'current':''}"></div>
+            <div class="exp-card" onclick="location.hash='view-exp-${p.id}'">
+              <div class="exp-card-header">
+                ${p.logo?`<img src="${p.logo}" class="exp-logo" onerror="this.style.display='none'">`:''}
+                <div class="exp-org">${p.organization}</div>
+              </div>
+              <div class="exp-role">${p.role}</div>
+              <span class="exp-type ${typeClass}">${p.type}</span>
+              ${dateStr?`<div class="exp-date">${dateStr}</div>`:''}
+              <p class="exp-desc">${p.description}</p>
+            </div>
+          </div>`;
+        }).join('')}
+        ${hasMore?`<div class="exp-continuation" onclick="location.hash='all-exp'" title="See all">→</div>`:''}
+      </div>
     </div>
-  </div>
-  ${hasMore?`<div class="see-all-row" style="max-width:1100px;margin:.5rem auto 0;padding:0 5vw"><button class="see-all-btn" onclick="location.hash='all-exp'">See All Experiences (${expItems.length}) →</button></div>`:''}`;
+    ${hasMore?`<div class="see-all-row"><button class="see-all-btn" onclick="location.hash='all-exp'">See All Experiences (${expItems.length}) →</button></div>`:''}
+  </section>`;
 }
 
 /* ── Research: pinned thesis first ── */
@@ -907,13 +916,19 @@ function renderSkillsSection(loading=false){
   </section>`;
 }
 
+function truncate(text,words){
+  const w=(text||'').trim().split(/\s+/);
+  return w.length<=words?text:w.slice(0,words).join(' ')+'…';
+}
 function cardHTML(p){
   const known=['Undergraduate Thesis','Thesis','Journal','Conference','Academic Project','Freelance Project','Full Time','Voluntary','Certificate','Session','Award','Training','Field Work'];
   const bc=known.includes(p.category)?'badge-'+p.category.replace(/\s+/g,''):'badge-dynamic';
+  const hasImg=!!p.image;
+  const excerpt=truncate(p.description, hasImg?20:38);
   return`<div class="card" onclick="location.hash='view-${p.id}'">
-    ${p.image?`<img src="${p.image}" class="card-img" alt="${p.title}" onerror="this.style.display='none'">`:`<div class="card-img" style="display:flex;align-items:center;justify-content:center;color:var(--ink3);font-size:.72rem">No Image</div>`}
+    ${hasImg?`<img src="${p.image}" class="card-img" alt="${p.title}" onerror="this.style.display='none'">`:''}
     <span class="badge ${bc}">${p.category}</span>
-    <h3>${p.title}</h3><p>${p.description}</p>
+    <h3>${p.title}</h3><p>${excerpt}</p>
     <div class="card-cta">Learn More →</div>
   </div>`;
 }
