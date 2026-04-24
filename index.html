@@ -77,8 +77,8 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .drawer-hire{display:block;margin:.8rem .5rem .25rem;padding:.65rem;border-radius:8px;background:var(--teal);color:#fff;text-align:center;font-weight:700;font-size:.82rem;text-decoration:none}
 
 /* ════ HERO ════ */
-.hero{max-width:1100px;margin:0 auto;padding:3rem 5vw 2.5rem}
-.hero-inner{display:grid;grid-template-columns:auto 1fr;gap:2.8rem;align-items:flex-start;margin-bottom:1.5rem}
+.hero{max-width:1100px;margin:0 auto;padding:3rem 5vw 2.5rem;display:flex;flex-direction:column;gap:0}
+.hero-inner{display:grid;grid-template-columns:auto 1fr;gap:2.8rem;align-items:flex-start;margin-bottom:1.4rem;width:100%}
 .photo-wrap{position:relative;display:inline-block;border-radius:24px;box-shadow:var(--shadow-lg);overflow:hidden;flex-shrink:0}
 .hero-photo{width:170px;height:170px;border-radius:24px;object-fit:cover;display:block;border:4px solid var(--surface)}
 .photo-wrap::after{content:'';position:absolute;top:-20%;left:-80%;width:52%;height:140%;background:linear-gradient(105deg,transparent 28%,rgba(255,255,255,.07) 44%,rgba(255,255,255,.44) 50%,rgba(255,255,255,.07) 56%,transparent 70%);transform:skewX(-12deg);animation:glassWave 4s cubic-bezier(.45,0,.55,1) infinite;pointer-events:none}
@@ -101,7 +101,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .hero-bio-full{
   font-size:.91rem;color:var(--ink2);line-height:1.85;
   text-align:justify;text-justify:inter-word;
-  max-width:100%;
+  width:100%;display:block;
 }
 
 /* ════ SECTIONS ════ */
@@ -298,7 +298,7 @@ footer{text-align:center;padding:2.2rem;color:var(--ink3);border-top:1px solid v
   .hero-inner{grid-template-columns:1fr;text-align:center;gap:1.5rem}
   .photo-wrap{margin:0 auto}
   .hero-icon-btns{justify-content:center}
-  .hero-bio-full{text-align:left}
+  .hero-bio-full{text-align:left;width:100%}
   .skills-grid{grid-template-columns:1fr}
   .review-card{flex:0 0 82vw}
 }
@@ -385,6 +385,7 @@ let EDUCATION_DATA=[
 let REVIEWS_DATA=[];
 let ALL_PROJECTS=[];
 let ALL_SKILLS=[];
+let ALL_EXPERIENCES=[];
 
 let GROUPS={
   Research:{label:"Research",subcats:["Undergraduate Thesis","Journal","Conference"],hasDropdown:true},
@@ -521,6 +522,32 @@ async function fetchSkills(){
   if(v.length>0)ALL_SKILLS=v;dbg(`skills: ${v.length} loaded`,'ok');
 }
 
+async function fetchExperiences(){
+  const files=await ghList('content/experiences');if(!files)return;
+  const items=await Promise.all(files.filter(f=>f.name.endsWith('.md')).map(async f=>{
+    const text=await ghRaw(f.download_url);if(!text)return null;
+    const{fm,body}=parseFM(text);
+    const endDate=fm.end_date||'';
+    const isCurrent=!endDate||endDate.toLowerCase().includes('present');
+    return{
+      id:f.name.replace('.md',''),
+      organization:fm.organization||'',
+      role:fm.role||fm.title||'',
+      type:fm.employment_type||'Full Time',
+      startDate:fm.start_date||'',
+      endDate:endDate,
+      isCurrent,
+      location:fm.location||'',
+      description:fm.description||'',
+      logo:fixImg(fm.logo||''),
+      body,
+      order:fm.end_date?new Date(fm.end_date||'').getTime()||0:Date.now()
+    };
+  }));
+  const v=items.filter(Boolean).sort((a,b)=>b.order-a.order);
+  if(v.length>0){ALL_EXPERIENCES=v;dbg(`experiences: ${v.length}`,'ok');}
+}
+
 async function fetchProjects(){
   const files=await ghList('content/projects');if(!files)return[];
   const items=await Promise.all(files.filter(f=>f.name.endsWith('.md')).map(async f=>{
@@ -583,7 +610,7 @@ function closeDrawer(){document.getElementById('side-drawer').classList.remove('
 /* ══ INIT ══ */
 async function init(){
   dbg('Fetching...','ok');renderHome(true);
-  await Promise.all([fetchSettings(),fetchEducation(),fetchCategories(),fetchReviews(),fetchSkills()]);
+  await Promise.all([fetchSettings(),fetchEducation(),fetchCategories(),fetchReviews(),fetchSkills(),fetchExperiences()]);
   ALL_PROJECTS=await fetchProjects();
   dbg(`Projects: ${ALL_PROJECTS.length}`,'ok');
   buildNav();if(HERO.photo)updateNavPhoto(HERO.photo);route();
@@ -592,6 +619,8 @@ function route(){
   const hash=window.location.hash.replace('#','');
   if(!hash||hash==='home')renderHome(false);
   else if(hash.startsWith('view-'))renderDetail(hash.replace('view-',''));
+  else if(hash==='all-exp'){renderAllExpPage();}
+  else if(hash.startsWith('view-exp-')){renderExpDetail(hash.replace('view-exp-',''));}
   else if(hash.startsWith('all-')){
     const rest=hash.slice(4);
     const key=Object.keys(GROUPS).find(k=>rest===k||rest.startsWith(k+'-'));
@@ -723,40 +752,43 @@ function renderHome(loading=false){
 
 /* ── Experience horizontal timeline ── */
 function renderExpSection(loading=false){
-  const expItems=ALL_PROJECTS.filter(p=>GROUPS.Experiences.subcats.includes(p.category));
-  const shown=expItems.slice(0,3);
-  const hasMore=expItems.length>3;
-  if(loading||!expItems.length){
+  const expItems=ALL_EXPERIENCES;
+  const shown=expItems.slice(0,4);
+  const hasMore=expItems.length>4;
+  if(loading){
     return`<section class="section">
       <div class="section-header"><h2 class="section-title">Experiences</h2></div>
-      ${loading?`<div style="display:flex;gap:1rem;overflow:hidden">${Array(3).fill('<div class="skeleton" style="width:220px;height:180px;flex-shrink:0"></div>').join('')}</div>`:'<p style="color:var(--ink3);font-size:.84rem">No experience added yet.</p>'}
+      <div style="display:flex;gap:1rem;overflow:hidden;padding:1rem 0">${Array(3).fill('<div class="skeleton" style="width:220px;height:180px;flex-shrink:0;border-radius:14px"></div>').join('')}</div>
     </section>`;
   }
+  if(!expItems.length)return'';
   return`<section class="section">
     <div class="section-header">
       <h2 class="section-title">Experiences</h2>
-      <span class="see-all-link" onclick="showAll('Experiences',null)">See All (${expItems.length}) →</span>
+      ${hasMore?`<span class="see-all-link" onclick="location.hash='all-exp'">See All (${expItems.length}) →</span>`:''}
     </div>
   </section>
   <div class="exp-timeline-wrap">
     <div class="exp-timeline">
-      ${shown.map((p,idx)=>{
-        const typeClass=p.category==='Full Time'?'fulltime':p.category==='Voluntary'?'voluntary':'internship';
-        const isCurrent=p.description&&p.description.toLowerCase().includes('present');
+      ${shown.map(p=>{
+        const typeClass=p.type==='Full Time'?'fulltime':p.type==='Voluntary'?'voluntary':'internship';
+        const dateStr=p.startDate?(p.startDate+(p.isCurrent?' – Present':p.endDate?' – '+p.endDate:'')):'';
         return`<div class="exp-item">
-          <div class="exp-dot ${isCurrent?'current':''}"></div>
-          <div class="exp-card" onclick="location.hash='view-${p.id}'">
-            <div class="exp-role">${p.title}</div>
-            <span class="exp-type ${typeClass}">${p.category}</span>
+          <div class="exp-dot ${p.isCurrent?'current':''}"></div>
+          <div class="exp-card" onclick="location.hash='view-exp-${p.id}'">
+            ${p.logo?`<img src="${p.logo}" style="width:32px;height:32px;object-fit:contain;border-radius:6px;margin-bottom:.4rem" onerror="this.style.display='none'">`:''}
+            <div class="exp-org">${p.organization}</div>
+            <div class="exp-role">${p.role}</div>
+            <span class="exp-type ${typeClass}">${p.type}</span>
+            ${dateStr?`<div class="exp-date">${dateStr}</div>`:''}
             <p class="exp-desc">${p.description}</p>
-            <div class="card-cta" style="margin-top:.5rem">Details →</div>
           </div>
-        </div>${idx<shown.length-1?'':''}`;
+        </div>`;
       }).join('')}
-      ${hasMore?`<div class="exp-continuation" onclick="showAll('Experiences',null)" title="See all experiences">→</div>`:''}
+      ${hasMore?`<div class="exp-continuation" onclick="location.hash='all-exp'" title="See all">→</div>`:''}
     </div>
   </div>
-  ${hasMore?`<div class="see-all-row" style="max-width:1100px;margin:.5rem auto 0;padding:0 5vw"><button class="see-all-btn" onclick="showAll('Experiences',null)">See All Experiences (${expItems.length}) →</button></div>`:''}`;
+  ${hasMore?`<div class="see-all-row" style="max-width:1100px;margin:.5rem auto 0;padding:0 5vw"><button class="see-all-btn" onclick="location.hash='all-exp'">See All Experiences (${expItems.length}) →</button></div>`:''}`;
 }
 
 /* ── Research: pinned thesis first ── */
@@ -962,6 +994,55 @@ function renderDetail(id){
   </div>`;
   window.scrollTo(0,0);
 }
+function renderAllExpPage(){
+  document.getElementById('app').innerHTML=`
+  <div class="detail-page">
+    <button onclick="goHome()" class="btn btn-g" style="margin-bottom:1.1rem">← Home</button>
+    <h2 class="section-title" style="margin-bottom:1.2rem">All Experiences</h2>
+    <div class="grid">
+      ${ALL_EXPERIENCES.map(p=>{
+        const typeClass=p.type==='Full Time'?'fulltime':p.type==='Voluntary'?'voluntary':'internship';
+        const dateStr=p.startDate?(p.startDate+(p.isCurrent?' – Present':p.endDate?' – '+p.endDate:'')):'';
+        return`<div class="card" onclick="location.hash='view-exp-${p.id}'">
+          ${p.logo?`<img src="${p.logo}" class="card-img" style="object-fit:contain;padding:.5rem" onerror="this.style.display='none'">`:'<div class="card-img" style="display:flex;align-items:center;justify-content:center;color:var(--ink3);font-size:.72rem">No Logo</div>'}
+          <span class="exp-type ${typeClass}" style="margin-bottom:.4rem">${p.type}</span>
+          <div style="font-size:.72rem;color:var(--ink3);margin-bottom:.15rem">${p.organization}</div>
+          <h3>${p.role}</h3>
+          ${dateStr?`<div style="font-size:.7rem;color:var(--ink3);margin-bottom:.3rem">${dateStr}</div>`:''}
+          <p>${p.description}</p>
+          <div class="card-cta">Details →</div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+  window.scrollTo(0,0);
+}
+
+function renderExpDetail(id){
+  const item=ALL_EXPERIENCES.find(e=>e.id===id);
+  if(!item){goHome();return;}
+  const typeClass=item.type==='Full Time'?'fulltime':item.type==='Voluntary'?'voluntary':'internship';
+  const dateStr=item.startDate?(item.startDate+(item.isCurrent?' – Present':item.endDate?' – '+item.endDate:'')):'';
+  document.getElementById('app').innerHTML=`
+  <div class="detail-page">
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.6rem">
+      <button onclick="goHome()" class="btn btn-g">← Home</button>
+      <button onclick="location.hash='all-exp'" class="btn btn-g">← Experiences</button>
+    </div>
+    <div class="detail-hero">
+      ${item.logo?`<img src="${item.logo}" style="width:60px;height:60px;object-fit:contain;border-radius:10px;margin-bottom:1rem;display:block" onerror="this.style.display='none'">`:''}
+      <div style="font-size:.8rem;color:var(--ink3);margin-bottom:.3rem">${item.organization}</div>
+      <h1 class="detail-title">${item.role}</h1>
+      <span class="exp-type ${typeClass}">${item.type}</span>
+      ${dateStr?`<div style="font-size:.8rem;color:var(--ink3);margin-top:.4rem">${dateStr}</div>`:''}
+      ${item.location?`<div style="font-size:.8rem;color:var(--ink3)">${item.location}</div>`:''}
+      <p style="color:var(--ink2);margin-top:.8rem;font-size:.87rem">${item.description}</p>
+    </div>
+    ${item.body?`<div class="detail-section"><h3 style="font-family:Fraunces,serif;margin-bottom:.82rem">Details</h3><div class="detail-body">${md2html(item.body)}</div></div>`:''}
+  </div>`;
+  window.scrollTo(0,0);
+}
+
 function goHome(){clearInterval(revTimer);window.location.hash='';renderHome(false);}
 </script>
 </body>
