@@ -61,6 +61,10 @@ collections:
       - {label: "Institution Photo", name: "photo",       widget: "image",  required: false}
       - {label: "Description",       name: "description", widget: "string", required: false}
       - {label: "Subjects (comma separated)", name: "subjects", widget: "string", required: false}
+      - label: "Duration (e.g. 2017 – 2021)"
+        name: "duration"
+        widget: "string"
+        required: false
 
   # ══════════════════════════════
   # 3. EXPERIENCES ← নতুন dedicated collection
@@ -86,10 +90,20 @@ collections:
           - {label: "Internship", value: "Internship"}
           - {label: "Research",   value: "Research"}
         default: "Full Time"
-      - {label: "Start Date", name: "start_date", widget: "string",
-         hint: "e.g. Sep 2024"}
-      - {label: "End Date",   name: "end_date",   widget: "string", required: false,
-         hint: "খালি রাখলে 'Present' দেখাবে"}
+      - label: "Start Date"
+        name: "start_date"
+        widget: "datetime"
+        format: "DD MMMM, YYYY"
+        date_format: "DD MMMM, YYYY"
+        time_format: false
+      - label: "End Date"
+        name: "end_date"
+        widget: "datetime"
+        format: "DD MMMM, YYYY"
+        date_format: "DD MMMM, YYYY"
+        time_format: false
+        required: false
+        hint: "খালি রাখলে 'Present' দেখাবে"
       - {label: "Location",   name: "location",   widget: "string", required: false,
          hint: "e.g. Jessore, Bangladesh"}
       - {label: "Short Description", name: "description", widget: "string",
