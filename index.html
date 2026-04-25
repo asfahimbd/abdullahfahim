@@ -193,16 +193,16 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 
 /* Skill tooltip/popup */
 .skill-popup{
-  display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
-  background:var(--ink);color:#fff;border-radius:10px;padding:.75rem;
-  min-width:180px;max-width:240px;z-index:100;box-shadow:var(--shadow-lg);
+  display:none;position:fixed;
+  background:var(--ink);color:#fff;border-radius:12px;padding:.85rem;
+  width:220px;z-index:500;box-shadow:var(--shadow-lg);
   pointer-events:none;
 }
 .skill-popup::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--ink)}
 .skill-chip.has-info:hover .skill-popup{display:block}
-.skill-popup img{width:100%;height:80px;object-fit:cover;border-radius:6px;margin-bottom:.5rem;display:block}
-.skill-popup-name{font-size:.76rem;font-weight:700;margin-bottom:.25rem}
-.skill-popup-desc{font-size:.68rem;opacity:.85;line-height:1.5}
+.skill-popup img{width:100%;height:85px;object-fit:cover;border-radius:7px;margin-bottom:.5rem;display:block}
+.skill-popup-name{font-size:.78rem;font-weight:700;margin-bottom:.28rem}
+.skill-popup-desc{font-size:.7rem;opacity:.88;line-height:1.55}
 
 /* ════ REVIEWS ════ */
 .reviews-track{display:flex;gap:1rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:0 5vw .5rem;scroll-padding-left:5vw}
@@ -575,11 +575,19 @@ async function fetchEducation(){
   const items=await Promise.all(files.filter(f=>f.name.endsWith('.md')).map(async f=>{
     const text=await ghRaw(f.download_url);if(!text)return null;
     const{fm}=parseFM(text);
+    // Extract year from datetime string (e.g. "01 January, 2025" → "2025")
+    const rawPassing=fm.passing||'';
+    const yearMatch=rawPassing.match(/\b(\d{4})\b/);
+    const passingYear=yearMatch?yearMatch[1]:rawPassing;
     return{level:fm.level||'',institution:fm.institution||'',degree:fm.degree||'',
-      passing:fm.passing||'',gpa:fm.gpa||'',icon:fm.icon||'🎓',iconBg:fm.icon_bg||'var(--blue-l)',
-      photo:fixImg(fm.photo||''),description:fm.description||'',subjects:fm.subjects||'',order:parseInt(fm.order||99)};
+      passing:passingYear,gpa:fm.gpa||'',icon:fm.icon||'🎓',iconBg:fm.icon_bg||'var(--blue-l)',
+      logo:fixImg(fm.logo||''),     // small logo for homepage icon
+      photo:fixImg(fm.photo||''),   // large photo for modal
+      description:fm.description||'',subjects:fm.subjects||'',
+      order:parseInt(fm.order||99),passingYearNum:parseInt(passingYear||0)};
   }));
-  const s=items.filter(Boolean).sort((a,b)=>a.order-b.order);
+  // Sort by passing year descending (most recent first)
+  const s=items.filter(Boolean).sort((a,b)=>b.passingYearNum-a.passingYearNum);
   if(s.length>0)EDUCATION_DATA=s;
 }
 
@@ -614,9 +622,25 @@ async function fetchSkills(){
   const files=await ghList('content/skills');if(!files)return;
   const items=await Promise.all(files.filter(f=>f.name.endsWith('.md')).map(async f=>{
     const text=await ghRaw(f.download_url);if(!text)return null;
-    const{fm}=parseFM(text);
+    const{fm,body}=parseFM(text);
+    // Parse proof gallery
+    let proofPhotos=[];
+    const lines=text.split('\n');
+    let inFM=false,inProof=false,fmClosed=0;
+    for(let i=0;i<lines.length;i++){
+      const l=lines[i];
+      if(i===0&&l.trim()==='---'){inFM=true;continue;}
+      if(inFM&&l.trim()==='---'){fmClosed++;if(fmClosed>=1){inFM=false;inProof=false;break;}}
+      if(!inFM)continue;
+      if(l.match(/^proof_photos:\s*$/)){inProof=true;continue;}
+      if(inProof){
+        if(l.match(/^\s+-\s+/)){const v=l.replace(/^\s+-\s+/,'').trim().replace(/^["']|["']$/g,'');if(v)proofPhotos.push(fixImg(v));}
+        else if(l.match(/^\w/)){inProof=false;}
+      }
+    }
     return{name:fm.name||'',category:fm.category||'Academic',
-      logo:fixImg(fm.logo||''),description:fm.description||'',order:parseInt(fm.order||99)};
+      logo:fixImg(fm.logo||''),description:fm.description||'',
+      proofPhotos,body,order:parseInt(fm.order||99)};
   }));
   const v=items.filter(Boolean).sort((a,b)=>a.order-b.order);
   if(v.length>0)ALL_SKILLS=v;dbg(`skills: ${v.length} loaded`,'ok');
@@ -848,9 +872,9 @@ function renderHome(loading=false){
     <div class="edu-grid">
       ${EDUCATION_DATA.map((e,i)=>`
       <div class="edu-card" onclick="openEduModal(${i})">
-        <div class="edu-icon" style="background:${e.photo?'transparent':e.iconBg||'var(--surface2)'}">
-          ${e.photo
-            ?`<img src="${e.photo}" alt="${e.institution}" style="width:100%;height:100%;object-fit:contain;border-radius:4px" onerror="this.parentElement.innerHTML='${e.icon}'">`
+        <div class="edu-icon" style="background:${e.logo?'#fff':e.iconBg||'var(--surface2)'}">
+          ${e.logo
+            ?`<img src="${e.logo}" alt="${e.institution}" style="width:100%;height:100%;object-fit:contain;border-radius:4px" onerror="this.parentElement.style.background=\'${e.iconBg||'var(--surface2)'}\';this.parentElement.innerHTML=\'${e.icon}\'">`
             :e.icon}
         </div>
         <div style="flex:1;min-width:0">
@@ -1117,14 +1141,18 @@ function renderSkillsSection(loading=false){
           <div class="skill-group-body">
             ${loading?'<div class="skeleton" style="height:28px;width:80%;border-radius:6px"></div>':''}
             ${skills.map(s=>{
-              const hasInfo=!!(s.description||s.logo);
-              return`<div class="skill-chip ${hasInfo?'has-info':''}">
+              const hasInfo=!!(s.description||s.logo||s.proofPhotos?.length);
+              const hasProof=s.proofPhotos&&s.proofPhotos.length>0;
+              return`<div class="skill-chip ${hasInfo?'has-info':''}"
+                ${hasInfo?`onmouseenter="showSkillPopup(this)" onmouseleave="hideSkillPopup()"`:''}>
                 ${s.logo?`<img src="${s.logo}" alt="${s.name}" onerror="this.style.display='none'">`:''}
                 ${s.name}
+                ${hasProof?`<span onclick="event.stopPropagation();openSkillModal('${encodeURIComponent(JSON.stringify({name:s.name,desc:s.description,logo:s.logo,photos:s.proofPhotos}))}')" style="font-size:.6rem;cursor:pointer;opacity:.7;margin-left:2px">📷</span>`:''}
                 ${hasInfo?`<div class="skill-popup">
                   ${s.logo?`<img src="${s.logo}" alt="${s.name}">`:''}
                   <div class="skill-popup-name">${s.name}</div>
                   ${s.description?`<div class="skill-popup-desc">${s.description}</div>`:''}
+                  ${hasProof?`<div style="font-size:.65rem;opacity:.7;margin-top:.3rem">📷 ${s.proofPhotos.length} proof photo${s.proofPhotos.length>1?'s':''} — click chip</div>`:''}
                 </div>`:''}
               </div>`;
             }).join('')}
@@ -1401,6 +1429,48 @@ window.addEventListener('scroll',()=>{
     }
   });
 })();
+
+/* ── Skill popup positioning ── */
+let _spTimer=null;
+function showSkillPopup(chip){
+  clearTimeout(_spTimer);
+  const popup=chip.querySelector('.skill-popup');
+  if(!popup)return;
+  const rect=chip.getBoundingClientRect();
+  popup.style.display='block';
+  popup.style.left=(rect.left+rect.width/2-110)+'px';
+  popup.style.top=(rect.top-popup.offsetHeight-10+window.scrollY)+'px';
+  // If popup goes off screen top, show below
+  if(rect.top-popup.offsetHeight<10){
+    popup.style.top=(rect.bottom+10+window.scrollY)+'px';
+    popup.style.setProperty('--arrow-top','auto');
+  }
+}
+function hideSkillPopup(){
+  _spTimer=setTimeout(()=>{
+    document.querySelectorAll('.skill-popup').forEach(p=>p.style.display='none');
+  },150);
+}
+
+/* ── Skill proof modal ── */
+function openSkillModal(encoded){
+  try{
+    const data=JSON.parse(decodeURIComponent(encoded));
+    const allImgs=data.photos||[];
+    document.getElementById('edu-modal-box').innerHTML=`
+      <div class="modal-body">
+        <button class="modal-close" onclick="document.getElementById('edu-modal').classList.remove('open');document.body.style.overflow=''">✕ Close</button>
+        <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:1rem">
+          ${data.logo?`<img src="${data.logo}" style="width:38px;height:38px;object-fit:contain;border-radius:7px;border:1px solid var(--border)">`:''}
+          <h2 class="modal-title" style="font-size:1.3rem">${data.name}</h2>
+        </div>
+        ${data.desc?`<p class="modal-desc">${data.desc}</p>`:''}
+        ${allImgs.length?renderGallery('skill-proof',allImgs,50,50):''}
+      </div>`;
+    document.getElementById('edu-modal').classList.add('open');
+    document.body.style.overflow='hidden';
+  }catch(e){console.error(e);}
+}
 
 /* ── Decimal star renderer ── */
 function renderStars(rating){
