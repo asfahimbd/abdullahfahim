@@ -4,8 +4,258 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard | Abdullah Shadek Fahim</title>
+  <style>
+    /* ── Focal Point Modal ── */
+    #fp-overlay{
+      display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);
+      z-index:99999;align-items:center;justify-content:center;
+      backdrop-filter:blur(4px);
+    }
+    #fp-overlay.open{display:flex}
+    #fp-modal{
+      background:#1c1c1e;border-radius:16px;padding:1.4rem;
+      max-width:500px;width:94vw;
+      box-shadow:0 24px 72px rgba(0,0,0,.7);
+      border:1px solid #2e2e2e;
+    }
+    #fp-modal h3{margin:0 0 .25rem;font-size:.95rem;color:#f2f2f7;font-family:system-ui,sans-serif}
+    #fp-modal p{margin:0 0 .9rem;font-size:.76rem;color:#8e8e93;font-family:system-ui,sans-serif}
+    #fp-drag-area{
+      position:relative;border-radius:10px;overflow:hidden;
+      cursor:crosshair;user-select:none;touch-action:none;
+      aspect-ratio:4/3;background:#2c2c2e;
+    }
+    #fp-drag-area img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+    #fp-dot{
+      position:absolute;width:24px;height:24px;border-radius:50%;
+      border:2.5px solid #fff;
+      box-shadow:0 0 0 2px #1d5aff,0 2px 10px rgba(0,0,0,.6);
+      transform:translate(-50%,-50%);z-index:5;pointer-events:none;
+    }
+    #fp-footer{display:flex;gap:.7rem;margin-top:.9rem;align-items:center}
+    #fp-preview-wrap{width:60px;height:60px;border-radius:50%;overflow:hidden;border:2px solid #3a3a3c;flex-shrink:0}
+    #fp-preview-wrap img{width:100%;height:100%;object-fit:cover}
+    #fp-pos{font-size:.75rem;color:#8e8e93;font-family:system-ui,sans-serif;margin-top:.2rem}
+    #fp-apply{
+      margin-left:auto;padding:.5rem 1.15rem;background:#1d5aff;color:#fff;
+      border:none;border-radius:8px;font-size:.83rem;font-weight:700;
+      cursor:pointer;font-family:system-ui,sans-serif;transition:opacity .15s;
+    }
+    #fp-apply:hover{opacity:.88}
+    #fp-cancel{
+      padding:.5rem .9rem;background:transparent;color:#8e8e93;
+      border:1px solid #3a3a3c;border-radius:8px;font-size:.83rem;
+      cursor:pointer;font-family:system-ui,sans-serif;
+    }
+    /* Button injected into CMS */
+    .fp-trigger-btn{
+      display:inline-flex;align-items:center;gap:.3rem;
+      margin-top:.45rem;padding:.3rem .7rem;
+      background:rgba(29,90,255,.12);color:#6b9fff;
+      border:1px solid rgba(29,90,255,.3);border-radius:6px;
+      font-size:.72rem;font-weight:600;cursor:pointer;
+      font-family:system-ui,sans-serif;transition:all .15s;
+    }
+    .fp-trigger-btn:hover{background:rgba(29,90,255,.22);color:#a0bfff}
+  </style>
 </head>
 <body>
   <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
+
+  <!-- Focal Point Drag Modal -->
+  <div id="fp-overlay">
+    <div id="fp-modal">
+      <h3>🎯 Set Focal Point</h3>
+      <p>Drag the dot to set the crop focus. Click Apply when done.</p>
+      <div id="fp-drag-area">
+        <img id="fp-main-img" src="" alt="">
+        <div id="fp-dot"></div>
+      </div>
+      <div id="fp-footer">
+        <div id="fp-preview-wrap">
+          <img id="fp-preview-img" src="" alt="">
+        </div>
+        <div>
+          <div style="font-size:.68rem;color:#636366;font-family:system-ui,sans-serif">Round crop preview</div>
+          <div id="fp-pos">50%, 50%</div>
+        </div>
+        <button id="fp-cancel">Cancel</button>
+        <button id="fp-apply">✓ Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    /* ── State ── */
+    let activeXInput = null, activeYInput = null;
+    let curX = 50, curY = 50;
+    let isDragging = false;
+
+    /* ── DOM refs ── */
+    const overlay   = document.getElementById('fp-overlay');
+    const dragArea  = document.getElementById('fp-drag-area');
+    const dot       = document.getElementById('fp-dot');
+    const mainImg   = document.getElementById('fp-main-img');
+    const prevImg   = document.getElementById('fp-preview-img');
+    const posLabel  = document.getElementById('fp-pos');
+
+    /* ── Drag logic ── */
+    function setFocal(px, py){
+      curX = Math.max(0, Math.min(100, Math.round(px)));
+      curY = Math.max(0, Math.min(100, Math.round(py)));
+      dot.style.left = curX + '%';
+      dot.style.top  = curY + '%';
+      prevImg.style.objectPosition = curX + '% ' + curY + '%';
+      posLabel.textContent = curX + '%, ' + curY + '%';
+    }
+    function pctFrom(e){
+      const r = dragArea.getBoundingClientRect();
+      return {
+        x: ((e.touches ? e.touches[0].clientX : e.clientX) - r.left) / r.width  * 100,
+        y: ((e.touches ? e.touches[0].clientY : e.clientY) - r.top)  / r.height * 100
+      };
+    }
+    dragArea.addEventListener('mousedown',  e=>{ isDragging=true; const p=pctFrom(e); setFocal(p.x,p.y); e.preventDefault(); });
+    dragArea.addEventListener('touchstart', e=>{ isDragging=true; const p=pctFrom(e); setFocal(p.x,p.y); e.preventDefault(); },{passive:false});
+    window.addEventListener('mousemove',  e=>{ if(isDragging){ const p=pctFrom(e); setFocal(p.x,p.y); }});
+    window.addEventListener('touchmove',  e=>{ if(isDragging){ const p=pctFrom(e); setFocal(p.x,p.y); e.preventDefault(); }},{passive:false});
+    window.addEventListener('mouseup',  ()=>isDragging=false);
+    window.addEventListener('touchend', ()=>isDragging=false);
+
+    /* ── Modal open / close ── */
+    function openModal(imgSrc, xIn, yIn){
+      activeXInput = xIn;
+      activeYInput = yIn;
+      mainImg.src  = imgSrc;
+      prevImg.src  = imgSrc;
+      overlay.classList.add('open');
+      const ix = parseInt(xIn.value) || 50;
+      const iy = parseInt(yIn.value) || 50;
+      const apply = () => setFocal(ix, iy);
+      if(mainImg.complete && mainImg.naturalWidth) apply();
+      else mainImg.onload = apply;
+    }
+    function closeModal(){ overlay.classList.remove('open'); }
+    overlay.addEventListener('click', e=>{ if(e.target===overlay) closeModal(); });
+    document.getElementById('fp-cancel').addEventListener('click', closeModal);
+
+    /* ── Apply: push values into Sveltia inputs ── */
+    function pushToInput(inp, val){
+      try{
+        const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,'value').set;
+        setter.call(inp, val);
+      }catch(e){ inp.value = val; }
+      inp.dispatchEvent(new Event('input',  {bubbles:true}));
+      inp.dispatchEvent(new Event('change', {bubbles:true}));
+    }
+    document.getElementById('fp-apply').addEventListener('click', ()=>{
+      if(activeXInput) pushToInput(activeXInput, curX);
+      if(activeYInput) pushToInput(activeYInput, curY);
+      closeModal();
+    });
+
+    /* ── DOM helpers ── */
+    // Find a number input near an element whose text matches needle
+    function findInputByText(needle){
+      const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      let n;
+      while((n = walk.nextNode())){
+        if(n.textContent.trim() === needle){
+          let el = n.parentElement;
+          for(let i=0; i<10; i++){
+            const inp = el && el.querySelector('input[type="number"]');
+            if(inp) return inp;
+            el = el && el.parentElement;
+            if(!el || el === document.body) break;
+          }
+        }
+      }
+      return null;
+    }
+
+    // Find featured/profile image src near a given input element
+    function findImgNear(input){
+      // Walk up to find a container that holds an img
+      let el = input.parentElement;
+      for(let i=0; i<16; i++){
+        if(!el || el===document.body) break;
+        const imgs = el.querySelectorAll('img');
+        for(const img of imgs){
+          const s = img.src||'';
+          if(s && !s.includes('data:') && img.naturalWidth>0){
+            return s;
+          }
+        }
+        el = el.parentElement;
+      }
+      // Broader fallback: any visible content image on the page
+      const all = document.querySelectorAll('img');
+      for(const img of all){
+        const s = img.src||'';
+        if(s && (s.includes('/assets/') || s.includes('raw.githubusercontent') || s.startsWith('blob:'))){
+          return s;
+        }
+      }
+      return '';
+    }
+
+    /* ── Injection ── */
+    const PAIRS = [
+      // Project featured image focal
+      {xHint:'Horizontal focal point for image crop', yHint:'Vertical focal point for image crop',
+       xLabel:'Image Focal X (0-100)',                yLabel:'Image Focal Y (0-100)',          id:'fp-btn-project'},
+      // Profile photo focal
+      {xHint:'', yHint:'',
+       xLabel:'Photo Focus X (0=left · 50=center · 100=right)', yLabel:'Photo Focus Y (0=top · 50=center · 100=bottom)', id:'fp-btn-profile'},
+    ];
+
+    function tryInject(){
+      PAIRS.forEach(pair=>{
+        if(document.getElementById(pair.id)) return; // already injected
+
+        const xIn = findInputByText(pair.xHint) || findInputByText(pair.xLabel);
+        const yIn = findInputByText(pair.yHint) || findInputByText(pair.yLabel);
+        if(!xIn || !yIn) return;
+
+        const imgSrc = findImgNear(xIn);
+        if(!imgSrc) return;
+
+        // Find a stable container to attach the button to
+        // Walk up from xIn until we find a container also containing yIn
+        let container = xIn.parentElement;
+        for(let i=0; i<12; i++){
+          if(!container || container===document.body) break;
+          if(container.contains(yIn)){ break; }
+          container = container.parentElement;
+        }
+        if(!container || container===document.body) container = xIn.parentElement;
+
+        const btn = document.createElement('button');
+        btn.id = pair.id;
+        btn.className = 'fp-trigger-btn';
+        btn.innerHTML = '🎯 Drag to set focal point';
+        btn.addEventListener('click', e=>{ e.preventDefault(); e.stopPropagation(); openModal(imgSrc, xIn, yIn); });
+        container.insertBefore(btn, container.firstChild);
+      });
+    }
+
+    function cleanStale(){
+      PAIRS.forEach(pair=>{
+        const btn = document.getElementById(pair.id);
+        if(!btn) return;
+        const xIn = findInputByText(pair.xHint) || findInputByText(pair.xLabel);
+        if(!xIn) btn.remove();
+      });
+    }
+
+    let debounce = null;
+    const observer = new MutationObserver(()=>{
+      clearTimeout(debounce);
+      debounce = setTimeout(()=>{ cleanStale(); tryInject(); }, 450);
+    });
+    observer.observe(document.body, {childList:true, subtree:true});
+  })();
+  </script>
 </body>
 </html>
