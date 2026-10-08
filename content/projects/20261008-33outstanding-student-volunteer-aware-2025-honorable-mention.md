@@ -2,10 +2,11 @@
 title: 33Outstanding Student Volunteer Aware 2025 (Honorable Mention)
 date: 29 December, 2025
 pinned: false
-category: Certificate
+category: Training
 custom_category: ''
 skills: []
-research_interests: []
+research_interests:
+  - hhhd
 image: /assets/images/CamScanner 31-12-25 14.53_1.jpeg
 focus_x: 50
 focus_y: 50
