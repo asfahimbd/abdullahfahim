@@ -112,6 +112,8 @@ collections:
     fields:
       - {label: "Organization",      name: "organization", widget: "string",  required: false}
       - {label: "Logo",              name: "logo",         widget: "image",   required: false}
+      - {label: "Website URL",       name: "website",      widget: "string",  required: false,
+         hint: "e.g. https://example.com — shown as a link on the card and detail page"}
       - {label: "Location",          name: "location",     widget: "string",  required: false}
       - label: "Roles"
         name: "roles"
