@@ -1396,7 +1396,7 @@ async function renderPdfCanvas(url,cid){
     const lib=await loadPdfJs();
     const doc=await lib.getDocument({url,withCredentials:false}).promise;
     el.innerHTML='';
-    for(let p=1;p<=Math.min(doc.numPages,30);p++){
+    for(let p=1;p<=doc.numPages;p++){
       const page=await doc.getPage(p);
       const vp=page.getViewport({scale:1.5});
       const c=document.createElement('canvas');
