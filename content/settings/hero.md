@@ -5,7 +5,7 @@ bio: To apply my knowledge in Electrical and Electronic Engineering, Machine Lea
 photo: /assets/images/ChatGPT Image Sep 7, 2026, 07_54_17 PM.png
 photo_focus_x: 50
 photo_focus_y: 60
-cv_file: ''
+cv_file: /assets/images/Curriculum Vitae of Abdullah Shadek Fahim.pdf
 email: fahim.just.19@gmail.com
 linkedin: https://www.linkedin.com/in/abdullah-fahim7640/
 github: https://github.com/abdullahFahim19/
