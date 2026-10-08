@@ -2,7 +2,7 @@
 title: A Random Forest Surrogate Model
 date: 2026-05-07T18:43:00
 pinned: true
-category: Academic Project
+category: Certificate
 custom_category: Undergraduate Thesis
 skills:
   - SRIM
