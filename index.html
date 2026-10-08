@@ -38,14 +38,14 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .nav-photo-wrap::after{content:'';position:absolute;top:-20%;left:-80%;width:52%;height:140%;background:linear-gradient(105deg,transparent 28%,rgba(255,255,255,.08) 44%,rgba(255,255,255,.48) 50%,rgba(255,255,255,.08) 56%,transparent 70%);transform:skewX(-12deg);animation:glassWave 4s cubic-bezier(.45,0,.55,1) infinite;pointer-events:none}
 .nav-links{display:flex;gap:0;list-style:none;align-items:center;flex:1;justify-content:center}
 .nav-item{position:relative}
-.nav-item>a{display:flex;align-items:center;gap:.22rem;color:var(--ink3);text-decoration:none;font-size:.78rem;font-weight:500;padding:.42rem .52rem;border-radius:6px;transition:all .15s;white-space:nowrap;cursor:pointer}
+.nav-item>a{display:flex;align-items:center;gap:.22rem;color:var(--ink3);text-decoration:none;font-size:.78rem;font-weight:700;padding:.42rem .52rem;border-radius:6px;transition:all .15s;white-space:nowrap;cursor:pointer}
 .nav-item>a:hover,.nav-item:hover>a{color:var(--blue);background:var(--blue-l)}
 .nav-arrow{font-size:.48rem;opacity:.45;transition:transform .15s}
 .nav-item:hover .nav-arrow{transform:rotate(180deg)}
 .nav-cnt{background:var(--blue);color:#fff;border-radius:999px;padding:.03rem .3rem;font-size:.55rem;font-weight:700;min-width:15px;text-align:center;display:inline-block}
 .dropdown{display:none;position:absolute;top:calc(100% + 7px);left:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;min-width:192px;box-shadow:var(--shadow-lg);padding:.28rem;z-index:300;animation:dropIn .14s ease}
 @keyframes dropIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
-.nav-item:hover .dropdown{display:block}
+.nav-item .dropdown.open{display:block}
 .dropdown a{display:flex;align-items:center;justify-content:space-between;padding:.4rem .64rem;border-radius:7px;color:var(--ink2);text-decoration:none;font-size:.75rem;font-weight:500;transition:all .12s;cursor:pointer}
 .dropdown a:hover{background:var(--blue-l);color:var(--blue)}
 .dd-cnt{background:var(--blue-l);color:var(--blue);border-radius:999px;padding:.03rem .35rem;font-size:.6rem;font-weight:700}
@@ -394,7 +394,7 @@ footer{text-align:center;padding:2.2rem;color:var(--ink3);border-top:1px solid v
 
 <footer id="site-footer">
   <div style="display:flex;align-items:center;justify-content:center;gap:.8rem;margin-bottom:.6rem;flex-wrap:wrap" id="footer-socials"></div>
-  <div>© 2026 Abdullah Shadek Fahim · Jashore University of Science and Technology</div>
+  <div id="footer-copyright">© 2026 Abdullah Shadek Fahim · Jashore University of Science and Technology</div>
 </footer>
 
 <script>
@@ -402,6 +402,7 @@ const PROXY  = 'https://oauth-proxy.asfahimbd.workers.dev/gh';
 const REPO   = 'asfahimbd/abdullahfahim';
 const BRANCH = 'main';
 const GH_HEADERS = {};
+let NAV_VISIBILITY = {}; // {} means all visible; {Education:false} hides that section
 
 /* Debug */
 let _dbgClicks=0;
@@ -598,7 +599,7 @@ async function fetchEducation(){
     const yearMatch=rawPassing.match(/\b(\d{4})\b/);
     const passingYear=yearMatch?yearMatch[1]:rawPassing;
     return{level:fm.level||'',institution:fm.institution||'',degree:fm.degree||'',
-      passing:passingYear,gpa:fm.gpa||'',rank:fm.rank||'',icon:fm.icon||'🎓',iconBg:fm.icon_bg||'var(--blue-l)',
+      passing:passingYear,gpa:fm.gpa||'',rank:fm.rank||'',location:fm.location||'',icon:fm.icon||'🎓',iconBg:fm.icon_bg||'var(--blue-l)',
       logo:fixImg(fm.logo||''),     // small logo for homepage icon
       photo:fixImg(fm.photo||''),
      certificate:fixImg(fm.certificate||''),transcript:fixImg(fm.transcript||''),   // large photo for modal
@@ -732,7 +733,7 @@ async function fetchProjects(){
     const skills_list=parseYamlList(text,'skills','skill');
     const interests_list=parseYamlList(text,'research_interests','interest');
     return{id:f.name.replace('.md',''),title:fm.title||'Untitled',
-      category:fm.custom_category||fm.category||'',issuer:fm.issuer||'',
+      category:fm.custom_category||fm.category||'',issuer:fm.issuer||'',issuerLabel:fm.issuer_label||'',
       image:fixImg(fm.image||''),gallery,focusX,focusY,
       description:fm.description||'',date:fm.date||'',
       link:fm.link||'',youtube:fm.youtube||'',body,
@@ -770,8 +771,9 @@ function countCat(cat){
 
 /* ══ NAV ══ */
 function buildNav(){
-  const skillsLink=ALL_SKILLS.length?`<li class="nav-item"><a onclick="scrollToSkills()" style="cursor:pointer">Skills <span class="nav-cnt">${ALL_SKILLS.length}</span></a></li>`:'';
-  document.getElementById('main-nav').innerHTML=Object.entries(GROUPS).map(([key,g])=>{
+  const skillsVisible=NAV_VISIBILITY['Skills']!==false;
+  const skillsLink=(ALL_SKILLS.length&&skillsVisible)?`<li class="nav-item"><a onclick="scrollToSkills()" style="cursor:pointer">Skills <span class="nav-cnt">${ALL_SKILLS.length}</span></a></li>`:'';
+  document.getElementById('main-nav').innerHTML=Object.entries(GROUPS).filter(([key])=>NAV_VISIBILITY[key]!==false).map(([key,g])=>{
     const tot=countGroup(key);
     if(g.hasDropdown){
       return`<li class="nav-item"><a onclick="showAll('${key}',null)" style="cursor:pointer">${g.label}${tot>0?` <span class="nav-cnt">${tot}</span>`:''} <span class="nav-arrow">▾</span></a><div class="dropdown">${g.subcats.map(cat=>`<a onclick="showAll('${key}','${cat}')">${cat} <span class="dd-cnt">${countCat(cat)}</span></a>`).join('')}<div class="dropdown-div"></div><a onclick="showAll('${key}',null)" style="font-weight:700">All ${g.label} <span class="dd-cnt">${tot}</span></a></div></li>`;
@@ -779,12 +781,22 @@ function buildNav(){
       return`<li class="nav-item"><a onclick="showAll('${key}',null)">${g.label}${tot>0?` <span class="nav-cnt">${tot}</span>`:''}</a></li>`;
     }
   }).join('')+skillsLink;
+  // JS hover with delay to prevent premature dropdown close
+  document.querySelectorAll('#main-nav .nav-item').forEach(item=>{
+    let timer;
+    const dd=item.querySelector('.dropdown');
+    if(!dd)return;
+    item.addEventListener('mouseenter',()=>{clearTimeout(timer);dd.classList.add('open');});
+    item.addEventListener('mouseleave',()=>{timer=setTimeout(()=>dd.classList.remove('open'),180);});
+    dd.addEventListener('mouseenter',()=>clearTimeout(timer));
+    dd.addEventListener('mouseleave',()=>{timer=setTimeout(()=>dd.classList.remove('open'),180);});
+  });
   buildDrawer();
 }
 
 function buildDrawer(){
   document.getElementById('drawer-body').innerHTML=
-    Object.entries(GROUPS).map(([key,g])=>{
+    Object.entries(GROUPS).filter(([key])=>NAV_VISIBILITY[key]!==false).map(([key,g])=>{
       const tot=countGroup(key);
       if(g.hasDropdown){
         return`<div><button class="dg-btn" style="display:flex;justify-content:space-between"><span onclick="drawerGo('${key}',null)" style="flex:1;text-align:left">${g.label}${tot>0?` <span class="nav-cnt">${tot}</span>`:''}</span><span onclick="toggleDG('dg-${key}','dga-${key}')" style="padding:.2rem .4rem"><span id="dga-${key}" style="font-size:.55rem;transition:transform .2s">▾</span></span></button><div class="drawer-sub" id="dg-${key}">${g.subcats.map(cat=>`<a onclick="drawerGo('${key}','${cat}')">${cat} <span class="dd-cnt">${countCat(cat)}</span></a>`).join('')}<a onclick="drawerGo('${key}',null)" style="font-weight:700">All ${g.label} <span class="dd-cnt">${tot}</span></a></div></div>`;
@@ -792,7 +804,7 @@ function buildDrawer(){
         return`<div class="drawer-direct" onclick="drawerGo('${key}',null)">${g.label}${tot>0?`<span class="nav-cnt">${tot}</span>`:''}</div>`;
       }
     }).join('')
-    +(ALL_SKILLS.length?`<div class="drawer-direct" onclick="scrollToSkills();closeDrawer()">Skills <span class="nav-cnt">${ALL_SKILLS.length}</span></div>`:'')+`<div class="drawer-divider"></div><a href="/admin/" class="drawer-hire">Login to Dashboard</a><div class="drawer-direct" style="margin-top:.15rem" onclick="window.location.href='mailto:${HERO.email}';closeDrawer()">Contact Me</div>`;
+    +(ALL_SKILLS.length&&NAV_VISIBILITY['Skills']!==false?`<div class="drawer-direct" onclick="scrollToSkills();closeDrawer()">Skills <span class="nav-cnt">${ALL_SKILLS.length}</span></div>`:'')+`<div class="drawer-divider"></div><a href="/admin/" class="drawer-hire">Login to Dashboard</a><div class="drawer-direct" style="margin-top:.15rem" onclick="window.location.href='mailto:${HERO.email}';closeDrawer()">Contact Me</div>`;
 }
 
 function toggleDG(id,aid){const el=document.getElementById(id),ar=document.getElementById(aid);const o=el.classList.toggle('open');if(ar)ar.style.transform=o?'rotate(180deg)':'';}
@@ -803,10 +815,10 @@ function closeDrawer(){document.getElementById('side-drawer').classList.remove('
 /* ══ INIT ══ */
 async function init(){
   dbg('Fetching...','ok');renderHome(true);
-  await Promise.all([fetchSettings(),fetchEducation(),fetchCategories(),fetchInterests(),fetchSkills(),fetchExperiences()]);
+  await Promise.all([fetchSettings(),fetchEducation(),fetchCategories(),fetchInterests(),fetchSkills(),fetchExperiences(),fetchNavVisibility()]);
   ALL_PROJECTS=await fetchProjects();
   dbg(`Projects: ${ALL_PROJECTS.length}`,'ok');
-  buildNav();if(HERO.photo)updateNavPhoto(HERO.photo);buildFooter();route();
+  buildNav();if(HERO.photo)updateNavPhoto(HERO.photo);buildFooter();fetchFooterSettings();route();
 }
 function route(){
   const hash=window.location.hash.replace('#','');
@@ -835,6 +847,8 @@ const ICONS={
   orcid:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947s-.422.947-.947.947a.95.95 0 0 1-.947-.947c0-.525.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.016-5.325 5.016h-3.919V7.416zm1.444 1.303v7.444h2.297c3.272 0 3.872-2.484 3.872-3.722 0-2.016-1.284-3.722-3.862-3.722h-2.307z"/></svg>`,
   resume:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`
 };
+const LOC_ICON_SM=`<svg style="width:10px;height:10px;display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:2px" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`;
+const LOC_ICON_MD=`<svg style="width:13px;height:13px;display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:3px" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`;
 
 /* ══ HOME ══ */
 function renderHome(loading=false){
@@ -886,7 +900,6 @@ function renderHome(loading=false){
     </div>
   </section>
   ${interestsSection}
-  ${skillsSection}
   ${h.bio?`<div class="hero-bio-section"><p class="hero-bio-full">${h.bio}</p></div>`:''}
   </div>
 
@@ -914,6 +927,7 @@ function renderHome(loading=false){
             <span class="edu-pill">📅 ${e.passing}</span>
             ${e.gpa?`<span class="edu-pill">⭐ ${e.gpa}</span>`:''}
             ${e.rank?`<span class="edu-pill">🏅 ${e.rank}</span>`:''}
+            ${e.location?`<span class="edu-pill" style="display:inline-flex;align-items:center">${LOC_ICON_SM}${e.location}</span>`:''}
           </div>
         </div>
       </div>`).join('')}
@@ -941,6 +955,20 @@ function renderHome(loading=false){
   <!-- OTHER GROUPS -->
   ${loading?renderOtherSkels():renderOtherPreviews()}
 
+  ${ALL_SKILLS.length?`
+  <div class="divider"><hr></div>
+  <section id="skills-section" class="section">
+    <div class="section-header">
+      <h2 class="section-title">Skills</h2>
+    </div>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+      ${ALL_SKILLS.map(sk=>`<button onclick="location.hash='skill-'+encodeURIComponent(this.dataset.name);" data-name="${sk.name}"
+        style="padding:.3rem .75rem;border-radius:999px;font-size:.73rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border2);background:var(--surface2);color:var(--ink2);transition:all .17s"
+        onmouseover="this.style.background='var(--ink)';this.style.borderColor='var(--ink)';this.style.color='#fff'"
+        onmouseout="this.style.background='var(--surface2)';this.style.borderColor='var(--border2)';this.style.color='var(--ink2)'"
+        title="${sk.description||sk.name}">${sk.name}</button>`).join('')}
+    </div>
+  </section>`:''}
 
   `;
   }
@@ -977,7 +1005,7 @@ function renderExpCard(p,idx){
       ${p.logo?`<div class="exp-card-logo"><img src="${p.logo}" alt="${p.organization}" onerror="this.parentElement.style.display='none'"></div>`:''}
       <div class="exp-card-body">
         <div class="exp-org-name">${p.organization}</div>
-        ${p.location?`<div class="exp-location">📍 ${p.location}</div>`:''}
+        ${p.location?`<div class="exp-location">${LOC_ICON_SM}${p.location}</div>`:''}
         ${p.roles.map((r,i)=>{
           const tc=typeClass(r.employment_type||r.type||'');
           const rEnd=r.end_date||'';const rCur=!rEnd||rEnd==='';
@@ -990,7 +1018,7 @@ function renderExpCard(p,idx){
           ${dateStr?`<div class="exp-role-date">${dateStr}</div>`:''}
           ${r.show_excerpt&&r.description?`<div class="exp-excerpt">${truncate(r.description,20)}</div>`:''}`;
         }).join('')}
-        <div class="exp-cta">Details →</div>
+        <div class="exp-cta">Learn More</div>
       </div>
     </div>`;
   }
@@ -1001,14 +1029,14 @@ function renderExpCard(p,idx){
     ${p.logo?`<div class="exp-card-logo"><img src="${p.logo}" alt="${p.organization}" onerror="this.parentElement.style.display='none'"></div>`:''}
     <div class="exp-card-body">
       <div class="exp-org-name">${p.organization}</div>
-      ${p.location?`<div class="exp-location">📍 ${p.location}</div>`:''}
+      ${p.location?`<div class="exp-location">${LOC_ICON_SM}${p.location}</div>`:''}
       <div class="exp-role-row">
         <span class="exp-type ${tc}">${p.type||''}</span>
         <span class="exp-role-title">${p.role}</span>
       </div>
       ${dateStr?`<div class="exp-role-date">${dateStr}</div>`:''}
       ${p.showExcerpt&&p.description?`<div class="exp-excerpt">${truncate(p.description,22)}</div>`:''}
-      <div class="exp-cta">Details →</div>
+      <div class="exp-cta">Learn More</div>
     </div>
   </div>`;
 }
@@ -1310,7 +1338,7 @@ function renderDetail(id){
       })()}
       <span class="badge ${bc}">${item.category}</span>
       ${item.date?`<div style="font-size:.74rem;color:var(--ink3);margin-top:.3rem;margin-bottom:.15rem">📅 ${item.date}</div>`:''}
-      ${item.issuer?`<div style="font-size:.78rem;color:var(--ink3);margin-bottom:.15rem">🏢 Issued by: <strong>${item.issuer}</strong></div>`:''}
+      ${item.issuer?`<div style="font-size:.78rem;color:var(--ink3);margin-bottom:.15rem">🏢 ${item.issuerLabel||'Issued by'}: <strong>${item.issuer}</strong></div>`:''}
       <h1 class="detail-title">${item.title}</h1>
       ${item.description?`<p style="color:var(--ink2);margin-top:.4rem;font-size:.86rem">${item.description}</p>`:''}
       ${item.link?`<a href="${item.link}" target="_blank" class="btn btn-p" style="margin-top:.85rem">View Project</a>`:''}
@@ -1376,7 +1404,7 @@ function renderExpDetail(id){
         <strong style="font-size:1rem;color:var(--ink)">${item.role||''}</strong>
       </div>
       ${dateStr?`<div style="font-size:.78rem;color:var(--ink3);margin-bottom:.4rem">📅 ${dateStr}</div>`:''}
-      ${item.location?`<div style="font-size:.8rem;color:var(--ink3);margin-bottom:.5rem">📍 ${item.location}</div>`:''}
+      ${item.location?`<div style="font-size:.8rem;color:var(--ink3);margin-bottom:.5rem;display:flex;align-items:center">${LOC_ICON_MD}${item.location}</div>`:''}
       ${item.description?`<p style="font-size:.87rem;color:var(--ink2);line-height:1.7">${item.description}</p>`:''}
     </div>`;
   }
@@ -1392,7 +1420,7 @@ function renderExpDetail(id){
         ${item.logo?`<img src="${item.logo}" style="width:72px;height:72px;object-fit:contain;border-radius:12px;border:1px solid var(--border);padding:4px" onerror="this.style.display='none'">`:''}
         <div>
           <h1 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:1.7rem;line-height:1.2;margin-bottom:.2rem">${item.organization}</h1>
-          ${item.location?`<div style="font-size:.8rem;color:var(--ink3)">📍 ${item.location}</div>`:''}
+          ${item.location?`<div style="font-size:.8rem;color:var(--ink3);display:flex;align-items:center">${LOC_ICON_MD}${item.location}</div>`:''}
         </div>
       </div>
       ${rolesHTML}
@@ -1520,6 +1548,28 @@ function countryFlag(country){
     'Oman':'🇴🇲','South Africa':'🇿🇦','Kenya':'🇰🇪','Ghana':'🇬🇭',
   };
   return flags[country]||'🌐';
+}
+
+/* ── Nav visibility ── */
+async function fetchNavVisibility(){
+  try{
+    const text=await ghRaw(`https://raw.githubusercontent.com/${REPO}/${BRANCH}/content/settings/nav_visibility.md`);
+    if(!text)return;
+    const{fm}=parseFM(text);
+    NAV_VISIBILITY={};
+    Object.keys(fm).forEach(k=>{NAV_VISIBILITY[k]=(fm[k]==='true'||fm[k]===true);});
+  }catch(e){}
+}
+
+/* ── Footer settings ── */
+async function fetchFooterSettings(){
+  try{
+    const text=await ghRaw(`https://raw.githubusercontent.com/${REPO}/${BRANCH}/content/settings/footer.md`);
+    if(!text)return;
+    const{fm}=parseFM(text);
+    const el=document.getElementById('footer-copyright');
+    if(el&&fm.footer_text)el.textContent=fm.footer_text;
+  }catch(e){}
 }
 
 /* ── Footer socials ── */
