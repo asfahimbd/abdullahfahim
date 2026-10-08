@@ -63,6 +63,8 @@ collections:
       - {label: "Institution Photo / Logo", name: "photo",       widget: "image",   required: false}
       - {label: "Certificate (PDF/Image)",  name: "certificate", widget: "image",   required: false,
          hint: "Upload your degree certificate or relevant document"}
+      - {label: "Transcript (PDF/Image)",   name: "transcript",  widget: "image",   required: false,
+         hint: "Upload your academic transcript or marksheet"}
       - {label: "Description",       name: "description", widget: "text",    required: false}
       - {label: "Subjects Studied",  name: "subjects",    widget: "string",  required: false,
          hint: "Comma separated — e.g. Physics, Chemistry, Mathematics"}
@@ -97,10 +99,13 @@ collections:
           - {label: "Description",         name: "description",     widget: "text",     required: false}
       - label: "Skills Used"
         name: "skills"
-        widget: "list"
+        widget: "relation"
+        collection: "skills"
+        search_fields: ["name"]
+        value_field: "name"
+        display_fields: ["name"]
+        multiple: true
         required: false
-        hint: "Type skill names. These can be selected from the Skills collection or typed manually."
-        field: {label: "Skill", name: "skill", widget: "string"}
       - {label: "Full Details (Markdown)", name: "body",      widget: "markdown", required: false}
 
   # ══════════════════════════════════════════
@@ -203,18 +208,23 @@ collections:
 
       - label: "Skills Used"
         name: "skills"
-        widget: "list"
+        widget: "relation"
+        collection: "skills"
+        search_fields: ["name"]
+        value_field: "name"
+        display_fields: ["name"]
+        multiple: true
         required: false
-        summary: "{{fields.skill}}"
-        hint: "Add skills related to this item. Click to see all related items by skill."
-        field: {label: "Skill Name", name: "skill", widget: "string"}
 
       - label: "Research Interests"
         name: "research_interests"
-        widget: "list"
+        widget: "relation"
+        collection: "interests"
+        search_fields: ["name"]
+        value_field: "name"
+        display_fields: ["name"]
+        multiple: true
         required: false
-        hint: "Tag research interests. Use exact names from Research Interests collection."
-        field: {label: "Interest", name: "interest", widget: "string"}
 
       - {label: "Featured Image",    name: "image",       widget: "image",   required: false}
       - {label: "Image Focal X (0-100)", name: "focus_x", widget: "number", default: 50, required: false,
