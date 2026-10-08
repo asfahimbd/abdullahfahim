@@ -1,5 +1,5 @@
 ---
-title: Solar Training
+title: Solar Training yy
 date: 26 April, 2026
 pinned: false
 category: Academic Project
