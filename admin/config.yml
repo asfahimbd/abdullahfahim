@@ -102,10 +102,16 @@ collections:
       - {label: "Description",       name: "description", widget: "text",    required: false}
       - {label: "Subjects Studied",  name: "subjects",    widget: "string",  required: false,
          hint: "Comma separated — e.g. Physics, Chemistry, Mathematics"}
-      - {label: "YouTube Video URL", name: "youtube",     widget: "string",  required: false,
-         hint: "e.g. https://youtu.be/abc123 — shown as an embedded player in the detail popup"}
-      - {label: "Video Heading",     name: "youtube_title", widget: "string", required: false,
-         hint: "Heading shown above the video. Leave blank for 'Video'"}
+      - label: "YouTube Video URL"
+        name: "youtube"
+        widget: "string"
+        required: false
+        hint: "e.g. https://youtu.be/abc123 — shown as an embedded player in the detail popup"
+      - label: "Video Heading"
+        name: "youtube_title"
+        widget: "string"
+        required: false
+        hint: "Heading shown above the video. Leave blank for 'Video'"
 
   # ══════════════════════════════════════════
   # 3. EXPERIENCES
@@ -151,10 +157,16 @@ collections:
          hint: "Upload a PDF — shown as an inline viewer in the detail page"}
       - {label: "PDF Heading",           name: "pdf_title", widget: "string", required: false,
          hint: "Heading shown above the PDF viewer, e.g. 'Experience Letter', 'Internship Report'"}
-      - {label: "YouTube Video URL",     name: "youtube",   widget: "string", required: false,
-         hint: "e.g. https://youtu.be/abc123 or https://www.youtube.com/watch?v=abc123"}
-      - {label: "Video Heading",         name: "youtube_title", widget: "string", required: false,
-         hint: "Heading shown above the video, e.g. 'Highlights', 'Recap Video'. Leave blank for 'Video'"}
+      - label: "YouTube Video URL"
+        name: "youtube"
+        widget: "string"
+        required: false
+        hint: "e.g. https://youtu.be/abc123 — paste any YouTube link"
+      - label: "Video Heading"
+        name: "youtube_title"
+        widget: "string"
+        required: false
+        hint: "Heading above the video — leave blank to show 'Video'"
       - label: "Skills Used"
         name: "skills"
         widget: "relation"
