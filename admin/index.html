@@ -47,16 +47,29 @@
       border:1px solid #3a3a3c;border-radius:8px;font-size:.83rem;
       cursor:pointer;font-family:system-ui,sans-serif;
     }
-    /* Button injected into CMS form */
-    .fp-trigger-btn{
-      display:inline-flex;align-items:center;gap:.3rem;
-      margin:.45rem 0 .3rem;padding:.35rem .8rem;
-      background:rgba(29,90,255,.15);color:#6b9fff;
-      border:1px solid rgba(29,90,255,.35);border-radius:6px;
-      font-size:.75rem;font-weight:600;cursor:pointer;
-      font-family:system-ui,sans-serif;transition:all .15s;
+    /* ── Floating button (always visible) ── */
+    #fp-float{
+      position:fixed;bottom:24px;right:24px;
+      width:52px;height:52px;border-radius:50%;
+      background:#1d5aff;color:#fff;border:none;
+      font-size:24px;cursor:pointer;z-index:9998;
+      box-shadow:0 4px 18px rgba(0,0,0,.45);
+      display:flex;align-items:center;justify-content:center;
+      transition:transform .15s, background .15s;
+      font-family:system-ui,sans-serif;
     }
-    .fp-trigger-btn:hover{background:rgba(29,90,255,.28);color:#a0bfff}
+    #fp-float:hover{transform:scale(1.1);background:#3a6fff}
+    #fp-float-tip{
+      position:fixed;bottom:84px;right:16px;
+      background:#1c1c1e;color:#f2f2f7;
+      font-size:.72rem;font-family:system-ui,sans-serif;
+      padding:.4rem .7rem;border-radius:8px;
+      border:1px solid #333;white-space:nowrap;
+      pointer-events:none;opacity:0;
+      transition:opacity .2s;z-index:9999;
+    }
+    #fp-float:hover + #fp-float-tip,
+    #fp-float-tip.show{opacity:1}
   </style>
 </head>
 <body>
@@ -66,7 +79,7 @@
   <div id="fp-overlay">
     <div id="fp-modal">
       <h3>🎯 Set Focal Point</h3>
-      <p>Drag the dot to set the crop focus. Click Apply when done.</p>
+      <p>Drag the dot to set where the image is cropped. Click Apply when done.</p>
       <div id="fp-drag-area">
         <img id="fp-main-img" src="" alt="" crossorigin="anonymous">
         <div id="fp-dot"></div>
@@ -85,202 +98,226 @@
     </div>
   </div>
 
+  <!-- Floating focal point trigger (always visible) -->
+  <button id="fp-float" title="Set Focal Point">🎯</button>
+  <div id="fp-float-tip">Set focal point</div>
+
   <script>
   (function(){
-    /* ── State ── */
-    let activeXInput = null, activeYInput = null;
-    let curX = 50, curY = 50;
-    let isDragging = false;
+    var curX=50, curY=50, isDragging=false;
+    var activeX=null, activeY=null;
 
-    /* ── DOM refs ── */
-    const overlay  = document.getElementById('fp-overlay');
-    const dragArea = document.getElementById('fp-drag-area');
-    const dot      = document.getElementById('fp-dot');
-    const mainImg  = document.getElementById('fp-main-img');
-    const prevImg  = document.getElementById('fp-preview-img');
-    const posLabel = document.getElementById('fp-pos');
+    var overlay = document.getElementById('fp-overlay');
+    var dragArea= document.getElementById('fp-drag-area');
+    var dot     = document.getElementById('fp-dot');
+    var mainImg = document.getElementById('fp-main-img');
+    var prevImg = document.getElementById('fp-preview-img');
+    var posLbl  = document.getElementById('fp-pos');
 
-    /* ── Drag logic ── */
-    function setFocal(px, py){
-      curX = Math.max(0, Math.min(100, Math.round(px)));
-      curY = Math.max(0, Math.min(100, Math.round(py)));
-      dot.style.left = curX + '%';
-      dot.style.top  = curY + '%';
-      prevImg.style.objectPosition = curX + '% ' + curY + '%';
-      posLabel.textContent = curX + '%, ' + curY + '%';
+    /* ── drag ── */
+    function setFocal(px,py){
+      curX=Math.max(0,Math.min(100,Math.round(px)));
+      curY=Math.max(0,Math.min(100,Math.round(py)));
+      dot.style.left=curX+'%'; dot.style.top=curY+'%';
+      prevImg.style.objectPosition=curX+'% '+curY+'%';
+      posLbl.textContent=curX+'%, '+curY+'%';
     }
-    function pctFrom(e){
-      const r = dragArea.getBoundingClientRect();
+    function pct(e){
+      var r=dragArea.getBoundingClientRect();
       return {
-        x: ((e.touches ? e.touches[0].clientX : e.clientX) - r.left) / r.width  * 100,
-        y: ((e.touches ? e.touches[0].clientY : e.clientY) - r.top)  / r.height * 100
+        x:((e.touches?e.touches[0].clientX:e.clientX)-r.left)/r.width*100,
+        y:((e.touches?e.touches[0].clientY:e.clientY)-r.top)/r.height*100
       };
     }
-    dragArea.addEventListener('mousedown',  e=>{ isDragging=true; const p=pctFrom(e); setFocal(p.x,p.y); e.preventDefault(); });
-    dragArea.addEventListener('touchstart', e=>{ isDragging=true; const p=pctFrom(e); setFocal(p.x,p.y); e.preventDefault(); },{passive:false});
-    window.addEventListener('mousemove',  e=>{ if(isDragging){ const p=pctFrom(e); setFocal(p.x,p.y); }});
-    window.addEventListener('touchmove',  e=>{ if(isDragging){ const p=pctFrom(e); setFocal(p.x,p.y); e.preventDefault(); }},{passive:false});
-    window.addEventListener('mouseup',  ()=>isDragging=false);
-    window.addEventListener('touchend', ()=>isDragging=false);
+    dragArea.addEventListener('mousedown', function(e){isDragging=true;var p=pct(e);setFocal(p.x,p.y);e.preventDefault();});
+    dragArea.addEventListener('touchstart',function(e){isDragging=true;var p=pct(e);setFocal(p.x,p.y);e.preventDefault();},{passive:false});
+    window.addEventListener('mousemove', function(e){if(isDragging){var p=pct(e);setFocal(p.x,p.y);}});
+    window.addEventListener('touchmove', function(e){if(isDragging){var p=pct(e);setFocal(p.x,p.y);e.preventDefault();}},{passive:false});
+    window.addEventListener('mouseup',   function(){isDragging=false;});
+    window.addEventListener('touchend',  function(){isDragging=false;});
 
-    /* ── Modal open / close ── */
-    function openModal(imgSrc, xIn, yIn){
-      activeXInput = xIn;
-      activeYInput = yIn;
-      mainImg.src  = imgSrc;
-      prevImg.src  = imgSrc;
+    /* ── modal ── */
+    function openModal(src,xIn,yIn){
+      activeX=xIn; activeY=yIn;
+      mainImg.src=src; prevImg.src=src;
       overlay.classList.add('open');
-      const ix = parseFloat(xIn.value) || 50;
-      const iy = parseFloat(yIn.value) || 50;
-      const apply = () => setFocal(ix, iy);
-      if(mainImg.complete && mainImg.naturalWidth) apply();
-      else mainImg.onload = apply;
+      var ix=parseFloat(xIn.value)||50, iy=parseFloat(yIn.value)||50;
+      if(mainImg.complete&&mainImg.naturalWidth) setFocal(ix,iy);
+      else mainImg.onload=function(){setFocal(ix,iy);};
     }
-    function closeModal(){ overlay.classList.remove('open'); }
-    overlay.addEventListener('click', e=>{ if(e.target===overlay) closeModal(); });
-    document.getElementById('fp-cancel').addEventListener('click', closeModal);
+    function closeModal(){overlay.classList.remove('open');}
+    overlay.addEventListener('click',function(e){if(e.target===overlay)closeModal();});
+    document.getElementById('fp-cancel').addEventListener('click',closeModal);
 
-    /* ── Apply: push values into Sveltia-bound inputs ── */
-    function pushToInput(inp, val){
+    /* ── push value into Sveltia reactive input ── */
+    function push(inp,val){
       try{
-        const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,'value').set;
-        setter.call(inp, val);
-      }catch(e){ inp.value = val; }
-      inp.dispatchEvent(new Event('input',  {bubbles:true}));
-      inp.dispatchEvent(new Event('change', {bubbles:true}));
+        var s=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,'value').set;
+        s.call(inp,val);
+      }catch(e){inp.value=val;}
+      inp.dispatchEvent(new Event('input',{bubbles:true}));
+      inp.dispatchEvent(new Event('change',{bubbles:true}));
     }
-    document.getElementById('fp-apply').addEventListener('click', ()=>{
-      if(activeXInput) pushToInput(activeXInput, curX);
-      if(activeYInput) pushToInput(activeYInput, curY);
+    document.getElementById('fp-apply').addEventListener('click',function(){
+      if(activeX) push(activeX,curX);
+      if(activeY) push(activeY,curY);
       closeModal();
     });
 
-    /* ────────────────────────────────────────────────────────
-       ROBUST FOCAL INPUT DETECTION
-       Instead of matching exact label strings, we scan every
-       number input and check if nearby text contains focal/focus
-       keywords, then classify X vs Y by axis keywords.
-    ──────────────────────────────────────────────────────── */
-
-    // Return lowercase text of the nearest ancestor that mentions focal/focus
-    function getFocalContext(inp){
-      let el = inp.parentElement;
-      for(let i = 0; i < 10; i++){
-        if(!el || el === document.body) break;
-        const t = el.textContent.toLowerCase();
-        if(t.includes('focal') || t.includes('focus')) return t;
-        el = el.parentElement;
+    /* ────────────────────────────────────────────────
+       FIND FOCAL X & Y INPUTS
+       Strategy: scan all inputs (number + text with
+       numeric hints), classify by nearby label text.
+    ──────────────────────────────────────────────── */
+    function getClosestLabel(inp){
+      // 1. label[for=id]
+      if(inp.id){
+        var lbl=document.querySelector('label[for="'+inp.id+'"]');
+        if(lbl) return lbl.textContent.toLowerCase();
+      }
+      // 2. aria-label / placeholder
+      var al=(inp.getAttribute('aria-label')||inp.placeholder||'').toLowerCase();
+      if(al) return al;
+      // 3. Walk up to find first label or heading
+      var el=inp.parentElement;
+      for(var i=0;i<6;i++){
+        if(!el||el===document.body) break;
+        var lbl2=el.querySelector('label');
+        if(lbl2&&!lbl2.contains(inp)) return lbl2.textContent.toLowerCase();
+        // text node in direct parent
+        var cn=el.childNodes;
+        for(var j=0;j<cn.length;j++){
+          if(cn[j].nodeType===3&&cn[j].textContent.trim()) return cn[j].textContent.toLowerCase();
+        }
+        el=el.parentElement;
       }
       return '';
     }
 
-    function findFocalInputPair(){
-      const allInputs = [...document.querySelectorAll('input[type="number"]')];
-      let xIn = null, yIn = null;
-
-      for(const inp of allInputs){
-        const ctx = getFocalContext(inp);
-        if(!ctx) continue;
-
-        // X axis: look for x, horizontal, left-right
-        const isX = /focal[\s_-]*x\b/.test(ctx) ||
-                    /focus[\s_-]*x\b/.test(ctx)  ||
-                    /\bhorizontal\b/.test(ctx)    ||
-                    (/\bleft\b/.test(ctx) && /\bright\b/.test(ctx));
-
-        // Y axis: look for y, vertical, top-bottom
-        const isY = /focal[\s_-]*y\b/.test(ctx) ||
-                    /focus[\s_-]*y\b/.test(ctx)  ||
-                    /\bvertical\b/.test(ctx)      ||
-                    (/\btop\b/.test(ctx) && /\bbottom\b/.test(ctx));
-
-        if(isX && !xIn) xIn = inp;
-        else if(isY && !yIn) yIn = inp;
+    function hasFocalAncestor(inp){
+      var el=inp.parentElement;
+      for(var i=0;i<12;i++){
+        if(!el||el===document.body) break;
+        var t=el.textContent.toLowerCase();
+        if(t.includes('focal')||t.includes('focus')) return true;
+        el=el.parentElement;
       }
-
-      return {xIn, yIn};
+      return false;
     }
 
-    /* ── Find the best candidate image currently visible in the CMS ── */
-    function findImgSrc(){
-      const candidates = [];
-      for(const img of document.querySelectorAll('img')){
-        const s = img.src || '';
-        if(!s) continue;
-        if(img.naturalWidth < 40 || img.naturalHeight < 40) continue;
-        const area = img.naturalWidth * img.naturalHeight;
-        // Prefer blob URLs (just-uploaded) and known CDN/repo paths
-        const bonus =
-          s.startsWith('blob:')               ? 2e8 :
-          s.includes('raw.githubusercontent') ? 1e8 :
-          s.includes('/uploads/')             ? 1e8 :
-          s.includes('/assets/')              ? 5e7 :
-          s.includes('netlify')               ? 5e7 : 0;
-        if(bonus > 0 || area > 10000) candidates.push({src: s, score: area + bonus});
+    function findPair(){
+      // Try all inputs: number first, then text
+      var all=[].concat(
+        Array.from(document.querySelectorAll('input[type="number"]')),
+        Array.from(document.querySelectorAll('input[type="text"]'))
+      );
+      var xIn=null, yIn=null;
+
+      for(var i=0;i<all.length;i++){
+        var inp=all[i];
+        if(!hasFocalAncestor(inp)) continue;
+        var lbl=getClosestLabel(inp);
+
+        var isX=/focal[\s_-]*x\b|focus[\s_-]*x\b|horizontal|\bleft\b.*\bright\b|image focal x|photo focus x/.test(lbl);
+        var isY=/focal[\s_-]*y\b|focus[\s_-]*y\b|vertical|\btop\b.*\bbottom\b|image focal y|photo focus y/.test(lbl);
+
+        if(isX&&!xIn) xIn=inp;
+        else if(isY&&!yIn) yIn=inp;
+        if(xIn&&yIn) break;
       }
-      if(!candidates.length) return '';
-      candidates.sort((a,b) => b.score - a.score);
-      return candidates[0].src;
-    }
 
-    /* ── Button injection ── */
-    const BTN_ID = 'fp-btn-focal';
-
-    function tryInject(){
-      if(document.getElementById(BTN_ID)) return; // already present
-
-      const {xIn, yIn} = findFocalInputPair();
-      if(!xIn || !yIn) return;
-
-      // Walk up from xIn to find the nearest ancestor that also contains yIn
-      let container = xIn.parentElement;
-      for(let i = 0; i < 14; i++){
-        if(!container || container === document.body) break;
-        if(container.contains(yIn)) break;
-        container = container.parentElement;
-      }
-      if(!container || container === document.body) container = xIn.parentElement;
-
-      const btn = document.createElement('button');
-      btn.id        = BTN_ID;
-      btn.type      = 'button';
-      btn.className = 'fp-trigger-btn';
-      btn.innerHTML = '🎯 Drag to set focal point';
-
-      btn.addEventListener('click', e => {
-        e.preventDefault();
-        e.stopPropagation();
-        const imgSrc = findImgSrc();
-        if(!imgSrc){
-          alert('Please upload an image first, then click this button to set the focal point.');
-          return;
+      // Fallback: if we can't match by label, just take the first two focal-context inputs in order
+      if(!xIn||!yIn){
+        var focalInputs=all.filter(function(inp){ return hasFocalAncestor(inp); });
+        if(focalInputs.length>=2){
+          xIn=focalInputs[0]; yIn=focalInputs[1];
         }
-        openModal(imgSrc, xIn, yIn);
-      });
+      }
 
-      // Prepend to container
-      container.insertBefore(btn, container.firstChild);
+      return {xIn:xIn, yIn:yIn};
     }
 
-    function cleanStale(){
-      const btn = document.getElementById(BTN_ID);
-      if(!btn) return;
-      const {xIn} = findFocalInputPair();
-      if(!xIn) btn.remove(); // user navigated away from focal fields
+    /* ── Find best image currently visible in CMS ── */
+    function findImg(){
+      var best=null, bestScore=0;
+      var imgs=document.querySelectorAll('img');
+      for(var i=0;i<imgs.length;i++){
+        var img=imgs[i], s=img.src||'';
+        if(!s||img.naturalWidth<40||img.naturalHeight<40) continue;
+        var area=img.naturalWidth*img.naturalHeight;
+        var bonus=s.startsWith('blob:')?2e8:
+                  s.includes('raw.githubusercontent')?1e8:
+                  s.includes('/uploads/')?1e8:
+                  s.includes('/assets/')?5e7:0;
+        var score=area+bonus;
+        if(score>bestScore){bestScore=score;best=s;}
+      }
+      return best||'';
     }
 
-    /* ── Watch CMS DOM mutations ── */
-    let debounce = null;
-    const observer = new MutationObserver(() => {
-      clearTimeout(debounce);
-      debounce = setTimeout(() => { cleanStale(); tryInject(); }, 350);
+    /* ── Floating button click ── */
+    document.getElementById('fp-float').addEventListener('click',function(e){
+      e.preventDefault();
+      var pair=findPair();
+      if(!pair.xIn||!pair.yIn){
+        alert('Focal point fields not found on this page.\n\nPlease open a Portfolio Item (click "Edit" on an item) and try again.');
+        return;
+      }
+      var img=findImg();
+      if(!img){
+        alert('No image found yet.\nPlease upload a Featured Image for this item first, then click 🎯 again.');
+        return;
+      }
+      openModal(img, pair.xIn, pair.yIn);
     });
-    observer.observe(document.body, {childList: true, subtree: true});
 
-    // Eager attempts in case CMS renders synchronously or fast
-    setTimeout(tryInject, 600);
-    setTimeout(tryInject, 1800);
-    setTimeout(tryInject, 4000);
+    /* ── Also try inline injection next to the X field ── */
+    var BTN='fp-inline-btn';
+    function tryInline(){
+      if(document.getElementById(BTN)) return;
+      var pair=findPair();
+      if(!pair.xIn||!pair.yIn) return;
+
+      var container=pair.xIn.parentElement;
+      for(var i=0;i<14;i++){
+        if(!container||container===document.body) break;
+        if(container.contains(pair.yIn)) break;
+        container=container.parentElement;
+      }
+      if(!container||container===document.body) container=pair.xIn.parentElement;
+
+      var btn=document.createElement('button');
+      btn.id=BTN; btn.type='button';
+      btn.textContent='🎯 Set focal point';
+      btn.style.cssText='display:inline-flex;align-items:center;gap:.3rem;'+
+        'margin:.4rem 0 .3rem;padding:.3rem .75rem;'+
+        'background:rgba(29,90,255,.15);color:#6b9fff;'+
+        'border:1px solid rgba(29,90,255,.35);border-radius:6px;'+
+        'font-size:.75rem;font-weight:600;cursor:pointer;'+
+        'font-family:system-ui,sans-serif;';
+      btn.addEventListener('click',function(ev){
+        ev.preventDefault(); ev.stopPropagation();
+        var img=findImg();
+        if(!img){alert('Please upload an image first.');return;}
+        openModal(img,pair.xIn,pair.yIn);
+      });
+      container.insertBefore(btn,container.firstChild);
+    }
+    function cleanInline(){
+      var btn=document.getElementById(BTN);
+      if(btn&&!findPair().xIn) btn.remove();
+    }
+
+    var timer=null;
+    var obs=new MutationObserver(function(){
+      clearTimeout(timer);
+      timer=setTimeout(function(){cleanInline();tryInline();},350);
+    });
+    obs.observe(document.body,{childList:true,subtree:true});
+
+    setTimeout(tryInline,700);
+    setTimeout(tryInline,2000);
+    setTimeout(tryInline,4500);
   })();
   </script>
 </body>
