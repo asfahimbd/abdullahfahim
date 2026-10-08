@@ -256,8 +256,8 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 
 /* ════ GALLERY SLIDER ════ */
 .gallery-wrap{position:relative;margin-top:1rem}
-.gallery-main{position:relative;width:100%;height:320px;border-radius:12px;overflow:hidden;background:var(--surface2);cursor:zoom-in}
-.gallery-main img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .25s}
+.gallery-main{position:relative;width:100%;aspect-ratio:4/3;border-radius:12px;overflow:hidden;background:var(--surface2);cursor:zoom-in}
+.gallery-main img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:opacity .25s}
 .gallery-main-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.38);color:#fff;border:none;cursor:pointer;width:36px;height:36px;border-radius:50%;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .18s;z-index:2}
 .gallery-main-nav:hover{background:rgba(0,0,0,.6)}
 .gallery-prev{left:10px}
@@ -268,6 +268,12 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .gallery-thumb{width:62px;height:52px;border-radius:7px;object-fit:cover;cursor:pointer;opacity:.55;transition:all .18s;border:2px solid transparent;flex-shrink:0}
 .gallery-thumb.active{opacity:1;border-color:var(--blue)}
 .gallery-thumb:hover{opacity:.85}
+
+/* ════ PDF EMBED ════ */
+.pdf-embed-wrap{width:100%;margin-top:1.2rem;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--surface2)}
+.pdf-embed-title{padding:.7rem 1rem;font-size:.8rem;font-weight:700;color:var(--ink2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.4rem}
+.pdf-embed{display:block;width:100%;height:680px;border:none;background:#fff}
+@media(max-width:600px){.pdf-embed{height:500px}}
 
 /* Focal point drag */
 .focal-wrap{position:relative;display:inline-block}
@@ -737,6 +743,7 @@ async function fetchProjects(){
       image:fixImg(fm.image||''),gallery,focusX,focusY,
       description:fm.description||'',date:fm.date||'',
       link:fm.link||'',youtube:fm.youtube||'',body,
+      pdfFile:fixImg(fm.pdf_file||''),pdfTitle:fm.pdf_title||'',
       skills_list,interests_list,pinned:fm.pinned==='true'||fm.pinned===true};
   }));
   // Sort: pinned first, then by date desc
@@ -826,6 +833,7 @@ function route(){
   else if(hash==='all-exp'){renderAllExpPage(null);}
   else if(hash.startsWith('all-exp-')){renderAllExpPage(hash.replace('all-exp-','').replace(/-/g,' '));}
   else if(hash.startsWith('view-exp-')){renderExpDetail(hash.replace('view-exp-',''));}
+  else if(hash==='photo-crop-tool'){renderFocalTool();}
   else if(hash.startsWith('view-'))renderDetail(hash.replace('view-',''));
   else if(hash.startsWith('skill-')){showBySkill(decodeURIComponent(hash.replace('skill-','')));}
   else if(hash.startsWith('interest-')){showByInterest(decodeURIComponent(hash.replace('interest-','')));}
@@ -1347,6 +1355,7 @@ function renderDetail(id){
     </div>
     ${item.youtube?`<div class="detail-section"><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-bottom:.4rem">Video</h3><div class="yt-wrap"><iframe src="https://www.youtube.com/embed/${getYtId(item.youtube)}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture" allowfullscreen></iframe></div></div>`:''}
     ${item.body?`<div class="detail-section"><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-bottom:.82rem">Details</h3><div class="detail-body">${md2html(item.body)}</div></div>`:''}
+    ${item.pdfFile?`<div class="detail-section"><div class="pdf-embed-wrap"><div class="pdf-embed-title">📄 ${item.pdfTitle||'Document'}</div><iframe class="pdf-embed" src="${item.pdfFile}#toolbar=0&navpanes=0&scrollbar=1" title="${item.pdfTitle||'Document'}" loading="lazy"></iframe></div></div>`:''}
   </div>`;
   window.scrollTo(0,0);
 }
@@ -1611,6 +1620,93 @@ function compressImage(file,maxW=1200,quality=0.82){
     };
     reader.readAsDataURL(file);
   });
+}
+
+/* ══ FOCAL POINT DRAG TOOL ══ */
+function renderFocalTool(){
+  const photo=HERO.photo||'';
+  document.getElementById('app').innerHTML=`
+  <div class="detail-page" style="max-width:680px">
+    <button onclick="goHome()" class="btn btn-g" style="margin-bottom:1.2rem">← Home</button>
+    <h2 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-bottom:.3rem">Photo Focal Point</h2>
+    <p style="font-size:.82rem;color:var(--ink3);margin-bottom:1.2rem">Drag the circle to set the crop focal point. Copy the X/Y values and paste them into the CMS Profile Info fields.</p>
+    ${photo?`
+    <div style="display:flex;gap:1.4rem;flex-wrap:wrap;align-items:flex-start">
+      <div style="flex:1;min-width:220px">
+        <div style="font-size:.7rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem">Drag to set focal point</div>
+        <div id="focal-container" style="position:relative;border-radius:10px;overflow:hidden;cursor:crosshair;user-select:none;touch-action:none;aspect-ratio:4/3;background:var(--surface2)">
+          <img id="focal-img" src="${photo}" style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none" draggable="false">
+          <div id="focal-dot" style="position:absolute;width:26px;height:26px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 0 0 2px var(--blue),0 2px 8px rgba(0,0,0,.5);transform:translate(-50%,-50%);cursor:move;z-index:5;transition:box-shadow .15s"></div>
+        </div>
+      </div>
+      <div style="flex:0 0 140px">
+        <div style="font-size:.7rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem">Avatar preview</div>
+        <div style="width:110px;height:110px;border-radius:50%;overflow:hidden;border:3px solid var(--border);background:var(--surface2)">
+          <img id="focal-preview" src="${photo}" style="width:100%;height:100%;object-fit:cover" draggable="false">
+        </div>
+        <div style="margin-top:1rem;display:flex;flex-direction:column;gap:.5rem">
+          <div style="font-size:.7rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em">Values to copy</div>
+          <label style="font-size:.78rem;color:var(--ink2)">Photo Focus X
+            <div style="display:flex;align-items:center;gap:.4rem;margin-top:.2rem">
+              <input id="focal-x" type="number" min="0" max="100" value="50" style="width:60px;padding:.25rem .4rem;border:1.5px solid var(--border);border-radius:6px;font-size:.85rem;background:var(--bg);color:var(--ink)" oninput="applyFocalFromInput()">
+              <button onclick="copyFocal('x')" style="padding:.25rem .5rem;border-radius:6px;font-size:.72rem;font-weight:600;border:1.5px solid var(--border2);background:var(--surface2);cursor:pointer;color:var(--ink2)">Copy</button>
+            </div>
+          </label>
+          <label style="font-size:.78rem;color:var(--ink2)">Photo Focus Y
+            <div style="display:flex;align-items:center;gap:.4rem;margin-top:.2rem">
+              <input id="focal-y" type="number" min="0" max="100" value="50" style="width:60px;padding:.25rem .4rem;border:1.5px solid var(--border);border-radius:6px;font-size:.85rem;background:var(--bg);color:var(--ink)" oninput="applyFocalFromInput()">
+              <button onclick="copyFocal('y')" style="padding:.25rem .5rem;border-radius:6px;font-size:.72rem;font-weight:600;border:1.5px solid var(--border2);background:var(--surface2);cursor:pointer;color:var(--ink2)">Copy</button>
+            </div>
+          </label>
+          <div id="focal-copied" style="font-size:.72rem;color:var(--blue);min-height:1rem;font-weight:600"></div>
+        </div>
+      </div>
+    </div>`:`<div style="padding:1.5rem;background:var(--surface2);border-radius:10px;color:var(--ink3);font-size:.85rem">No profile photo set yet. Upload one via the CMS dashboard first.</div>`}
+  </div>`;
+  if(!photo)return;
+  // Initialize dot at stored HERO focal position (or center)
+  const initX=HERO.photoFocusX!=null?HERO.photoFocusX:50;
+  const initY=HERO.photoFocusY!=null?HERO.photoFocusY:50;
+  const dot=document.getElementById('focal-dot');
+  const container=document.getElementById('focal-container');
+  const xIn=document.getElementById('focal-x');
+  const yIn=document.getElementById('focal-y');
+  const preview=document.getElementById('focal-preview');
+  function setFocal(px,py){
+    const rx=Math.max(0,Math.min(100,Math.round(px)));
+    const ry=Math.max(0,Math.min(100,Math.round(py)));
+    dot.style.left=rx+'%';
+    dot.style.top=ry+'%';
+    xIn.value=rx;yIn.value=ry;
+    preview.style.objectPosition=rx+'% '+ry+'%';
+    document.getElementById('focal-img').style.objectPosition=rx+'% '+ry+'%';
+  }
+  window.applyFocalFromInput=function(){setFocal(parseFloat(xIn.value||50),parseFloat(yIn.value||50));}
+  window.copyFocal=function(axis){
+    const v=axis==='x'?xIn.value:yIn.value;
+    navigator.clipboard.writeText(v).then(()=>{
+      const el=document.getElementById('focal-copied');
+      el.textContent='Copied '+axis.toUpperCase()+': '+v;
+      setTimeout(()=>el.textContent='',2000);
+    }).catch(()=>{
+      const el=document.getElementById('focal-copied');
+      el.textContent=axis.toUpperCase()+' = '+v;
+    });
+  }
+  setFocal(initX,initY);
+  function pctFromEvent(e){
+    const r=container.getBoundingClientRect();
+    const cx=(e.touches?e.touches[0].clientX:e.clientX)-r.left;
+    const cy=(e.touches?e.touches[0].clientY:e.clientY)-r.top;
+    return{x:cx/r.width*100,y:cy/r.height*100};
+  }
+  let dragging=false;
+  container.addEventListener('mousedown',e=>{dragging=true;const{x,y}=pctFromEvent(e);setFocal(x,y);e.preventDefault();});
+  container.addEventListener('touchstart',e=>{dragging=true;const{x,y}=pctFromEvent(e);setFocal(x,y);e.preventDefault();},{passive:false});
+  window.addEventListener('mousemove',e=>{if(dragging){const{x,y}=pctFromEvent(e);setFocal(x,y);}});
+  window.addEventListener('touchmove',e=>{if(dragging){const{x,y}=pctFromEvent(e);setFocal(x,y);e.preventDefault();}},{passive:false});
+  window.addEventListener('mouseup',()=>dragging=false);
+  window.addEventListener('touchend',()=>dragging=false);
 }
 
 function scrollToSkills(){
