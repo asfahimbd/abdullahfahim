@@ -1,14 +1,16 @@
 ---
+order: 1
 level: School
 institution: Govt. Muslim High School, Chittagong
 degree: Secondary School Certificate (Science)
 passing: '2017'
 gpa: 5.00/5.00
-logo: /assets/images/pasted-image-1779131540791.png
-photo: /assets/images/pasted-image-1777051988183.png
 icon: 🎓
 icon_bg: var(--blue-l)
+photo: /assets/images/pasted-image-1777051988183.png
+certificate: /assets/images/561f823c-2063-434f-8984-2f1b470a35e6.png
+transcript: /assets/images/IMG_4291.jpeg
 description: During my school years, I gained a comprehensive education in subjects such as Bengali, English, Physics, Mathematics, Chemistry, Biology, Information and Communication Technology (ICT), Career Education, Physical Education and Health, Bangladesh and Global Studies, and Islamic and Moral Education. I also had the privilege of representing my school in various Olympiads and symposiums, showcasing my knowledge and enthusiasm for academic and extracurricular excellence. As an active member of BDRCS and I have worked on my school campus at several incidents.
 subjects: Bengali, English, Physics, Mathematics, Chemistry, Biology, Information and Communication Technology (ICT), Career Education, Physical Education and Health, Bangladesh and Global Studies, and Islamic and Moral Education
-order: 1
+logo: /assets/images/pasted-image-1779131540791.png
 ---
