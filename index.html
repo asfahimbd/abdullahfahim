@@ -728,7 +728,8 @@ async function fetchExperiences(){
         roles:sortedRoles,
         isMultiRole:true,
         isCurrent:!sortedRoles[0].end_date||sortedRoles[0].end_date===''||sortedRoles[0].end_date.toLowerCase().includes('present'),
-        body,skills_list,gallery,pdfFile,pdfTitle
+        body,skills_list,gallery,pdfFile,pdfTitle,
+        website:fm.website||''
       };
     }
     // Single role entry
@@ -747,7 +748,8 @@ async function fetchExperiences(){
       isMultiRole:false,body,
       showExcerpt:fm.show_excerpt==='true'||fm.show_excerpt===true,
       certificate:fixImg(fm.certificate||''),
-      gallery,pdfFile,pdfTitle
+      gallery,pdfFile,pdfTitle,
+      website:fm.website||''
     };
   }));
   const v=items.filter(Boolean).sort((a,b)=>{
@@ -1075,6 +1077,8 @@ function fmtDate(s){
   return m[d.getUTCMonth()]+' '+d.getUTCFullYear();
 }
 
+function expHost(url){try{return new URL(url).hostname.replace(/^www\./,'');}catch{return url;}}
+
 function renderExpCard(p){
   const isCur=p.isCurrent;
   const logoHTML=p.logo
@@ -1086,6 +1090,7 @@ function renderExpCard(p){
     <div class="exp-card-header-txt">
       <div class="exp-org-name">${p.organization}</div>
       ${p.location?`<div class="exp-location">${LOC_ICON_SM}${p.location}</div>`:''}
+      ${p.website?`<div class="exp-location" style="margin-top:.08rem"><a href="${p.website}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--blue);text-decoration:none;font-size:.65rem;font-weight:500;display:flex;align-items:center;gap:.18rem">🌐 ${expHost(p.website)}</a></div>`:''}
     </div>
     ${isCur?'<div class="exp-cur-dot" title="Currently working here"></div>':''}
   </div>`;
@@ -1617,7 +1622,8 @@ function renderExpDetail(id){
         ${item.logo?`<img src="${item.logo}" style="width:72px;height:72px;object-fit:contain;border-radius:12px;border:1px solid var(--border);padding:4px" onerror="this.style.display='none'">`:''}
         <div>
           <h1 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:1.7rem;line-height:1.2;margin-bottom:.2rem">${item.organization}</h1>
-          ${item.location?`<div style="font-size:.8rem;color:var(--ink3);display:flex;align-items:center">${LOC_ICON_MD}${item.location}</div>`:''}
+          ${item.location?`<div style="font-size:.8rem;color:var(--ink3);display:flex;align-items:center;margin-bottom:.15rem">${LOC_ICON_MD}${item.location}</div>`:''}
+          ${item.website?`<a href="${item.website}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;color:var(--blue);font-weight:600;text-decoration:none;padding:.18rem .5rem;border-radius:6px;background:var(--blue-l);border:1px solid var(--blue-m)">🌐 ${expHost(item.website)}</a>`:''}
         </div>
       </div>
       ${rolesHTML}
