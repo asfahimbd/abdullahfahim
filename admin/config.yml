@@ -27,7 +27,7 @@ collections:
           - {label: "Profile Photo",     name: "photo",      widget: "image",   required: false}
           - {label: "Photo Focus X (0=left · 50=center · 100=right)", name: "photo_focus_x", widget: "number", value_type: "int", min: 0, max: 100, default: 50, required: false}
           - {label: "Photo Focus Y (0=top · 50=center · 100=bottom)",  name: "photo_focus_y", widget: "number", value_type: "int", min: 0, max: 100, default: 50, required: false}
-          - {label: "CV / Resume PDF (upload)", name: "cv_file", widget: "image", required: false,
+          - {label: "CV / Resume PDF (upload)", name: "cv_file", widget: "file", required: false,
              hint: "Upload your CV/resume PDF directly — takes priority over the URL below"}
           - {label: "Email",             name: "email",      widget: "string",  required: false}
           - {label: "LinkedIn URL",      name: "linkedin",   widget: "string",  required: false}
@@ -273,3 +273,8 @@ collections:
       - {label: "Full Details",      name: "body",        widget: "markdown", required: false}
       - {label: "YouTube Video URL", name: "youtube",     widget: "string",   required: false}
       - {label: "External Link",     name: "link",        widget: "string",   required: false}
+
+      - {label: "PDF Document (upload)", name: "pdf_file", widget: "file", required: false,
+         hint: "Upload a PDF — it will show as an inline viewer on the project page (no download button)"}
+      - {label: "PDF Heading",       name: "pdf_title",   widget: "string",   required: false,
+         hint: "Heading shown above the PDF viewer, e.g. 'Full Paper', 'Research Report'"}
