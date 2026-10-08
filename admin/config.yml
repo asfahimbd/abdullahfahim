@@ -124,11 +124,25 @@ collections:
             widget: "select"
             required: false
             options: ["Full Time","Part Time","Voluntary","Internship","Research","Other"]
-          - {label: "Start Date",          name: "start_date",      widget: "datetime", required: false}
-          - {label: "End Date",            name: "end_date",        widget: "datetime", required: false}
+          - {label: "Start Date",          name: "start_date",      widget: "date",     required: false,
+             hint: "Select date — time is not shown on the site"}
+          - {label: "End Date",            name: "end_date",        widget: "date",     required: false,
+             hint: "Leave blank if currently working here"}
           - {label: "Currently Working",   name: "is_current",      widget: "boolean",  default: false, required: false}
           - {label: "Show Excerpt on Card",name: "show_excerpt",    widget: "boolean",  default: true,  required: false}
           - {label: "Description",         name: "description",     widget: "text",     required: false}
+          - {label: "Certificate (Image/PDF)",  name: "certificate", widget: "image",   required: false,
+             hint: "Upload certificate or document for this role — a 'View Certificate' button will appear in the detail page"}
+      - label: "Gallery / Photos"
+        name: "gallery"
+        widget: "list"
+        required: false
+        hint: "Upload photos related to this experience — they will appear as a slideshow in the detail page"
+        field: {label: "Photo", name: "image", widget: "image"}
+      - {label: "PDF Document (upload)", name: "pdf_file", widget: "file", required: false,
+         hint: "Upload a PDF — shown as an inline viewer in the detail page"}
+      - {label: "PDF Heading",           name: "pdf_title", widget: "string", required: false,
+         hint: "Heading shown above the PDF viewer, e.g. 'Experience Letter', 'Internship Report'"}
       - label: "Skills Used"
         name: "skills"
         widget: "relation"
