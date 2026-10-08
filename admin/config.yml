@@ -71,6 +71,8 @@ collections:
       - {label: "Order (1=top)",     name: "order",       widget: "number",  default: 1,          required: false}
       - {label: "Level",             name: "level",       widget: "select",  options: ["University","College","School","Other"], default: "University", required: false}
       - {label: "Institution Name",  name: "institution", widget: "string",  required: false}
+      - {label: "Website URL",       name: "website",     widget: "string",  required: false,
+         hint: "e.g. https://example.com — shown as a link on the card and detail popup"}
       - {label: "Degree / Group",    name: "degree",      widget: "string",  required: false}
       - {label: "Passing Year",      name: "passing",     widget: "string",  required: false}
       - {label: "Location",          name: "location",    widget: "string",  required: false,
@@ -125,7 +127,7 @@ collections:
             name: "employment_type"
             widget: "select"
             required: false
-            options: ["Full Time","Part Time","Voluntary","Internship","Research","Other"]
+            options: ["Full Time","Part Time","Voluntary","Internship","Research","Ambassador","Other"]
           - {label: "Start Date",          name: "start_date",      widget: "datetime", required: false,
              hint: "Select date — time is not shown on the site", time_format: false}
           - {label: "End Date",            name: "end_date",        widget: "datetime", required: false,
