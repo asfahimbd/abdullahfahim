@@ -78,8 +78,10 @@ collections:
       - {label: "GPA / Result",      name: "gpa",         widget: "string",  required: false}
       - {label: "Rank / Position",   name: "rank",        widget: "string",  required: false,
          hint: "e.g. 3rd / 95 students — leave blank to hide"}
-      - {label: "Icon (emoji)",      name: "icon",        widget: "string",  default: "🎓",       required: false}
-      - label: "Icon Background Color"
+      - {label: "Institution Logo (icon for card)", name: "logo", widget: "image", required: false,
+         hint: "Upload PNG/JPG logo — shown as the small icon on the education card. Replaces the emoji icon below."}
+      - {label: "Icon (emoji — used if no logo uploaded)", name: "icon", widget: "string", default: "🎓", required: false}
+      - label: "Icon Background Color (used if no logo)"
         name: "icon_bg"
         widget: "select"
         required: false
@@ -89,7 +91,8 @@ collections:
           - {label: "Amber",  value: "var(--amber-l)"}
           - {label: "Rose",   value: "var(--rose-l)"}
         default: "var(--blue-l)"
-      - {label: "Institution Photo / Logo", name: "photo",       widget: "image",   required: false}
+      - {label: "Institute Photo (shown in detail popup)", name: "photo", widget: "image", required: false,
+         hint: "Large photo of the campus or institute — shown when someone clicks to expand this education entry"}
       - {label: "Certificate (PDF/Image)",  name: "certificate", widget: "image",   required: false,
          hint: "Upload your degree certificate or relevant document"}
       - {label: "Transcript (PDF/Image)",   name: "transcript",  widget: "image",   required: false,
