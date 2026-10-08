@@ -6,11 +6,11 @@ category: Academic Project
 custom_category: ''
 skills:
   - Matlab
-research_interests:
-  - Machine learning
+research_interests: []
 image: /assets/images/IMG_4433.jpeg
 focus_x: 50
 focus_y: 30
+issuer: ''
 gallery:
   - /assets/images/98abd8e2-04ff-4549-9d2e-8422e5890a09.jpeg
 description: Energy Transition youth engagement
