@@ -7,16 +7,16 @@ bio: |-
   Having served as the Chairperson and currently serving as a Mentor of the IEEE JUST Student Branch, I am dedicated to fostering professional growth, leadership, and collaboration within the engineering community. My diverse background combining technical engineering expertise, leadership, and digital design drives my commitment to cutting-edge R&D.
 
   I am now looking to contribute to global research teams tackling challenges in computational semiconductor physics, applied AI, and technology.
-photo: /assets/images/ChatGPT Image Sep 7, 2026, 07_54_17 PM.png
+photo: /assets/images/fahim profile picture.png
 photo_focus_x: 50
-photo_focus_y: 80
+photo_focus_y: 50
 cv_file: /assets/images/Curriculum Vitae of Abdullah Shadek Fahim.pdf
 email: fahim.just.19@gmail.com
 linkedin: https://www.linkedin.com/in/abdullah-fahim7640/
 github: https://github.com/abdullahFahim19/
 orcid: https://orcid.org/0009-0003-8210-9930
 facebook: http://facebook.com/abdsfahim
-youtube: ''
+youtube: https://www.youtube.com/@abdsfahim
 resume: ''
 fiverr: http://fiverr.com/asfahimbd
 youtube_channel: http://youtube.com/@abdsfahim
