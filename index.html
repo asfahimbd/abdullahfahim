@@ -489,9 +489,8 @@ function parseFM(rawText){
   return{fm,body};
 }
 
-/* Parse YAML list (roles under same org) — robust version */
+/* Parse YAML list (roles under same org) — handles block scalars (|-, |, >-, >) */
 function parseRolesList(rawText){
-  // Normalize line endings using split/join (no regex needed)
   const txt = rawText.split('\r\n').join('\n').split('\r').join('\n');
   if(txt.indexOf('\nroles:') === -1) return [];
 
@@ -509,7 +508,7 @@ function parseRolesList(rawText){
     }
     if(!line.trim()) continue;
     const indent = line.search(/\S/);
-    if(indent === 0 && /^\w/.test(line)) break; // back to root
+    if(indent === 0 && /^\w/.test(line)) break; // back to root level
     const isDash = /^\s+-/.test(line);
     if(isDash && (listIndent === -1 || indent === listIndent)){
       if(listIndent === -1) listIndent = indent;
@@ -518,8 +517,32 @@ function parseRolesList(rawText){
       const inline = line.match(/^\s+-\s+([\w_]+):\s*["']?(.*?)["']?\s*$/);
       if(inline) cur[inline[1]] = inline[2].trim();
     } else if(cur !== null && indent > listIndent){
-      const kv = line.match(/^\s+([\w_]+):\s*["']?(.*?)["']?\s*$/);
-      if(kv) cur[kv[1]] = kv[2].trim();
+      const kv = line.match(/^\s+([\w_]+):\s*(.*?)\s*$/);
+      if(kv){
+        const key = kv[1];
+        let val = kv[2].trim();
+        // Handle YAML block scalars: |, |- , |+, >, >-, >+
+        if(/^[|>][+\-]?$/.test(val)){
+          const fold = val.startsWith('>');
+          const strip = val.includes('-');
+          const blockLines = [];
+          let blockIndent = -1;
+          while(i+1 < lines.length){
+            const nxt = lines[i+1];
+            if(!nxt.trim()){ blockLines.push(''); i++; continue; }
+            const ni = nxt.search(/\S/);
+            if(blockIndent === -1) blockIndent = ni;
+            if(ni < blockIndent) break; // dedented = end of block
+            blockLines.push(nxt.slice(blockIndent));
+            i++;
+          }
+          if(strip){ while(blockLines.length && !blockLines[blockLines.length-1].trim()) blockLines.pop(); }
+          cur[key] = fold ? blockLines.join(' ').replace(/\s+/g,' ').trim() : blockLines.join('\n').trim();
+        } else {
+          if((val.startsWith('"')&&val.endsWith('"'))||(val.startsWith("'")&&val.endsWith("'"))) val=val.slice(1,-1);
+          cur[key] = val;
+        }
+      }
     }
   }
   if(cur && Object.keys(cur).length > 0) items.push(cur);
@@ -1040,10 +1063,14 @@ function buildYearLabel(startDate, endDate, isCurrent){
 function fmtDate(s){
   if(!s)return'';
   const raw=String(s).trim();
-  // If it's already just a year or short string, return as-is
+  if(!raw||raw==='null'||raw==='undefined')return'';
+  // Full 4-digit year only
   if(/^\d{4}$/.test(raw))return raw;
-  // Strip time part (T...) and parse
+  // 2-digit year → treat as 20xx
+  if(/^\d{2}$/.test(raw))return'20'+raw;
+  // Strip time part (T...) and parse date portion only
   const datePart=raw.split('T')[0].split(' ')[0];
+  if(!/^\d{4}-\d{2}/.test(datePart))return datePart; // not ISO format, return raw
   const d=new Date(datePart+'T00:00:00Z');
   if(isNaN(d.getTime()))return datePart;
   const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -1331,7 +1358,32 @@ function renderAllPage(key,sub){
 }
 
 /* ══ DETAIL ══ */
-function md2html(md){if(!md)return'';return md.replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`(.+?)`/g,'<code>$1</code>').replace(/^\- (.+)$/gm,'<li>$1</li>').replace(/(<li>[\s\S]+?<\/li>)/g,'<ul>$1</ul>').replace(/\n\n/g,'</p><p>')+'</p>';}
+function md2html(md){
+  if(!md)return'';
+  // Fix backslash paths (CMS sometimes saves \assets\ instead of /assets/)
+  md=md.replace(/\\assets\\/g,'/assets/').replace(/\\assets\//g,'/assets/');
+  return md
+    // Images first (before links)
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g,(_,alt,src)=>{
+      const s=fixImg(src.trim());
+      return`<img src="${s}" alt="${alt}" style="max-width:100%;border-radius:8px;margin:.5rem 0">`;
+    })
+    // Links
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>')
+    // Headings
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^# (.+)$/gm,'<h1>$1</h1>')
+    // Bold / italic / code
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/`(.+?)`/g,'<code>$1</code>')
+    // Lists
+    .replace(/^\- (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>[\s\S]+?<\/li>)/g,'<ul>$1</ul>')
+    // Paragraphs
+    .replace(/\n\n/g,'</p><p>')+'</p>';
+}
 function getYtId(url){const m=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);return m?m[1]:url;}
 /* ── Gallery slider ── */
 let _gal={};
@@ -1462,7 +1514,7 @@ function renderExpDetail(id){
           <strong style="font-size:1rem;color:var(--ink)">${r.role||''}</strong>
         </div>
         ${dateStr?`<div style="margin-bottom:.45rem"><span class="edu-pill">📅 ${dateStr}</span></div>`:''}
-        ${r.description?`<p style="font-size:.86rem;color:var(--ink2);line-height:1.7;margin-bottom:.5rem">${r.description}</p>`:''}
+        ${r.description?`<div style="font-size:.86rem;color:var(--ink2);line-height:1.7;margin-bottom:.5rem">${md2html(r.description)}</div>`:''}
         ${cert?`<div style="margin-top:.3rem"><button onclick="openImgLightbox('${cert}')" style="display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .7rem;border-radius:6px;border:1px solid var(--border2);background:var(--surface2);color:var(--ink2);font-size:.73rem;font-weight:600;cursor:pointer;font-family:inherit">📜 View Certificate</button></div>`:''}
       </div>`;
     }).join('');
@@ -1478,7 +1530,7 @@ function renderExpDetail(id){
       </div>
       ${dateStr?`<div style="margin-bottom:.45rem"><span class="edu-pill">📅 ${dateStr}</span></div>`:''}
       ${item.location?`<div style="font-size:.8rem;color:var(--ink3);margin-bottom:.5rem;display:flex;align-items:center">${LOC_ICON_MD}${item.location}</div>`:''}
-      ${item.description?`<p style="font-size:.87rem;color:var(--ink2);line-height:1.7;margin-bottom:.5rem">${item.description}</p>`:''}
+      ${item.description?`<div style="font-size:.87rem;color:var(--ink2);line-height:1.7;margin-bottom:.5rem">${md2html(item.description)}</div>`:''}
       ${cert?`<div style="margin-top:.3rem"><button onclick="openImgLightbox('${cert}')" style="display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .7rem;border-radius:6px;border:1px solid var(--border2);background:var(--surface2);color:var(--ink2);font-size:.73rem;font-weight:600;cursor:pointer;font-family:inherit">📜 View Certificate</button></div>`:''}
     </div>`;
   }
