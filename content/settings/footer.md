@@ -1,3 +1,3 @@
 ---
-footer_text: © 2026 Abdullah Shadek Fahim
+footer_text: © Abdullah Shadek Fahim - Last update on October, 2026
 ---
