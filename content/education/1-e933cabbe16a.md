@@ -6,7 +6,7 @@ degree: Secondary School Certificate (Science)
 passing: '2017'
 location: Abdur Rahman Rd, Chattogram, Bangladesh
 gpa: 5.00/5.00
-rank: General Board Scholarship
+rank: ''
 logo: /assets/images/pasted-image-1779131540791.png
 icon: 🎓
 icon_bg: var(--blue-l)
