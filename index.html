@@ -151,6 +151,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .exp-type.voluntary{background:var(--teal-l);color:var(--teal)}
 .exp-type.internship,.exp-type.parttime{background:var(--amber-l);color:var(--amber)}
 .exp-type.research{background:var(--purple-l);color:var(--purple)}
+.exp-type.ambassador{background:#fff4e0;color:#b45309}
 .exp-role-divider{height:1px;background:var(--border);margin:.42rem 0}
 .exp-cta{margin-top:auto;padding-top:.55rem;color:var(--blue);font-weight:700;font-size:.74rem;display:flex;align-items:center;gap:.28rem}
 
@@ -636,7 +637,9 @@ async function fetchEducation(){
     const yearMatch=rawPassing.match(/\b(\d{4})\b/);
     const passingYear=yearMatch?yearMatch[1]:rawPassing;
     return{level:fm.level||'',institution:fm.institution||'',degree:fm.degree||'',
-      passing:passingYear,gpa:fm.gpa||'',rank:fm.rank||'',location:fm.location||'',icon:fm.icon||'🎓',iconBg:fm.icon_bg||'var(--blue-l)',
+      passing:passingYear,gpa:fm.gpa||'',rank:fm.rank||'',location:fm.location||'',
+      website:fm.website||'',
+      icon:fm.icon||'🎓',iconBg:fm.icon_bg||'var(--blue-l)',
       logo:fixImg(fm.logo||''),     // small logo for homepage icon
       photo:fixImg(fm.photo||''),
      certificate:fixImg(fm.certificate||''),transcript:fixImg(fm.transcript||''),   // large photo for modal
@@ -991,6 +994,7 @@ function renderHome(loading=false){
             ${e.rank?`<span class="edu-pill">🏅 ${e.rank}</span>`:''}
             ${e.location?`<span class="edu-pill" style="display:inline-flex;align-items:center">${LOC_ICON_SM}${e.location}</span>`:''}
           </div>
+          ${e.website?`<div style="margin-top:.2rem"><a href="${e.website}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--blue);text-decoration:none;font-size:.65rem;font-weight:500;display:inline-flex;align-items:center;gap:.18rem">🌐 ${expHost(e.website)}</a></div>`:''}
         </div>
       </div>`).join('')}
     </div>
@@ -1043,6 +1047,7 @@ function typeClass(t){
   if(t.includes('intern'))return'internship';
   if(t.includes('part'))return'parttime';
   if(t.includes('research'))return'research';
+  if(t.includes('ambassador'))return'ambassador';
   return'fulltime';
 }
 
@@ -1515,7 +1520,7 @@ function renderDetail(id){
   if(item.pdfFile)setTimeout(()=>renderPdfCanvas(item.pdfFile,'pdf-canvas-proj-'+item.id),100);
 }
 function renderAllExpPage(typeFilter){
-  const expTypes=['Full Time','Part Time','Voluntary','Internship','Research','Other'];
+  const expTypes=['Full Time','Part Time','Voluntary','Internship','Research','Ambassador','Other'];
   let items=ALL_EXPERIENCES;
   if(typeFilter){
     items=ALL_EXPERIENCES.filter(e=>{
