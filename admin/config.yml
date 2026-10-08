@@ -25,6 +25,10 @@ collections:
           - {label: "Tagline",           name: "tagline",    widget: "string",  required: false}
           - {label: "Short Bio",         name: "bio",        widget: "text",    required: false}
           - {label: "Profile Photo",     name: "photo",      widget: "image",   required: false}
+          - {label: "Photo Focus X (0=left · 50=center · 100=right)", name: "photo_focus_x", widget: "number", value_type: "int", min: 0, max: 100, default: 50, required: false}
+          - {label: "Photo Focus Y (0=top · 50=center · 100=bottom)",  name: "photo_focus_y", widget: "number", value_type: "int", min: 0, max: 100, default: 50, required: false}
+          - {label: "CV / Resume PDF (upload)", name: "cv_file", widget: "image", required: false,
+             hint: "Upload your CV/resume PDF directly — takes priority over the URL below"}
           - {label: "Email",             name: "email",      widget: "string",  required: false}
           - {label: "LinkedIn URL",      name: "linkedin",   widget: "string",  required: false}
           - {label: "GitHub URL",        name: "github",     widget: "string",  required: false}
@@ -49,6 +53,8 @@ collections:
       - {label: "Degree / Group",    name: "degree",      widget: "string",  required: false}
       - {label: "Passing Year",      name: "passing",     widget: "string",  required: false}
       - {label: "GPA / Result",      name: "gpa",         widget: "string",  required: false}
+      - {label: "Rank / Position",   name: "rank",        widget: "string",  required: false,
+         hint: "e.g. 3rd / 95 students — leave blank to hide"}
       - {label: "Icon (emoji)",      name: "icon",        widget: "string",  default: "🎓",       required: false}
       - label: "Icon Background Color"
         name: "icon_bg"
@@ -116,22 +122,11 @@ collections:
     folder: "content/skills"
     create: true
     slug: "{{slug}}"
-    summary: "{{name}} — {{category}}"
+    summary: "{{name}}"
     fields:
       - {label: "Skill Name",        name: "name",        widget: "string",  required: false}
-      - label: "Category"
-        name: "category"
-        widget: "select"
-        required: false
-        options:
-          - {label: "Academic",    value: "Academic"}
-          - {label: "Research",    value: "Research"}
-          - {label: "Freelance",   value: "Freelance"}
-          - {label: "Professional / Soft", value: "Professional"}
-        default: "Academic"
-      - {label: "Logo / Icon Image", name: "logo",        widget: "image",   required: false}
       - {label: "Short Description", name: "description", widget: "text",    required: false,
-         hint: "Shows in popup on hover"}
+         hint: "Brief description of this skill"}
       - {label: "Order",             name: "order",       widget: "number",  default: 99, required: false}
 
   # ══════════════════════════════════════════
@@ -232,11 +227,14 @@ collections:
       - {label: "Image Focal Y (0-100)", name: "focus_y", widget: "number", default: 50, required: false,
          hint: "Vertical focal point for image crop"}
 
-      - label: "Gallery Images"
+      - {label: "Issuer / Provider",   name: "issuer",      widget: "string",  required: false,
+         hint: "For certificates: who issued this (e.g. Coursera, IEEE, BUET)"}
+
+      - label: "Slides / Gallery Images"
         name: "gallery"
         widget: "list"
         required: false
-        field: {label: "Image", name: "image", widget: "image"}
+        field: {label: "Image / Slide", name: "image", widget: "image"}
 
       - {label: "Short Description", name: "description", widget: "text",     required: false}
       - {label: "Full Details",      name: "body",        widget: "markdown", required: false}
