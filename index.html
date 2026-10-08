@@ -272,7 +272,11 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 /* ════ PDF EMBED ════ */
 .pdf-embed-wrap{width:100%;margin-top:1.2rem;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--surface2)}
 .pdf-embed-title{padding:.7rem 1rem;font-size:.8rem;font-weight:700;color:var(--ink2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.4rem}
+.pdf-embed-body{position:relative}
 .pdf-embed{display:block;width:100%;height:680px;border:none;background:#fff}
+.pdf-spinner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;z-index:2;min-height:200px;pointer-events:none}
+.pdf-spin-ring{width:34px;height:34px;border:3px solid var(--border2);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto .7rem}
+@keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:600px){.pdf-embed{height:500px}}
 
 /* Focal point drag */
@@ -1355,7 +1359,7 @@ function renderDetail(id){
     </div>
     ${item.youtube?`<div class="detail-section"><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-bottom:.4rem">Video</h3><div class="yt-wrap"><iframe src="https://www.youtube.com/embed/${getYtId(item.youtube)}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture" allowfullscreen></iframe></div></div>`:''}
     ${item.body?`<div class="detail-section"><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-bottom:.82rem">Details</h3><div class="detail-body">${md2html(item.body)}</div></div>`:''}
-    ${item.pdfFile?`<div class="detail-section"><div class="pdf-embed-wrap"><div class="pdf-embed-title">📄 ${item.pdfTitle||'Document'}</div><iframe class="pdf-embed" src="${item.pdfFile}#toolbar=0&navpanes=0&scrollbar=1" title="${item.pdfTitle||'Document'}" loading="lazy"></iframe></div></div>`:''}
+    ${item.pdfFile?`<div class="detail-section"><div class="pdf-embed-wrap"><div class="pdf-embed-title">📄 ${item.pdfTitle||'Document'}</div><div class="pdf-embed-body"><div class="pdf-spinner" id="pdf-sp-${item.id}"><div style="text-align:center"><div class="pdf-spin-ring"></div><div style="font-size:.78rem;color:var(--ink3)">Loading document…</div></div></div><iframe class="pdf-embed" src="https://docs.google.com/viewer?url=${encodeURIComponent(item.pdfFile)}&embedded=true" title="${item.pdfTitle||'Document'}" onload="(function(){var s=document.getElementById('pdf-sp-${item.id}');if(s)s.style.display='none';})()"></iframe></div></div></div>`:''}
   </div>`;
   window.scrollTo(0,0);
 }
@@ -1626,74 +1630,48 @@ function compressImage(file,maxW=1200,quality=0.82){
 function renderFocalTool(){
   const photo=HERO.photo||'';
   document.getElementById('app').innerHTML=`
-  <div class="detail-page" style="max-width:680px">
+  <div class="detail-page" style="max-width:700px">
     <button onclick="goHome()" class="btn btn-g" style="margin-bottom:1.2rem">← Home</button>
     <h2 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-bottom:.3rem">Photo Focal Point</h2>
-    <p style="font-size:.82rem;color:var(--ink3);margin-bottom:1.2rem">Drag the circle to set the crop focal point. Copy the X/Y values and paste them into the CMS Profile Info fields.</p>
+    <p style="font-size:.82rem;color:var(--ink3);margin-bottom:1.2rem">Drag the circle on the photo to set the crop focal point, then click <strong>Save Focal Point</strong> — saves directly to your site, no copy-pasting needed.</p>
     ${photo?`
     <div style="display:flex;gap:1.4rem;flex-wrap:wrap;align-items:flex-start">
       <div style="flex:1;min-width:220px">
         <div style="font-size:.7rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem">Drag to set focal point</div>
         <div id="focal-container" style="position:relative;border-radius:10px;overflow:hidden;cursor:crosshair;user-select:none;touch-action:none;aspect-ratio:4/3;background:var(--surface2)">
           <img id="focal-img" src="${photo}" style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none" draggable="false">
-          <div id="focal-dot" style="position:absolute;width:26px;height:26px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 0 0 2px var(--blue),0 2px 8px rgba(0,0,0,.5);transform:translate(-50%,-50%);cursor:move;z-index:5;transition:box-shadow .15s"></div>
+          <div id="focal-dot" style="position:absolute;width:26px;height:26px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 0 0 2px var(--blue),0 2px 8px rgba(0,0,0,.5);transform:translate(-50%,-50%);cursor:move;z-index:5"></div>
         </div>
       </div>
-      <div style="flex:0 0 140px">
+      <div style="flex:0 0 160px">
         <div style="font-size:.7rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem">Avatar preview</div>
         <div style="width:110px;height:110px;border-radius:50%;overflow:hidden;border:3px solid var(--border);background:var(--surface2)">
           <img id="focal-preview" src="${photo}" style="width:100%;height:100%;object-fit:cover" draggable="false">
         </div>
-        <div style="margin-top:1rem;display:flex;flex-direction:column;gap:.5rem">
-          <div style="font-size:.7rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em">Values to copy</div>
-          <label style="font-size:.78rem;color:var(--ink2)">Photo Focus X
-            <div style="display:flex;align-items:center;gap:.4rem;margin-top:.2rem">
-              <input id="focal-x" type="number" min="0" max="100" value="50" style="width:60px;padding:.25rem .4rem;border:1.5px solid var(--border);border-radius:6px;font-size:.85rem;background:var(--bg);color:var(--ink)" oninput="applyFocalFromInput()">
-              <button onclick="copyFocal('x')" style="padding:.25rem .5rem;border-radius:6px;font-size:.72rem;font-weight:600;border:1.5px solid var(--border2);background:var(--surface2);cursor:pointer;color:var(--ink2)">Copy</button>
-            </div>
-          </label>
-          <label style="font-size:.78rem;color:var(--ink2)">Photo Focus Y
-            <div style="display:flex;align-items:center;gap:.4rem;margin-top:.2rem">
-              <input id="focal-y" type="number" min="0" max="100" value="50" style="width:60px;padding:.25rem .4rem;border:1.5px solid var(--border);border-radius:6px;font-size:.85rem;background:var(--bg);color:var(--ink)" oninput="applyFocalFromInput()">
-              <button onclick="copyFocal('y')" style="padding:.25rem .5rem;border-radius:6px;font-size:.72rem;font-weight:600;border:1.5px solid var(--border2);background:var(--surface2);cursor:pointer;color:var(--ink2)">Copy</button>
-            </div>
-          </label>
-          <div id="focal-copied" style="font-size:.72rem;color:var(--blue);min-height:1rem;font-weight:600"></div>
+        <div style="margin-top:1rem;display:flex;flex-direction:column;gap:.6rem">
+          <div style="font-size:.75rem;color:var(--ink3)">Position: <span id="focal-pos" style="color:var(--ink);font-weight:700">50%, 50%</span></div>
+          <button id="focal-save-btn" onclick="saveFocalPoint()" style="padding:.6rem 1rem;border-radius:8px;font-size:.82rem;font-weight:700;border:none;background:var(--blue);color:#fff;cursor:pointer;transition:all .18s">💾 Save Focal Point</button>
+          <div id="focal-status" style="font-size:.74rem;min-height:1.1rem;font-weight:600;line-height:1.35"></div>
         </div>
       </div>
     </div>`:`<div style="padding:1.5rem;background:var(--surface2);border-radius:10px;color:var(--ink3);font-size:.85rem">No profile photo set yet. Upload one via the CMS dashboard first.</div>`}
   </div>`;
   if(!photo)return;
-  // Initialize dot at stored HERO focal position (or center)
   const initX=HERO.photoFocusX!=null?HERO.photoFocusX:50;
   const initY=HERO.photoFocusY!=null?HERO.photoFocusY:50;
   const dot=document.getElementById('focal-dot');
   const container=document.getElementById('focal-container');
-  const xIn=document.getElementById('focal-x');
-  const yIn=document.getElementById('focal-y');
   const preview=document.getElementById('focal-preview');
+  const posLabel=document.getElementById('focal-pos');
+  let curX=initX,curY=initY;
   function setFocal(px,py){
-    const rx=Math.max(0,Math.min(100,Math.round(px)));
-    const ry=Math.max(0,Math.min(100,Math.round(py)));
-    dot.style.left=rx+'%';
-    dot.style.top=ry+'%';
-    xIn.value=rx;yIn.value=ry;
-    preview.style.objectPosition=rx+'% '+ry+'%';
-    document.getElementById('focal-img').style.objectPosition=rx+'% '+ry+'%';
+    curX=Math.max(0,Math.min(100,Math.round(px)));
+    curY=Math.max(0,Math.min(100,Math.round(py)));
+    dot.style.left=curX+'%';dot.style.top=curY+'%';
+    preview.style.objectPosition=curX+'% '+curY+'%';
+    document.getElementById('focal-img').style.objectPosition=curX+'% '+curY+'%';
+    posLabel.textContent=curX+'%, '+curY+'%';
   }
-  window.applyFocalFromInput=function(){setFocal(parseFloat(xIn.value||50),parseFloat(yIn.value||50));}
-  window.copyFocal=function(axis){
-    const v=axis==='x'?xIn.value:yIn.value;
-    navigator.clipboard.writeText(v).then(()=>{
-      const el=document.getElementById('focal-copied');
-      el.textContent='Copied '+axis.toUpperCase()+': '+v;
-      setTimeout(()=>el.textContent='',2000);
-    }).catch(()=>{
-      const el=document.getElementById('focal-copied');
-      el.textContent=axis.toUpperCase()+' = '+v;
-    });
-  }
-  setFocal(initX,initY);
   function pctFromEvent(e){
     const r=container.getBoundingClientRect();
     const cx=(e.touches?e.touches[0].clientX:e.clientX)-r.left;
@@ -1701,12 +1679,67 @@ function renderFocalTool(){
     return{x:cx/r.width*100,y:cy/r.height*100};
   }
   let dragging=false;
-  container.addEventListener('mousedown',e=>{dragging=true;const{x,y}=pctFromEvent(e);setFocal(x,y);e.preventDefault();});
-  container.addEventListener('touchstart',e=>{dragging=true;const{x,y}=pctFromEvent(e);setFocal(x,y);e.preventDefault();},{passive:false});
-  window.addEventListener('mousemove',e=>{if(dragging){const{x,y}=pctFromEvent(e);setFocal(x,y);}});
-  window.addEventListener('touchmove',e=>{if(dragging){const{x,y}=pctFromEvent(e);setFocal(x,y);e.preventDefault();}},{passive:false});
+  container.addEventListener('mousedown',e=>{dragging=true;const p=pctFromEvent(e);setFocal(p.x,p.y);e.preventDefault();});
+  container.addEventListener('touchstart',e=>{dragging=true;const p=pctFromEvent(e);setFocal(p.x,p.y);e.preventDefault();},{passive:false});
+  window.addEventListener('mousemove',e=>{if(dragging){const p=pctFromEvent(e);setFocal(p.x,p.y);}});
+  window.addEventListener('touchmove',e=>{if(dragging){const p=pctFromEvent(e);setFocal(p.x,p.y);e.preventDefault();}},{passive:false});
   window.addEventListener('mouseup',()=>dragging=false);
   window.addEventListener('touchend',()=>dragging=false);
+  setFocal(initX,initY);
+  window.saveFocalPoint=async function(){
+    const btn=document.getElementById('focal-save-btn');
+    const status=document.getElementById('focal-status');
+    btn.disabled=true;btn.textContent='Saving…';
+    status.style.color='var(--ink3)';status.textContent='Saving to CMS…';
+    let token=null;
+    try{
+      const tryKeys=['sveltia-cms:github:token','sveltia-cms:user','netlify-cms-user','decap-cms-user','sveltia-cms:token'];
+      for(const k of tryKeys){
+        const v=localStorage.getItem(k);if(!v)continue;
+        if(v.startsWith('ghp_')||v.startsWith('gho_')){token=v;break;}
+        try{const o=JSON.parse(v);const t=o?.token||o?.access_token;if(t){token=t;break;}}catch(e){}
+      }
+      if(!token){
+        for(const k of Object.keys(localStorage)){
+          const v=localStorage.getItem(k);if(!v)continue;
+          if(v.startsWith('ghp_')||v.startsWith('gho_')){token=v;break;}
+          try{const o=JSON.parse(v);const t=o?.token||o?.access_token;if(t&&(String(t).startsWith('ghp_')||String(t).startsWith('gho_'))){token=t;break;}}catch(e){}
+        }
+      }
+    }catch(e){}
+    if(!token){
+      status.style.color='var(--rose)';
+      status.innerHTML='Not logged in. <a href="/admin/" style="color:var(--blue);font-weight:700">Open Dashboard</a> and log in first, then try again.';
+      btn.disabled=false;btn.textContent='💾 Save Focal Point';return;
+    }
+    try{
+      const apiUrl='https://api.github.com/repos/asfahimbd/abdullahfahim/contents/content/settings/hero.md';
+      const hdrs={'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'};
+      const getRes=await fetch(apiUrl,{headers:hdrs});
+      if(!getRes.ok)throw new Error('Could not read CMS file ('+getRes.status+')');
+      const fileData=await getRes.json();
+      let content=decodeURIComponent(escape(atob(fileData.content.replace(/\n/g,''))));
+      const updField=(yaml,key,val)=>{
+        const re=new RegExp('^'+key+'\\s*:.*$','m');
+        return re.test(yaml)?yaml.replace(re,key+': '+val):yaml.replace(/^(---\s*)$/m,key+': '+val+'\n$1');
+      };
+      content=updField(content,'photo_focus_x',curX);
+      content=updField(content,'photo_focus_y',curY);
+      const putRes=await fetch(apiUrl,{method:'PUT',headers:hdrs,body:JSON.stringify({
+        message:'Update photo focal point ('+curX+'%, '+curY+'%)',
+        content:btoa(unescape(encodeURIComponent(content))),
+        sha:fileData.sha,branch:'main'
+      })});
+      if(!putRes.ok)throw new Error('Save failed ('+putRes.status+')');
+      HERO.photoFocusX=curX;HERO.photoFocusY=curY;
+      status.style.color='var(--teal)';status.textContent='✓ Saved! Site updates in ~1 min.';
+      btn.textContent='✓ Saved';
+      setTimeout(()=>{btn.disabled=false;btn.textContent='💾 Save Focal Point';},3500);
+    }catch(err){
+      status.style.color='var(--rose)';status.textContent='Error: '+err.message;
+      btn.disabled=false;btn.textContent='💾 Save Focal Point';
+    }
+  };
 }
 
 function scrollToSkills(){
