@@ -17,4 +17,6 @@ gallery: []
 description: ''
 youtube: ''
 link: ''
+pdf_file: /assets/images/191131_defense.pdf
+pdf_title: Presentation Slide
 ---
