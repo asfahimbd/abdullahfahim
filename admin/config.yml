@@ -2,6 +2,8 @@ backend:
   name: github
   repo: asfahimbd/abdullahfahim
   branch: main
+  client_id: Ov23liPSGiyh6XED26AR
+  client_secret: 1c95cf1cc4b0af9a06830204bc7971d4fc75a7fb
   base_url: https://oauth-proxy.asfahimbd.workers.dev
 
 media_folder: "assets/images"
@@ -9,227 +11,224 @@ public_folder: "/assets/images"
 
 collections:
 
-  # ══════════════════════════════
+  # ══════════════════════════════════════════
   # 1. SITE SETTINGS
-  # ══════════════════════════════
+  # ══════════════════════════════════════════
   - name: "site_settings"
     label: "⚙ Site Settings"
     files:
-      - label: "Hero / Profile Info"
+      - label: "Profile Info"
         name: "hero"
         file: "content/settings/hero.md"
         fields:
-          - {label: "Full Name",           name: "name",            widget: "string",   required: false}
-          - {label: "Tagline",             name: "tagline",         widget: "string",   required: false}
-          - {label: "Bio",                 name: "bio",             widget: "string",   required: false}
-          - {label: "Profile Photo",       name: "photo",           widget: "image",    required: false}
-          - {label: "Email",               name: "email",           widget: "string",   required: false}
-          - {label: "LinkedIn URL",        name: "linkedin",        widget: "string",   required: false}
-          - {label: "GitHub URL",          name: "github",          widget: "string",   required: false}
-          - {label: "ORCID ID",            name: "orcid",           widget: "string",   required: false}
-          - {label: "Fiverr URL",          name: "fiverr",          widget: "string",   required: false}
-          - {label: "Facebook URL",        name: "facebook",        widget: "string",   required: false}
-          - {label: "YouTube Channel URL", name: "youtube_channel", widget: "string",   required: false}
-          - {label: "Resume / CV (PDF)",   name: "resume",          widget: "file",     required: false}
+          - {label: "Full Name",         name: "name",       widget: "string",  required: false}
+          - {label: "Tagline",           name: "tagline",    widget: "string",  required: false}
+          - {label: "Short Bio",         name: "bio",        widget: "text",    required: false}
+          - {label: "Profile Photo",     name: "photo",      widget: "image",   required: false}
+          - {label: "Email",             name: "email",      widget: "string",  required: false}
+          - {label: "LinkedIn URL",      name: "linkedin",   widget: "string",  required: false}
+          - {label: "GitHub URL",        name: "github",     widget: "string",  required: false}
+          - {label: "ORCID URL",         name: "orcid",      widget: "string",  required: false}
+          - {label: "Facebook URL",      name: "facebook",   widget: "string",  required: false}
+          - {label: "YouTube URL",       name: "youtube",    widget: "string",  required: false}
+          - {label: "Resume PDF URL",    name: "resume",     widget: "string",  required: false,
+             hint: "Google Drive / Docs share link"}
 
-  # ══════════════════════════════
+  # ══════════════════════════════════════════
   # 2. EDUCATION
-  # ══════════════════════════════
+  # ══════════════════════════════════════════
   - name: "education"
     label: "🎓 Education"
     folder: "content/education"
     create: true
-    slug: "{{year}}-{{slug}}"
+    slug: "{{order}}-{{slug}}"
     fields:
-      - {label: "Level", name: "level", widget: "select", required: false,
-         options: ["University","College","School","Other"], default: "University"}
-      - {label: "Institution Name", name: "institution", widget: "string",   required: false}
-      - {label: "Degree / Group",   name: "degree",      widget: "string",   required: false}
-      - label: "Passing Year"
-        name: "passing"
-        widget: "datetime"
+      - {label: "Order (1=top)",     name: "order",       widget: "number",  default: 1,          required: false}
+      - {label: "Level",             name: "level",       widget: "select",  options: ["University","College","School","Other"], default: "University", required: false}
+      - {label: "Institution Name",  name: "institution", widget: "string",  required: false}
+      - {label: "Degree / Group",    name: "degree",      widget: "string",  required: false}
+      - {label: "Passing Year",      name: "passing",     widget: "string",  required: false}
+      - {label: "GPA / Result",      name: "gpa",         widget: "string",  required: false}
+      - {label: "Icon (emoji)",      name: "icon",        widget: "string",  default: "🎓",       required: false}
+      - label: "Icon Background Color"
+        name: "icon_bg"
+        widget: "select"
         required: false
-        format: "YYYY"
-        date_format: "YYYY"
-        time_format: false
-        hint: "শুধু year দেখাবে — recent year আগে আসবে"
-      - {label: "GPA / Result",     name: "gpa",         widget: "string",   required: false}
-      - label: "Institution Logo (Small — homepage icon)"
-        name: "logo"
-        widget: "image"
-        required: false
-        hint: "Homepage card এ emoji এর বদলে এই logo দেখাবে। Square PNG সবচেয়ে ভালো।"
-      - label: "Institution Photo (Large — popup modal)"
-        name: "photo"
-        widget: "image"
-        required: false
-        hint: "Click করলে popup এ এই ছবি দেখাবে।"
-      - {label: "Icon (emoji — logo না থাকলে দেখাবে)", name: "icon", widget: "string", required: false, default: "🎓"}
-      - {label: "Icon Background", name: "icon_bg", widget: "select", required: false,
-         options: [{label: "Blue", value: "var(--blue-l)"},{label: "Teal", value: "var(--teal-l)"},{label: "Amber", value: "var(--amber-l)"},{label: "Rose", value: "var(--rose-l)"}],
-         default: "var(--blue-l)"}
-      - {label: "Description",     name: "description", widget: "string",   required: false}
-      - {label: "Subjects (comma separated)", name: "subjects", widget: "string", required: false}
+        options:
+          - {label: "Blue",   value: "var(--blue-l)"}
+          - {label: "Teal",   value: "var(--teal-l)"}
+          - {label: "Amber",  value: "var(--amber-l)"}
+          - {label: "Rose",   value: "var(--rose-l)"}
+        default: "var(--blue-l)"
+      - {label: "Institution Photo / Logo", name: "photo",       widget: "image",   required: false}
+      - {label: "Certificate (PDF/Image)",  name: "certificate", widget: "image",   required: false,
+         hint: "Upload your degree certificate or relevant document"}
+      - {label: "Description",       name: "description", widget: "text",    required: false}
+      - {label: "Subjects Studied",  name: "subjects",    widget: "string",  required: false,
+         hint: "Comma separated — e.g. Physics, Chemistry, Mathematics"}
 
-  # ══════════════════════════════
+  # ══════════════════════════════════════════
   # 3. EXPERIENCES
-  # ══════════════════════════════
+  # ══════════════════════════════════════════
   - name: "experiences"
     label: "💼 Experiences"
     folder: "content/experiences"
     create: true
-    slug: "{{year}}{{month}}{{day}}-{{slug}}"
-    summary: "{{organization}}"
+    slug: "{{slug}}"
     fields:
-      - {label: "Organization/Company", name: "organization", widget: "string",  required: false}
-      - {label: "Organization Logo",    name: "logo",         widget: "image",   required: false}
-      - {label: "Location",             name: "location",     widget: "string",  required: false}
-      - label: "Roles / Positions"
+      - {label: "Organization",      name: "organization", widget: "string",  required: false}
+      - {label: "Logo",              name: "logo",         widget: "image",   required: false}
+      - {label: "Location",          name: "location",     widget: "string",  required: false}
+      - label: "Roles"
         name: "roles"
         widget: "list"
         required: false
-        hint: "একই company তে একাধিক role — সবচেয়ে নতুনটা আগে রাখো"
         fields:
-          - {label: "Role/Position",   name: "role",              widget: "string",   required: false}
-          - {label: "Employment Type", name: "employment_type",   widget: "select",   required: false,
-             options: ["Full Time","Part Time","Voluntary","Internship","Research","Other"], default: "Full Time"}
-          - {label: "Start Date",      name: "start_date",        widget: "datetime", required: false,
-             format: "DD MMMM, YYYY", date_format: "DD MMMM, YYYY", time_format: false}
-          - {label: "End Date",        name: "end_date",          widget: "datetime", required: false,
-             format: "DD MMMM, YYYY", date_format: "DD MMMM, YYYY", time_format: false,
-             hint: "খালি রাখলে 'Present' দেখাবে"}
-          - {label: "Description",     name: "description",       widget: "string",   required: false}
-          - {label: "Show Excerpt on Homepage?", name: "show_excerpt", widget: "boolean", required: false, default: false}
-      - {label: "Full Details", name: "body", widget: "markdown", required: false}
+          - {label: "Role / Title",        name: "role",            widget: "string",  required: false}
+          - label: "Employment Type"
+            name: "employment_type"
+            widget: "select"
+            required: false
+            options: ["Full Time","Part Time","Voluntary","Internship","Research","Other"]
+          - {label: "Start Date",          name: "start_date",      widget: "datetime", required: false}
+          - {label: "End Date",            name: "end_date",        widget: "datetime", required: false}
+          - {label: "Currently Working",   name: "is_current",      widget: "boolean",  default: false, required: false}
+          - {label: "Show Excerpt on Card",name: "show_excerpt",    widget: "boolean",  default: true,  required: false}
+          - {label: "Description",         name: "description",     widget: "text",     required: false}
+      - label: "Skills Used"
+        name: "skills"
+        widget: "list"
+        required: false
+        hint: "Type skill names. These can be selected from the Skills collection or typed manually."
+        field: {label: "Skill", name: "skill", widget: "string"}
+      - {label: "Full Details (Markdown)", name: "body",      widget: "markdown", required: false}
 
-  # ══════════════════════════════
+  # ══════════════════════════════════════════
   # 4. SKILLS
-  # ══════════════════════════════
+  # ══════════════════════════════════════════
   - name: "skills"
     label: "💡 Skills"
     folder: "content/skills"
     create: true
     slug: "{{slug}}"
-    summary: "{{category}} — {{name}}"
+    summary: "{{name}} — {{category}}"
     fields:
-      - {label: "Skill Name",   name: "name",        widget: "string",  required: false}
-      - {label: "Category",     name: "category",    widget: "select",  required: false,
-         options: [{label: "Academic Skills", value: "Academic"},{label: "Research Tools", value: "Research"},{label: "Freelance Tools", value: "Freelance"},{label: "Professional Skills", value: "Soft"}],
-         default: "Academic"}
-      - {label: "Software Logo", name: "logo",       widget: "image",   required: false,
-         hint: "Chip এ ছোট icon হিসেবে দেখাবে। Transparent PNG সবচেয়ে ভালো।"}
-      - {label: "Description",  name: "description", widget: "string",  required: false,
-         hint: "Hover করলে tooltip এ দেখাবে।"}
-      - label: "Proof Photos"
-        name: "proof_photos"
-        widget: "list"
+      - {label: "Skill Name",        name: "name",        widget: "string",  required: false}
+      - label: "Category"
+        name: "category"
+        widget: "select"
         required: false
-        hint: "কাজের প্রমাণ ছবি — click করলে gallery modal এ দেখাবে 📷"
-        field:
-          label: "Photo"
-          name: "photo"
-          widget: "image"
-      - {label: "Full Details", name: "body",        widget: "markdown", required: false,
-         hint: "Certificate, achievement বা বিস্তারিত বিবরণ"}
-      - {label: "Order",        name: "order",       widget: "number",  required: false, default: 10}
+        options:
+          - {label: "Academic",    value: "Academic"}
+          - {label: "Research",    value: "Research"}
+          - {label: "Freelance",   value: "Freelance"}
+          - {label: "Professional / Soft", value: "Professional"}
+        default: "Academic"
+      - {label: "Logo / Icon Image", name: "logo",        widget: "image",   required: false}
+      - {label: "Short Description", name: "description", widget: "text",    required: false,
+         hint: "Shows in popup on hover"}
+      - {label: "Order",             name: "order",       widget: "number",  default: 99, required: false}
 
-  # ══════════════════════════════
-  # 5. CLIENT REVIEWS
-  # ══════════════════════════════
-  - name: "reviews"
-    label: "⭐ Client Reviews"
-    folder: "content/reviews"
+  # ══════════════════════════════════════════
+  # 5. RESEARCH INTERESTS
+  # ══════════════════════════════════════════
+  - name: "interests"
+    label: "🔬 Research Interests"
+    folder: "content/interests"
     create: true
-    slug: "{{year}}{{month}}{{day}}-{{slug}}"
-    summary: "{{stars}}★ — {{name}}"
+    slug: "{{slug}}"
+    summary: "{{name}}"
     fields:
-      - {label: "Client Name",  name: "name",     widget: "string",   required: false}
-      - {label: "Client Photo", name: "photo",    widget: "image",    required: false}
-      - {label: "Platform",     name: "platform", widget: "select",   required: false,
-         options: ["Fiverr","Upwork","LinkedIn","Direct","Other"], default: "Fiverr"}
-      - {label: "Star Rating",  name: "stars",    widget: "number",   required: false,
-         value_type: "float", min: 0, max: 5, step: 0.1, default: 5,
-         hint: "0–5 এর মধ্যে — e.g. 4.3, 4.7, 5.0"}
-      - {label: "Country",      name: "country",  widget: "select",   required: false,
-         options: [Bangladesh, USA, "United States", UK, "United Kingdom", Canada, Australia, India, Germany, France, Japan, China, "Saudi Arabia", UAE, Malaysia, Singapore, Netherlands, Sweden, Norway, Pakistan, Turkey, Italy, Spain, Brazil, "South Korea", Indonesia, Nigeria, Egypt, Qatar, Kuwait, Jordan, Bahrain, Oman, "South Africa", Kenya, Ghana]}
-      - {label: "Review Text",  name: "text",     widget: "text",     required: false}
-      - label: "Review Date"
-        name: "time"
-        widget: "datetime"
-        required: false
-        format: "MMMM YYYY"
-        date_format: "MMMM YYYY"
-        time_format: false
-        hint: "e.g. April 2025"
+      - {label: "Interest Name",     name: "name",        widget: "string",  required: false,
+         hint: "e.g. Ion Implantation, Machine Learning, Semiconductor Physics"}
+      - {label: "Short Description", name: "description", widget: "text",    required: false}
+      - {label: "Order",             name: "order",       widget: "number",  default: 99, required: false}
 
-  # ══════════════════════════════
+  # ══════════════════════════════════════════
   # 6. CUSTOM CATEGORIES
-  # ══════════════════════════════
+  # ══════════════════════════════════════════
   - name: "categories"
     label: "🗂 Custom Categories"
     folder: "content/categories"
     create: true
     slug: "{{slug}}"
+    summary: "{{icon}} {{name}} → {{parent_group}}"
     fields:
-      - {label: "Category Name", name: "name",         widget: "string",  required: false}
-      - {label: "Icon (emoji)",  name: "icon",         widget: "string",  required: false, default: "📌"}
-      - {label: "Add to Group",  name: "parent_group", widget: "select",  required: false,
-         options: [{label: "Research", value: "Research"},{label: "Projects", value: "Projects"},{label: "Training & Field Works", value: "Training"},{label: "Standalone (own tab)", value: "Standalone"}],
-         default: "Standalone"}
+      - {label: "Category Name",  name: "name",         widget: "string",  required: false}
+      - {label: "Icon (emoji)",   name: "icon",         widget: "string",  default: "📌", required: false}
+      - label: "Add to Group"
+        name: "parent_group"
+        widget: "select"
+        required: false
+        options:
+          - {label: "Research",         value: "Research"}
+          - {label: "Projects",         value: "Projects"}
+          - {label: "Experiences",      value: "Experiences"}
+          - {label: "Standalone",       value: "Standalone"}
+        default: "Standalone"
 
-  # ══════════════════════════════
-  # 7. PORTFOLIO ITEMS
-  # ══════════════════════════════
+  # ══════════════════════════════════════════
+  # 7. PORTFOLIO ITEMS (Projects, Research, etc.)
+  # ══════════════════════════════════════════
   - name: "projects"
     label: "📁 Portfolio Items"
     folder: "content/projects"
     create: true
     slug: "{{year}}{{month}}{{day}}-{{slug}}"
     fields:
-      - {label: "Title",         name: "title",          widget: "string",   required: false}
+      - {label: "Title",            name: "title",       widget: "string",  required: false}
+      - {label: "Date",             name: "date",        widget: "datetime",required: false}
+      - {label: "Pinned",           name: "pinned",      widget: "boolean", default: false, required: false}
+
       - label: "Category"
         name: "category"
         widget: "select"
         required: false
-        hint: "Homepage এ যে category দেখাচ্ছে সেটা select করো"
         options:
-          - {label: "📌 Undergraduate Thesis", value: "Undergraduate Thesis"}
-          - {label: "📰 Journal",              value: "Journal"}
-          - {label: "🎤 Conference",           value: "Conference"}
-          - {label: "🎓 Academic Project",     value: "Academic Project"}
-          - {label: "💼 Freelance Project",    value: "Freelance Project"}
-          - {label: "🎓 Training",             value: "Training"}
-          - {label: "🔬 Field Work",           value: "Field Work"}
-          - {label: "📜 Certificate",          value: "Certificate"}
-          - {label: "🎙 Technical Talk",       value: "Session"}
-          - {label: "🏆 Achievement",          value: "Award"}
-          - {label: "✏️ Custom (fill below)",  value: "Custom"}
-        default: "Freelance Project"
-      - {label: "Custom Category", name: "custom_category", widget: "string",   required: false}
-      - {label: "📌 Pin to top",  name: "pinned",           widget: "boolean",  required: false, default: false}
-      - label: "Date"
-        name: "date"
-        widget: "datetime"
+          - {label: "📄 Thesis",              value: "Thesis"}
+          - {label: "📰 Journal",             value: "Journal"}
+          - {label: "🎤 Conference",          value: "Conference"}
+          - {label: "🎓 Academic Project",    value: "Academic Project"}
+          - {label: "💼 Freelance Project",   value: "Freelance Project"}
+          - {label: "🧑‍💻 Training",           value: "Training"}
+          - {label: "🌍 Field Work",          value: "Field Work"}
+          - {label: "📜 Certificate",         value: "Certificate"}
+          - {label: "🎙 Session",             value: "Session"}
+          - {label: "🏆 Award",               value: "Award"}
+          - {label: "✏️ Custom",              value: "Custom"}
+        default: "Academic Project"
+
+      - {label: "Custom Category",   name: "custom_category", widget: "string",  required: false,
+         hint: "Only if 'Custom' selected above"}
+
+      - label: "Skills Used"
+        name: "skills"
+        widget: "list"
         required: false
-        format: "DD MMMM, YYYY"
-        date_format: "DD MMMM, YYYY"
-        time_format: false
-      - label: "Featured Image (Main)"
-        name: "image"
-        widget: "image"
+        summary: "{{fields.skill}}"
+        hint: "Add skills related to this item. Click to see all related items by skill."
+        field: {label: "Skill Name", name: "skill", widget: "string"}
+
+      - label: "Research Interests"
+        name: "research_interests"
+        widget: "list"
         required: false
-      - {label: "Focus X (0–100, বাম=0 ডান=100)", name: "focus_x", widget: "number", required: false, default: 50, min: 0, max: 100}
-      - {label: "Focus Y (0–100, উপর=0 নিচ=100)", name: "focus_y", widget: "number", required: false, default: 30, min: 0, max: 100}
-      - label: "Gallery (Additional Photos)"
+        hint: "Tag research interests. Use exact names from Research Interests collection."
+        field: {label: "Interest", name: "interest", widget: "string"}
+
+      - {label: "Featured Image",    name: "image",       widget: "image",   required: false}
+      - {label: "Image Focal X (0-100)", name: "focus_x", widget: "number", default: 50, required: false,
+         hint: "Horizontal focal point for image crop"}
+      - {label: "Image Focal Y (0-100)", name: "focus_y", widget: "number", default: 50, required: false,
+         hint: "Vertical focal point for image crop"}
+
+      - label: "Gallery Images"
         name: "gallery"
         widget: "list"
         required: false
-        hint: "Detail page এ slideshow — main image এর পরে আসবে"
-        field:
-          label: "Photo"
-          name: "photo"
-          widget: "image"
-      - {label: "Short Description", name: "description", widget: "string",   required: false}
+        field: {label: "Image", name: "image", widget: "image"}
+
+      - {label: "Short Description", name: "description", widget: "text",     required: false}
       - {label: "Full Details",      name: "body",        widget: "markdown", required: false}
       - {label: "YouTube Video URL", name: "youtube",     widget: "string",   required: false}
       - {label: "External Link",     name: "link",        widget: "string",   required: false}
