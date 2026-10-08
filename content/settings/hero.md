@@ -9,7 +9,7 @@ bio: |-
   I am now looking to contribute to global research teams tackling challenges in computational semiconductor physics, applied AI, and technology.
 photo: /assets/images/ChatGPT Image Sep 7, 2026, 07_54_17 PM.png
 photo_focus_x: 50
-photo_focus_y: 60
+photo_focus_y: 40
 cv_file: /assets/images/Curriculum Vitae of Abdullah Shadek Fahim.pdf
 email: fahim.just.19@gmail.com
 linkedin: https://www.linkedin.com/in/abdullah-fahim7640/
