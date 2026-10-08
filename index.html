@@ -677,7 +677,7 @@ async function fetchExperiences(){
         if(!aEnd)return-1;if(!bEnd)return 1;
         return 0;
       });
-      const skills_list=parseYamlList(text,\'skills\',\'skill\');
+      const skills_list=parseYamlList(text,'skills','skill');
       return{
         id:f.name.replace('.md',''),
         organization:fm.organization||'',
@@ -744,8 +744,8 @@ async function fetchProjects(){
     }
     const focusX=parseInt(fm.focus_x||50);
     const focusY=parseInt(fm.focus_y||30);
-    const skills_list=parseYamlList(text,\'skills\',\'skill\');
-    const interests_list=parseYamlList(text,\'research_interests\',\'interest\');
+    const skills_list=parseYamlList(text,'skills','skill');
+    const interests_list=parseYamlList(text,'research_interests','interest');
     return{id:f.name.replace('.md',''),title:fm.title||'Untitled',
       category:fm.custom_category||fm.category||'',
       image:fixImg(fm.image||''),gallery,focusX,focusY,
@@ -854,6 +854,17 @@ const ICONS={
 /* ══ HOME ══ */
 function renderHome(loading=false){
   const h=HERO;
+  const interestsSection=ALL_INTERESTS.length?`
+<div class="hero-bio-section" style="padding-top:0;padding-bottom:1.2rem">
+  <div style="margin-bottom:.6rem"><span style="font-size:.7rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em">Research Interests</span></div>
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+    ${ALL_INTERESTS.map(ri=>`<button onclick="location.hash='interest-'+encodeURIComponent(this.dataset.name);" data-name="${ri.name}"
+      style="padding:.3rem .75rem;border-radius:999px;font-size:.73rem;font-weight:600;cursor:pointer;border:1.5px solid var(--blue-m);background:var(--blue-l);color:var(--blue);transition:all .17s"
+      onmouseover="this.style.background='var(--blue)';this.style.color='#fff'"
+      onmouseout="this.style.background='var(--blue-l)';this.style.color='var(--blue)'"
+      title="${ri.description||ri.name}">${ri.name}</button>`).join('')}
+  </div>
+</div>`:'';
   const iconBtns=[
     h.email?`<a href="mailto:${h.email}" class="icon-btn" title="Email">${ICONS.email} Email</a>`:'',
     h.linkedin?`<a href="${h.linkedin}" target="_blank" class="icon-btn" title="LinkedIn">${ICONS.linkedin} LinkedIn</a>`:'',
@@ -913,9 +924,9 @@ function renderHome(loading=false){
     </div>
   </section>
 
-  <div class="divider"><hr>${interestsSection}
+  ${interestsSection}
 
-  </div>
+  <div class="divider"><hr></div>
 
   <!-- EXPERIENCE TIMELINE -->
   ${renderExpSection(loading)}
@@ -970,18 +981,6 @@ function renderExpCard(p,idx){
   const isCur=p.isCurrent;
   // Card grid version
   if(p.isMultiRole&&p.roles&&p.roles.length>0){
-    
-  const interestsSection=ALL_INTERESTS.length?`
-<div class="hero-bio-section" style="padding-top:0;padding-bottom:1.2rem">
-  <div style="margin-bottom:.6rem"><span style="font-size:.7rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em">Research Interests</span></div>
-  <div style="display:flex;gap:.5rem;flex-wrap:wrap">
-    ${ALL_INTERESTS.map(ri=>`<button onclick="location.hash='interest-'+encodeURIComponent('${ri.name.replace(/'/g,\\"\\\\\\\\'\\")}');"
-      style="padding:.3rem .75rem;border-radius:999px;font-size:.73rem;font-weight:600;cursor:pointer;border:1.5px solid var(--blue-m);background:var(--blue-l);color:var(--blue);transition:all .17s"
-      onmouseover="this.style.background='var(--blue)';this.style.color='#fff'"
-      onmouseout="this.style.background='var(--blue-l)';this.style.color='var(--blue)'"
-      title="${ri.description||ri.name}">${ri.name}</button>`).join('')}
-  </div>
-</div>`:'';
   return`<div class="exp-card-wrap ${isCur?'is-current':''}" onclick="location.hash='view-exp-${p.id}'">
       ${p.logo?`<div class="exp-card-logo"><img src="${p.logo}" alt="${p.organization}" onerror="this.parentElement.style.display='none'"></div>`:''}
       <div class="exp-card-body">
