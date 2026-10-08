@@ -1,12 +1,18 @@
 ---
 title: Outstanding Student Volunteer Aware 2025 (Honorable Mention)
+date: 29 December, 2025
+pinned: false
 category: Certificate
 custom_category: ''
-pinned: false
-date: 29 December, 2025
+skills: []
+research_interests: []
 image: /assets/images/CamScanner 31-12-25 14.53_1.jpeg
+focus_x: 50
+focus_y: 50
+issuer: ''
+gallery: []
 description: Outstanding Student Volunteer Aware 2025 (Honorable Mention)
-youtube: ''
+youtube: https://www.youtube.com/watch?v=NQSjGEYAbJE
 link: ''
 ---
 
