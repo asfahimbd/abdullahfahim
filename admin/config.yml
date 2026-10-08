@@ -38,6 +38,27 @@ collections:
           - {label: "Resume PDF URL",    name: "resume",     widget: "string",  required: false,
              hint: "Google Drive / Docs share link"}
 
+      - label: "Nav Visibility"
+        name: "nav_visibility"
+        file: "content/settings/nav_visibility.md"
+        fields:
+          - {label: "Show Education",       name: "Education",      widget: "boolean", default: true, required: false}
+          - {label: "Show Experiences",     name: "Experiences",    widget: "boolean", default: true, required: false}
+          - {label: "Show Research",        name: "Research",       widget: "boolean", default: true, required: false}
+          - {label: "Show Projects",        name: "Projects",       widget: "boolean", default: true, required: false}
+          - {label: "Show Training",        name: "Training",       widget: "boolean", default: true, required: false}
+          - {label: "Show Certificates",    name: "Certificates",   widget: "boolean", default: true, required: false}
+          - {label: "Show Technical Talks", name: "TechnicalTalk",  widget: "boolean", default: true, required: false}
+          - {label: "Show Achievements",    name: "Achievements",   widget: "boolean", default: true, required: false}
+          - {label: "Show Skills",          name: "Skills",         widget: "boolean", default: true, required: false}
+
+      - label: "Footer"
+        name: "footer"
+        file: "content/settings/footer.md"
+        fields:
+          - {label: "Footer Text", name: "footer_text", widget: "string", required: false,
+             hint: "Text shown at the bottom of every page — e.g. '© 2026 Your Name · Your Institution'"}
+
   # ══════════════════════════════════════════
   # 2. EDUCATION
   # ══════════════════════════════════════════
@@ -52,6 +73,8 @@ collections:
       - {label: "Institution Name",  name: "institution", widget: "string",  required: false}
       - {label: "Degree / Group",    name: "degree",      widget: "string",  required: false}
       - {label: "Passing Year",      name: "passing",     widget: "string",  required: false}
+      - {label: "Location",          name: "location",    widget: "string",  required: false,
+         hint: "e.g. Jashore, Bangladesh — leave blank to hide"}
       - {label: "GPA / Result",      name: "gpa",         widget: "string",  required: false}
       - {label: "Rank / Position",   name: "rank",        widget: "string",  required: false,
          hint: "e.g. 3rd / 95 students — leave blank to hide"}
@@ -198,8 +221,15 @@ collections:
           - {label: "✏️ Custom",              value: "Custom"}
         default: "Academic Project"
 
-      - {label: "Custom Category",   name: "custom_category", widget: "string",  required: false,
-         hint: "Only if 'Custom' selected above"}
+      - label: "Custom Category"
+        name: "custom_category"
+        widget: "relation"
+        collection: "categories"
+        search_fields: ["name"]
+        value_field: "name"
+        display_fields: ["name"]
+        required: false
+        hint: "Select a category you created in Custom Categories (only needed if 'Custom' selected above)"
 
       - label: "Skills Used"
         name: "skills"
@@ -229,11 +259,14 @@ collections:
 
       - {label: "Issuer / Provider",   name: "issuer",      widget: "string",  required: false,
          hint: "For certificates: who issued this (e.g. Coursera, IEEE, BUET)"}
+      - {label: "Issuer Label (custom text)", name: "issuer_label", widget: "string", required: false,
+         hint: "Custom label for 'Issued by' — e.g. 'Presented by', 'Awarded by'. Leave blank for default 'Issued by'"}
 
       - label: "Slides / Gallery Images"
         name: "gallery"
         widget: "list"
         required: false
+        hint: "Upload image files (JPG, PNG, WebP). For PDF slides, convert pages to images first."
         field: {label: "Image / Slide", name: "image", widget: "image"}
 
       - {label: "Short Description", name: "description", widget: "text",     required: false}
