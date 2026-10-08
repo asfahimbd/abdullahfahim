@@ -51,8 +51,8 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .dropdown a:hover{background:var(--blue-l);color:var(--blue)}
 .dd-cnt{background:var(--blue-l);color:var(--blue);border-radius:999px;padding:.03rem .35rem;font-size:.6rem;font-weight:700}
 .dropdown-div{height:1px;background:var(--border);margin:.25rem .25rem}
-.nav-hire{font-size:.73rem;font-weight:700;padding:.33rem .75rem;border-radius:7px;border:none;background:var(--teal);color:#fff;cursor:pointer;transition:all .17s;text-decoration:none;white-space:nowrap;flex-shrink:0}
-.nav-hire:hover{background:var(--teal-d)}
+.nav-login{font-size:.73rem;font-weight:700;padding:.33rem .75rem;border-radius:7px;border:1px solid var(--border2);background:var(--surface);color:var(--ink2);cursor:pointer;transition:all .17s;text-decoration:none;white-space:nowrap;flex-shrink:0}
+.nav-login:hover{border-color:var(--blue);color:var(--blue)}
 .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;flex-shrink:0}
 .hamburger span{display:block;width:22px;height:2px;background:var(--ink);border-radius:2px}
 
@@ -154,7 +154,8 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(278px,1fr));gap:1rem}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.15rem;cursor:pointer;transition:all .21s;display:flex;flex-direction:column;overflow:hidden;box-shadow:var(--shadow)}
 .card:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px);border-color:var(--blue-m)}
-.card-img{width:100%;height:125px;object-fit:cover;border-radius:8px;margin-bottom:.75rem;background:var(--surface2);display:block}
+.card-img-wrap{width:100%;padding-top:75%;position:relative;overflow:hidden;border-radius:8px;margin-bottom:.75rem;background:var(--surface2)}
+.card-img-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .card h3{font-size:.88rem;font-weight:700;margin-bottom:.3rem;line-height:1.35}
 .card p{font-size:.75rem;color:var(--ink2);flex:1;line-height:1.6}
 .card-cta{margin-top:.65rem;color:var(--blue);font-weight:700;font-size:.73rem}
@@ -345,7 +346,7 @@ footer{text-align:center;padding:2.2rem;color:var(--ink3);border-top:1px solid v
     A.S.<span>FAHIM</span>
   </div>
   <ul class="nav-links" id="main-nav"></ul>
-  <a id="nav-fiverr-btn" href="#" target="_blank" class="nav-hire">Hire Me</a>
+  <a href="/admin/" class="nav-login">Login</a>
   <button class="hamburger" onclick="openDrawer()" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
@@ -419,23 +420,18 @@ function dbg(msg,type='ok'){
 
 /* ══ FALLBACK DATA ══ */
 let HERO={
-  name:"Abdullah Shadek Fahim",tagline:"Electrical & Electronic Engineer · Level 2 Fiverr Seller",
+  name:"Abdullah Shadek Fahim",tagline:"Electrical & Electronic Engineer",
   bio:"Specializing in Semiconductor Research (Ion Implantation) and Full-stack Web Development. Undergraduate at JUST with a passion for Machine Learning in Physics.",
   photo:"",email:"asfahimbd@gmail.com",orcid:"",resume:"",
   github:"https://github.com/abdullahFahim19",
   linkedin:"https://linkedin.com/in/abdullah-fahim7640",
-  fiverr:"https://www.fiverr.com/YOUR_USERNAME",
   facebook:"",youtube_channel:""
 };
-let EDUCATION_DATA=[
-  {level:"University",institution:"Jashore University of Science and Technology",degree:"B.Sc. in Electrical & Electronic Engineering",passing:"2025",gpa:"3.XX/4.00",icon:"🎓",iconBg:"var(--blue-l)",photo:"",description:"Semiconductor devices, Power systems, and Machine Learning.",subjects:"Digital Electronics,Electromagnetics,Signal Processing,VLSI Design,Power Systems,Machine Learning,Ion Implantation,Microprocessors,Control Systems"},
-  {level:"College",institution:"Your College",degree:"HSC · Science",passing:"2019",gpa:"5.00/5.00",icon:"🏫",iconBg:"var(--teal-l)",photo:"",description:"",subjects:"Physics,Chemistry,Mathematics,Biology,English"},
-  {level:"School",institution:"Your School",degree:"SSC · Science",passing:"2017",gpa:"5.00/5.00",icon:"📚",iconBg:"var(--amber-l)",photo:"",description:"",subjects:"Physics,Chemistry,Mathematics,Biology,English"}
-];
-let REVIEWS_DATA=[];
+let EDUCATION_DATA=[];
 let ALL_PROJECTS=[];
 let ALL_SKILLS=[];
 let ALL_EXPERIENCES=[];
+let ALL_INTERESTS=[];
 
 let GROUPS={
   Research:{label:"Research",subcats:["Undergraduate Thesis","Journal","Conference"],hasDropdown:true},
@@ -514,6 +510,27 @@ function parseRolesList(rawText){
   if(cur && Object.keys(cur).length > 0) items.push(cur);
   return items;
 }
+function parseYamlList(text, listKey, fieldKey){
+  const result=[];
+  const lines=text.split('\\n');
+  let inFM=false,inList=false,fmClosed=0;
+  for(let i=0;i<lines.length;i++){
+    const l=lines[i];
+    if(i===0&&l.trim()==='---'){inFM=true;continue;}
+    if(inFM&&l.trim()==='---'){fmClosed++;if(fmClosed>=1){inFM=false;break;}}
+    if(!inFM)continue;
+    if(new RegExp(`^${listKey}:\\s*$`).test(l)){inList=true;continue;}
+    if(inList){
+      if(/^\\s+-/.test(l)){
+        const kv=l.match(/^\\s+-\\s+([\\w_]+):\\s*["']?(.*?)["']?\\s*$/);
+        if(kv&&(!fieldKey||kv[1]===fieldKey)){result.push(kv[2].trim());}
+        else if(!kv){const val=l.replace(/^\\s+-\\s*/,'').trim().replace(/^["']|["']$/g,'');if(val)result.push(val);}
+      } else if(/^\\w/.test(l)||/^[^-\\s]/.test(l)){inList=false;}
+    }
+  }
+  return result;
+}
+
 
 function fixImg(p){
   if(!p||p.trim()==='')return'';p=p.trim();
@@ -550,12 +567,11 @@ async function fetchSettings(){
     if(fm.name)HERO.name=fm.name;if(fm.tagline)HERO.tagline=fm.tagline;
     if(fm.bio)HERO.bio=fm.bio;if(fm.photo)HERO.photo=fixImg(fm.photo);
     if(fm.email)HERO.email=fm.email;if(fm.github)HERO.github=fm.github;
-    if(fm.linkedin)HERO.linkedin=fm.linkedin;if(fm.fiverr)HERO.fiverr=fm.fiverr;
-    if(fm.orcid)HERO.orcid=fm.orcid;
+    if(fm.linkedin)HERO.linkedin=fm.linkedin;
+      if(fm.orcid)HERO.orcid=fm.orcid;
     if(fm.resume)HERO.resume=fixImg(fm.resume);
     if(fm.facebook)HERO.facebook=fm.facebook;
     if(fm.youtube_channel)HERO.youtube_channel=fm.youtube_channel;
-    document.getElementById('nav-fiverr-btn').href=HERO.fiverr||'#';
     if(HERO.photo)updateNavPhoto(HERO.photo);
   }catch(e){dbg(`settings: ${e.message}`,'err');}
 }
@@ -582,7 +598,8 @@ async function fetchEducation(){
     return{level:fm.level||'',institution:fm.institution||'',degree:fm.degree||'',
       passing:passingYear,gpa:fm.gpa||'',icon:fm.icon||'🎓',iconBg:fm.icon_bg||'var(--blue-l)',
       logo:fixImg(fm.logo||''),     // small logo for homepage icon
-      photo:fixImg(fm.photo||''),   // large photo for modal
+      photo:fixImg(fm.photo||''),
+     certificate:fixImg(fm.certificate||''),   // large photo for modal
       description:fm.description||'',subjects:fm.subjects||'',
       order:parseInt(fm.order||99),passingYearNum:parseInt(passingYear||0)};
   }));
@@ -591,17 +608,17 @@ async function fetchEducation(){
   if(s.length>0)EDUCATION_DATA=s;
 }
 
-async function fetchReviews(){
-  const files=await ghList('content/reviews');if(!files)return;
+async function fetchInterests(){
+  const files=await ghList('content/interests');if(!files)return;
   const items=await Promise.all(files.filter(f=>f.name.endsWith('.md')).map(async f=>{
     const text=await ghRaw(f.download_url);if(!text)return null;
     const{fm}=parseFM(text);
-    return{name:fm.name||'Client',photo:fixImg(fm.photo||''),platform:fm.platform||'Fiverr',
-      stars:parseFloat(fm.stars||5),country:fm.country||'',text:fm.text||'',time:fm.time||''};
+    return{name:fm.name||'',description:fm.description||'',order:parseInt(fm.order||99)};
   }));
-  const v=items.filter(Boolean).sort((a,b)=>dateToTs(b.time)-dateToTs(a.time));if(v.length>0)REVIEWS_DATA=v;
+  const v=items.filter(Boolean).sort((a,b)=>a.order-b.order);
+  if(v.length>0)ALL_INTERESTS=v;
+  dbg(`interests: ${v.length} loaded`,'ok');
 }
-
 async function fetchCategories(){
   const files=await ghList('content/categories');if(!files)return;
   const cats=await Promise.all(files.filter(f=>f.name.endsWith('.md')).map(async f=>{
@@ -660,6 +677,7 @@ async function fetchExperiences(){
         if(!aEnd)return-1;if(!bEnd)return 1;
         return 0;
       });
+      const skills_list=parseYamlList(text,\'skills\',\'skill\');
       return{
         id:f.name.replace('.md',''),
         organization:fm.organization||'',
@@ -726,12 +744,14 @@ async function fetchProjects(){
     }
     const focusX=parseInt(fm.focus_x||50);
     const focusY=parseInt(fm.focus_y||30);
+    const skills_list=parseYamlList(text,\'skills\',\'skill\');
+    const interests_list=parseYamlList(text,\'research_interests\',\'interest\');
     return{id:f.name.replace('.md',''),title:fm.title||'Untitled',
       category:fm.custom_category||fm.category||'',
       image:fixImg(fm.image||''),gallery,focusX,focusY,
       description:fm.description||'',date:fm.date||'',
       link:fm.link||'',youtube:fm.youtube||'',body,
-      pinned:fm.pinned==='true'||fm.pinned===true};
+      skills_list,interests_list,pinned:fm.pinned==='true'||fm.pinned===true};
   }));
   // Sort: pinned first, then by date desc
   const sorted=items.filter(Boolean).sort((a,b)=>{
@@ -787,7 +807,7 @@ function buildDrawer(){
         return`<div class="drawer-direct" onclick="drawerGo('${key}',null)">${g.label}${tot>0?`<span class="nav-cnt">${tot}</span>`:''}</div>`;
       }
     }).join('')
-    +`<div class="drawer-divider"></div><a href="${HERO.fiverr||'#'}" target="_blank" class="drawer-hire">Hire Me on Fiverr</a><div class="drawer-direct" style="margin-top:.15rem" onclick="window.location.href='mailto:${HERO.email}';closeDrawer()">Contact Me</div>`;
+    +`<div class="drawer-divider"></div><a href="/admin/" class="drawer-hire">Login to Dashboard</a><div class="drawer-direct" style="margin-top:.15rem" onclick="window.location.href='mailto:${HERO.email}';closeDrawer()">Contact Me</div>`;
 }
 
 function toggleDG(id,aid){const el=document.getElementById(id),ar=document.getElementById(aid);const o=el.classList.toggle('open');if(ar)ar.style.transform=o?'rotate(180deg)':'';}
@@ -798,7 +818,7 @@ function closeDrawer(){document.getElementById('side-drawer').classList.remove('
 /* ══ INIT ══ */
 async function init(){
   dbg('Fetching...','ok');renderHome(true);
-  await Promise.all([fetchSettings(),fetchEducation(),fetchCategories(),fetchReviews(),fetchSkills(),fetchExperiences()]);
+  await Promise.all([fetchSettings(),fetchEducation(),fetchCategories(),fetchInterests(),fetchSkills(),fetchExperiences()]);
   ALL_PROJECTS=await fetchProjects();
   dbg(`Projects: ${ALL_PROJECTS.length}`,'ok');
   buildNav();if(HERO.photo)updateNavPhoto(HERO.photo);buildFooter();route();
@@ -810,6 +830,8 @@ function route(){
   else if(hash.startsWith('all-exp-')){renderAllExpPage(hash.replace('all-exp-','').replace(/-/g,' '));}
   else if(hash.startsWith('view-exp-')){renderExpDetail(hash.replace('view-exp-',''));}
   else if(hash.startsWith('view-'))renderDetail(hash.replace('view-',''));
+  else if(hash.startsWith('skill-')){showBySkill(decodeURIComponent(hash.replace('skill-','')));}
+  else if(hash.startsWith('interest-')){showByInterest(decodeURIComponent(hash.replace('interest-','')));}
   else if(hash.startsWith('all-')){
     const rest=hash.slice(4);
     const key=Object.keys(GROUPS).find(k=>rest===k||rest.startsWith(k+'-'));
@@ -845,8 +867,8 @@ function renderHome(loading=false){
   <section class="hero">
     <div class="hero-inner">
       <div class="photo-wrap">
-        <img src="${h.photo||'https://via.placeholder.com/170/e8eeff/1d5aff?text=ASF'}" class="hero-photo" alt="${h.name}"
-             onerror="this.src='https://via.placeholder.com/170/e8eeff/1d5aff?text=ASF'">
+        <img src="${h.photo||''}" class="hero-photo" alt="${h.name}"
+              onerror="this.style.display=\'none\'">
       </div>
       <div>
         <div class="hero-eyebrow">Researcher · Engineer · Freelancer</div>
@@ -891,7 +913,9 @@ function renderHome(loading=false){
     </div>
   </section>
 
-  <div class="divider"><hr></div>
+  <div class="divider"><hr>${interestsSection}
+
+  </div>
 
   <!-- EXPERIENCE TIMELINE -->
   ${renderExpSection(loading)}
@@ -914,43 +938,9 @@ function renderHome(loading=false){
   <!-- SKILLS -->
   ${renderSkillsSection(loading)}
 
-  <!-- REVIEWS -->
-  ${REVIEWS_DATA.length>0?`
-  <div class="divider"><hr></div>
-  <section class="section">
-    <div class="section-header">
-      <h2 class="section-title">Client Reviews</h2>
-      <span style="font-size:.72rem;color:var(--ink3)">${REVIEWS_DATA.length} reviews</span>
-    </div>
-    <div style="overflow:hidden">
-      <div class="reviews-track" id="reviews-track">
-        ${REVIEWS_DATA.map(r=>`
-        <div class="review-card">
-          <div class="review-top">
-            <img src="${r.photo||''}" class="review-avatar"
-                 onerror="this.src='https://via.placeholder.com/40/f2efe9/8a837a?text=${encodeURIComponent((r.name||'?')[0])}'">
-            <div>
-              <div class="review-name">${r.name}${r.country?` <span class="review-flag">${countryFlag(r.country)} <span class="review-country">${r.country}</span></span>`:''}</div>
-              <div class="review-platform">${r.platform}</div>
-            </div>
-          </div>
-          <div class="review-stars">${renderStars(r.stars||5)}</div>
-          <div class="review-text">"${r.text}"</div>
-          <div class="review-time">${r.time}</div>
-        </div>`).join('')}
-      </div>
-    </div>
-    <div class="slider-controls">
-      <button class="slider-btn" onclick="scrollRevs(-1)">‹</button>
-      <div class="slider-dots" id="rev-dots">
-        ${REVIEWS_DATA.map((_,i)=>`<div class="dot ${i===0?'active':''}" onclick="scrollToRev(${i})"></div>`).join('')}
-      </div>
-      <button class="slider-btn" onclick="scrollRevs(1)">›</button>
-    </div>
-  </section>`:''}
+
   `;
-  if(REVIEWS_DATA.length>0)setupRevSlider();
-}
+  }
 
 /* ── Experience horizontal timeline ── */
 function typeClass(t){
@@ -980,7 +970,19 @@ function renderExpCard(p,idx){
   const isCur=p.isCurrent;
   // Card grid version
   if(p.isMultiRole&&p.roles&&p.roles.length>0){
-    return`<div class="exp-card-wrap ${isCur?'is-current':''}" onclick="location.hash='view-exp-${p.id}'">
+    
+  const interestsSection=ALL_INTERESTS.length?`
+<div class="hero-bio-section" style="padding-top:0;padding-bottom:1.2rem">
+  <div style="margin-bottom:.6rem"><span style="font-size:.7rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em">Research Interests</span></div>
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+    ${ALL_INTERESTS.map(ri=>`<button onclick="location.hash='interest-'+encodeURIComponent('${ri.name.replace(/'/g,\\"\\\\\\\\'\\")}');"
+      style="padding:.3rem .75rem;border-radius:999px;font-size:.73rem;font-weight:600;cursor:pointer;border:1.5px solid var(--blue-m);background:var(--blue-l);color:var(--blue);transition:all .17s"
+      onmouseover="this.style.background='var(--blue)';this.style.color='#fff'"
+      onmouseout="this.style.background='var(--blue-l)';this.style.color='var(--blue)'"
+      title="${ri.description||ri.name}">${ri.name}</button>`).join('')}
+  </div>
+</div>`:'';
+  return`<div class="exp-card-wrap ${isCur?'is-current':''}" onclick="location.hash='view-exp-${p.id}'">
       ${p.logo?`<div class="exp-card-logo"><img src="${p.logo}" alt="${p.organization}" onerror="this.parentElement.style.display='none'"></div>`:''}
       <div class="exp-card-body">
         <div class="exp-org-name">${p.organization}</div>
@@ -1125,7 +1127,7 @@ function renderSkelSection(label){
 
 /* ── Skills ── */
 function renderSkillsSection(loading=false){
-  const cats=['Academic','Research','Freelance','Soft'];
+  const cats=['Academic','Research','Freelance','Professional'];
   const hasSkills=ALL_SKILLS.length>0;
   if(!hasSkills&&!loading)return'';
   const labels={Academic:'Academic Skills',Research:'Research Tools',Freelance:'Freelance Tools',Soft:'Professional Skills'};
@@ -1174,7 +1176,7 @@ function cardHTML(p){
   const excerpt=truncate(p.description, hasImg?20:38);
   const focusStyle=hasImg?`object-position:${p.focusX||50}% ${p.focusY||30}%`:'';
   return`<div class="card" onclick="location.hash='view-${p.id}'">
-    ${hasImg?`<img src="${p.image}" class="card-img" alt="${p.title}" style="${focusStyle}" onerror="this.style.display='none'">`:''}
+    ${hasImg?`<div class="card-img-wrap"><img src="${p.image}" alt="${p.title}" style="object-position:${p.focusX||50}% ${p.focusY||30}%" onerror="this.parentElement.style.display='none'"></div>`:''}
     <span class="badge ${bc}">${p.category}</span>
     ${p.date?`<div style="font-size:.64rem;color:var(--ink3);margin-bottom:.25rem">📅 ${p.date}</div>`:''}
     <h3>${p.title}</h3><p>${excerpt}</p>
@@ -1183,15 +1185,6 @@ function cardHTML(p){
 }
 
 /* ══ REVIEWS SLIDER ══ */
-let revTimer=null;
-function setupRevSlider(){
-  clearInterval(revTimer);const t=document.getElementById('reviews-track');if(!t)return;
-  t.addEventListener('scroll',updateRevDots,{passive:true});
-  revTimer=setInterval(()=>{if(document.getElementById('reviews-track'))scrollRevs(1);else clearInterval(revTimer);},5000);
-}
-function scrollRevs(dir){const t=document.getElementById('reviews-track');if(!t)return;const w=(t.querySelector('.review-card')?.offsetWidth||292)+16;t.scrollBy({left:dir*w,behavior:'smooth'});setTimeout(updateRevDots,420);}
-function scrollToRev(i){const t=document.getElementById('reviews-track');if(!t)return;const w=(t.querySelector('.review-card')?.offsetWidth||292)+16;t.scrollTo({left:i*w,behavior:'smooth'});setTimeout(updateRevDots,420);}
-function updateRevDots(){const t=document.getElementById('reviews-track'),dots=document.getElementById('rev-dots');if(!t||!dots)return;const w=(t.querySelector('.review-card')?.offsetWidth||292)+16;const idx=Math.min(Math.round(t.scrollLeft/w),REVIEWS_DATA.length-1);dots.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===idx));}
 
 /* ══ EDUCATION MODAL ══ */
 function openEduModal(i){
@@ -1206,6 +1199,7 @@ function openEduModal(i){
       <p class="modal-sub">${e.degree} · Passing: ${e.passing} · GPA: ${e.gpa}</p>
       ${e.description?`<p class="modal-desc">${e.description}</p>`:''}
       ${subs.length?`<h4 style="font-size:.74rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem">Subjects Studied</h4><div class="subjects-grid">${subs.map(s=>`<span class="subject-tag">${s}</span>`).join('')}</div>`:''}
+      ${e.certificate?`<div style="margin-top:1rem"><a href="${e.certificate}" target="_blank" class="btn btn-p">📜 View Certificate</a></div>`:''}
     </div>`;
   document.getElementById('edu-modal').classList.add('open');document.body.style.overflow='hidden';
 }
@@ -1510,8 +1504,7 @@ function buildFooter(){
     {url:HERO.github,    icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>`, label:'GitHub'},
     {url:HERO.facebook,  icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>`, label:'Facebook'},
     {url:HERO.youtube_channel, icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white"/></svg>`, label:'YouTube'},
-    {url:HERO.fiverr,    icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><text y="18" font-size="18" font-weight="bold" font-family="sans-serif">f</text></svg>`, label:'Fiverr'},
-  ].filter(s=>s.url);
+    ].filter(s=>s.url);
   fs.innerHTML=socials.map(s=>`<a href="${s.url}" target="_blank" rel="noopener"
     style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;border:1px solid var(--border);color:var(--ink3);transition:all .18s;text-decoration:none"
     onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)';this.style.transform='translateY(-2px)'"
@@ -1556,7 +1549,38 @@ function scrollToSkills(){
     if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
   }
 }
-function goHome(){clearInterval(revTimer);window.location.hash='';renderHome(false);}
+
+function showBySkill(skillName){
+  const items=ALL_PROJECTS.filter(p=>(p.skills_list||[]).some(s=>s.toLowerCase()===skillName.toLowerCase()));
+  const expItems=ALL_EXPERIENCES.filter(e=>(e.skills_list||[]).some(s=>s.toLowerCase()===skillName.toLowerCase()));
+  document.getElementById('app').innerHTML=`
+  <div class="detail-page">
+    <button onclick="goHome()" class="btn btn-g" style="margin-bottom:1.1rem">← Home</button>
+    <h2 class="section-title" style="margin-bottom:.4rem">Skill: ${skillName}</h2>
+    <p style="font-size:.78rem;color:var(--ink3);margin-bottom:1.2rem">${items.length+expItems.length} related item(s)</p>
+    ${expItems.length?`<h3 style="font-family:Fraunces,serif;font-size:1.1rem;margin-bottom:.7rem">Experiences</h3><div class="exp-grid">${expItems.map(e=>renderExpCard(e)).join('')}</div>`:''}
+    ${items.length?`<h3 style="font-family:Fraunces,serif;font-size:1.1rem;margin:.9rem 0 .7rem">Projects & Research</h3><div class="grid">${items.map(p=>cardHTML(p)).join('')}</div>`:''}
+    ${!items.length&&!expItems.length?`<div class="empty"><p>No items tagged with this skill yet.</p></div>`:''}
+  </div>`;
+  window.scrollTo(0,0);
+}
+
+
+function showByInterest(interest){
+  const items=ALL_PROJECTS.filter(p=>(p.interests_list||[]).some(i=>i.toLowerCase()===interest.toLowerCase()));
+  document.getElementById('app').innerHTML=`
+  <div class="detail-page">
+    <button onclick="goHome()" class="btn btn-g" style="margin-bottom:1.1rem">← Home</button>
+    <h2 class="section-title" style="margin-bottom:.4rem">Research Interest: ${interest}</h2>
+    <p style="font-size:.78rem;color:var(--ink3);margin-bottom:1.2rem">${items.length} related item(s)</p>
+    ${items.length?`<div class="grid">${items.map(p=>cardHTML(p)).join('')}</div>`:
+      `<div class="empty"><p>No items tagged with this research interest yet.</p></div>`}
+  </div>`;
+  window.scrollTo(0,0);
+}
+
+
+function goHome(){window.location.hash='';renderHome(false);}
 </script>
 </body>
 </html>
