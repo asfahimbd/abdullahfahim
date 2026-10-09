@@ -5,7 +5,7 @@ pinned: false
 category: Certificate
 custom_category: ''
 research_interests: []
-image: ''
+image: /assets/images/tici.jpg
 issuer: Training Institute For Chemical Industries (TICI), BCIC
 issuer_label: ''
 gallery: []
