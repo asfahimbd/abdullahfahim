@@ -244,10 +244,14 @@ collections:
 
       - label: "Research Interests"
         name: "research_interests"
-        widget: "list"
+        widget: "relation"
+        collection: "interests"
+        search_fields: ["name"]
+        value_field: "name"
+        display_fields: ["name"]
+        multiple: true
         required: false
-        hint: "Add research interest tags — one per line"
-        field: {label: "Interest", name: "interest", widget: "string"}
+        hint: "🔬 Research Interests section থেকে add করা interests এখানে select করো"
 
       - {label: "Featured Image",    name: "image",       widget: "image",   required: false}
 
