@@ -1,7 +1,7 @@
 ---
 title: 'CardioPredictor: A Real-time Non-Invasive and  Cuffless Cardiovascular Disease Prediction System  using 10 Fold Cross Validation on The  Framingham Dataset'
-date: 2025-09-29T18:09:00
-pinned: false
+date: 2025-09-29
+pinned: true
 pub_type: Conference
 status: Published
 authors:
