@@ -187,10 +187,13 @@ collections:
         hint: "Heading above the video — leave blank to show 'Video'"
       - label: "Skills Used"
         name: "skills"
-        widget: "list"
+        widget: "relation"
+        collection: "skills"
+        search_fields: ["name"]
+        value_field: "name"
+        display_fields: ["name"]
+        multiple: true
         required: false
-        hint: "Add each skill name one by one"
-        field: {label: "Skill Name", name: "skill", widget: "string"}
 
   # ══════════════════════════════════════════
   # 5. RESEARCH INTERESTS
@@ -273,10 +276,13 @@ collections:
 
       - label: "Skills Used"
         name: "skills"
-        widget: "list"
+        widget: "relation"
+        collection: "skills"
+        search_fields: ["name"]
+        value_field: "name"
+        display_fields: ["name"]
+        multiple: true
         required: false
-        hint: "Add each skill name one by one"
-        field: {label: "Skill Name", name: "skill", widget: "string"}
 
       - label: "Research Interests"
         name: "research_interests"
