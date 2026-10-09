@@ -1554,9 +1554,9 @@ function renderExpDetail(id){
           ${item.website?`<a href="${item.website}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;color:var(--blue);font-weight:600;text-decoration:none;padding:.18rem .5rem;border-radius:6px;background:var(--blue-l);border:1px solid var(--blue-m)">🌐 ${expHost(item.website)}</a>`:''}
         </div>
       </div>
+      ${item.body?`<div class="detail-body" style="font-size:.87rem;color:var(--ink2);line-height:1.8;margin-bottom:1.2rem">${md2html(item.body)}</div>`:''}
       ${rolesHTML}
     </div>
-    ${item.body?`<div class="detail-section"><h3 style="margin-bottom:.85rem">Full Details</h3><div class="detail-body">${md2html(item.body)}</div></div>`:''}
     ${item.youtube?`<div class="detail-section"><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-bottom:.6rem">${item.youtubeTitle||'Video'}</h3><div class="yt-wrap"><iframe src="https://www.youtube.com/embed/${getYtId(item.youtube)}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture" allowfullscreen></iframe></div></div>`:''}
     ${item.pdfFile?`<div class="detail-section"><div class="pdf-embed-wrap">
       <div class="pdf-embed-title">📄 ${item.pdfTitle||'Document'} <a href="${item.pdfFile}" target="_blank" rel="noopener" style="margin-left:auto;font-size:.72rem;color:var(--blue);text-decoration:none;font-weight:600">↗ খুলুন</a></div>
