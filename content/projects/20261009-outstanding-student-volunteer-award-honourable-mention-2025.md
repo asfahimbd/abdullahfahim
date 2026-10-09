@@ -2,7 +2,7 @@
 title: Outstanding Student Volunteer Award (Honourable Mention) 2025
 date: 2025-12-31
 pinned: false
-category: Award
+category: Certificate
 custom_category: ''
 research_interests: []
 image: /assets/images/pasted-image-1791548907301.png
