@@ -121,6 +121,7 @@ collections:
     folder: "content/skills"
     create: true
     slug: "{{slug}}"
+    identifier_field: "name"
     summary: "{{name}}"
     fields:
       - {label: "Skill Name",        name: "name",        widget: "string",  required: false}
@@ -161,7 +162,7 @@ collections:
              hint: "Leave blank if currently working here", time_format: false}
           - {label: "Currently Working",   name: "is_current",      widget: "boolean",  default: false, required: false}
           - {label: "Show Excerpt on Card",name: "show_excerpt",    widget: "boolean",  default: true,  required: false}
-          - {label: "Description",         name: "description",     widget: "text",     required: false}
+          - {label: "Description",         name: "description",     widget: "markdown", required: false}
           - {label: "Certificate (Image/PDF)",  name: "certificate", widget: "image",   required: false,
              hint: "Upload certificate or document for this role — a 'View Certificate' button will appear in the detail page"}
       - label: "Gallery / Photos"
