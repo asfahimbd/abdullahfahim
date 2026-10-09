@@ -842,6 +842,7 @@ async function init(){
 function route(){
   const hash=window.location.hash.replace('#','');
   if(!hash||hash==='home')renderHome(false);
+  else if(hash==='all-edu'){renderAllEduPage();}
   else if(hash==='all-exp'){renderAllExpPage(null);}
   else if(hash.startsWith('all-exp-')){renderAllExpPage(hash.replace('all-exp-','').replace(/-/g,' '));}
   else if(hash.startsWith('view-exp-')){renderExpDetail(hash.replace('view-exp-',''));}
@@ -915,10 +916,10 @@ function renderHome(loading=false){
   <section class="section">
     <div class="section-header">
       <h2 class="section-title">Education</h2>
-      <span style="font-size:.72rem;color:var(--ink3)">Click for details</span>
+      ${EDUCATION_DATA.length>3?`<span class="see-all-link" onclick="location.hash='all-edu'">See All (${EDUCATION_DATA.length})</span>`:`<span style="font-size:.72rem;color:var(--ink3)">Click for details</span>`}
     </div>
     <div class="edu-grid">
-      ${EDUCATION_DATA.map((e,i)=>`
+      ${EDUCATION_DATA.slice(0,3).map((e,i)=>`
       <div class="edu-card" onclick="openEduModal(${i})">
         <div class="edu-icon" style="background:${e.logo?'#fff':e.iconBg||'var(--surface2)'}">
           ${e.logo
@@ -939,6 +940,7 @@ function renderHome(loading=false){
         </div>
       </div>`).join('')}
     </div>
+    ${EDUCATION_DATA.length>3?`<div class="see-all-row"><button class="see-all-btn" onclick="location.hash='all-edu'">See All Education (${EDUCATION_DATA.length})</button></div>`:''}
   </section>
 
 
@@ -1230,6 +1232,38 @@ function openEduModal(i){
   document.getElementById('edu-modal').classList.add('open');document.body.style.overflow='hidden';
 }
 function closeEduModal(e){if(e&&e.target!==document.getElementById('edu-modal'))return;document.getElementById('edu-modal').classList.remove('open');document.body.style.overflow='';}
+
+/* ══ ALL EDUCATION PAGE ══ */
+function renderAllEduPage(){
+  document.getElementById('app').innerHTML=`
+  <div class="detail-page">
+    <button onclick="goHome()" class="btn btn-g" style="margin-bottom:1.1rem">← Home</button>
+    <h2 class="section-title" style="margin-bottom:1rem">Education</h2>
+    <div class="edu-grid">
+      ${EDUCATION_DATA.map((e,i)=>`
+      <div class="edu-card" onclick="openEduModal(${i})">
+        <div class="edu-icon" style="background:${e.logo?'#fff':e.iconBg||'var(--surface2)'}">
+          ${e.logo
+            ?`<img src="${e.logo}" alt="${e.institution}" style="width:100%;height:100%;object-fit:contain;border-radius:4px" onerror="this.parentElement.style.background='${e.iconBg||'var(--surface2)'}';this.parentElement.innerHTML='${e.icon}'">`
+            :e.icon}
+        </div>
+        <div style="flex:1;min-width:0">
+          <div class="edu-level">${e.level}</div>
+          <div class="edu-inst">${e.institution}</div>
+          <div class="edu-degree">${e.degree}</div>
+          <div class="edu-meta">
+            <span class="edu-pill">📅 ${e.passing}</span>
+            ${e.gpa?`<span class="edu-pill">⭐ ${e.gpa}</span>`:''}
+            ${e.rank?`<span class="edu-pill">🏅 ${e.rank}</span>`:''}
+            ${e.location?`<span class="edu-pill" style="display:inline-flex;align-items:center">${LOC_ICON_SM}${e.location}</span>`:''}
+          </div>
+          ${e.website?`<div style="margin-top:.2rem"><a href="${e.website}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--blue);text-decoration:none;font-size:.65rem;font-weight:500;display:inline-flex;align-items:center;gap:.18rem">🌐 ${expHost(e.website)}</a></div>`:''}
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+  window.scrollTo(0,0);
+}
 
 /* ══ ALL PAGE ══ */
 function showAll(key,sub){
