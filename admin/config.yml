@@ -42,6 +42,7 @@ collections:
         fields:
           - {label: "Show Education",       name: "Education",      widget: "boolean", default: true, required: false}
           - {label: "Show Experiences",     name: "Experiences",    widget: "boolean", default: true, required: false}
+          - {label: "Show Publications",    name: "Publications",   widget: "boolean", default: true, required: false}
           - {label: "Show Research",        name: "Research",       widget: "boolean", default: true, required: false}
           - {label: "Show Projects",        name: "Projects",       widget: "boolean", default: true, required: false}
           - {label: "Show Training",        name: "Training",       widget: "boolean", default: true, required: false}
@@ -276,3 +277,84 @@ collections:
          hint: "Upload a PDF — it will show as an inline viewer on the project page (no download button)"}
       - {label: "PDF Heading",       name: "pdf_title",   widget: "string",   required: false,
          hint: "Heading shown above the PDF viewer, e.g. 'Full Paper', 'Research Report'"}
+
+  # ══════════════════════════════════════════
+  # 7. PUBLICATIONS (Thesis, Journal, Conference)
+  # ══════════════════════════════════════════
+  - name: "publications"
+    label: "📚 Publications"
+    folder: "content/publications"
+    create: true
+    slug: "{{year}}{{month}}{{day}}-{{slug}}"
+    fields:
+      - {label: "Title",            name: "title",      widget: "string",   required: false}
+      - {label: "Date",             name: "date",       widget: "datetime", required: false}
+      - {label: "Pinned",           name: "pinned",     widget: "boolean",  default: false, required: false}
+
+      - label: "Publication Type"
+        name: "pub_type"
+        widget: "select"
+        required: false
+        options:
+          - {label: "📄 Thesis",      value: "Thesis"}
+          - {label: "📰 Journal",     value: "Journal"}
+          - {label: "🎤 Conference",  value: "Conference"}
+        default: "Journal"
+
+      - label: "Publication Status"
+        name: "status"
+        widget: "select"
+        required: false
+        options:
+          - {label: "✅ Published",        value: "Published"}
+          - {label: "✔ Accepted",          value: "Accepted"}
+          - {label: "🔄 Under Review",     value: "Under Review"}
+          - {label: "🔁 Revision",         value: "Revision"}
+          - {label: "📤 Preprint",         value: "Preprint"}
+          - {label: "📝 In Preparation",   value: "In Preparation"}
+        default: "Published"
+
+      - label: "Authors"
+        name: "authors"
+        widget: "list"
+        required: false
+        hint: "One author per entry — e.g. 'Abdullah S. Fahim', 'John Doe'"
+        field: {label: "Author Name", name: "author", widget: "string"}
+
+      - {label: "Venue (Journal/Conference Name)", name: "venue", widget: "string", required: false,
+         hint: "e.g. 'IEEE Transactions on Electron Devices' or 'Proc. ICECE 2024'"}
+
+      - {label: "DOI",              name: "doi",        widget: "string",   required: false,
+         hint: "e.g. 10.1109/TED.2024.123456 — linked as https://doi.org/..."}
+      - {label: "External Link",    name: "link",       widget: "string",   required: false,
+         hint: "Paper page, arXiv, ResearchGate, etc."}
+
+      - label: "Research Interests"
+        name: "research_interests"
+        widget: "relation"
+        collection: "interests"
+        search_fields: ["name"]
+        value_field: "name"
+        display_fields: ["name"]
+        multiple: true
+        required: false
+        hint: "Tag this paper with research interests from your Research Interests collection"
+
+      - {label: "Featured Image",   name: "image",      widget: "image",    required: false}
+
+      - label: "Gallery / Slide Images"
+        name: "gallery"
+        widget: "list"
+        required: false
+        hint: "Upload images — shown as a slideshow on the card and detail page"
+        field: {label: "Image / Slide", name: "image", widget: "image"}
+
+      - {label: "Brief Abstract (shown on card)", name: "brief_abstract", widget: "text", required: false,
+         hint: "Short 1-3 sentence summary shown on the homepage card. NOT shown on the detail page."}
+      - {label: "Full Abstract / Details (shown on detail page)", name: "body", widget: "markdown", required: false,
+         hint: "Full abstract and any additional details — shown only when someone clicks through to the detail page"}
+
+      - {label: "Preprint PDF (upload)", name: "pdf_file", widget: "file", required: false,
+         hint: "Upload your preprint PDF — shown as an inline viewer on the detail page"}
+      - {label: "PDF Heading",      name: "pdf_title",  widget: "string",   required: false,
+         hint: "Heading above the PDF viewer, e.g. 'Preprint', 'Full Paper'"}
