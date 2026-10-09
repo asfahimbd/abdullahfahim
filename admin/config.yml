@@ -138,10 +138,9 @@ collections:
             widget: "select"
             required: false
             options: ["Full Time","Part Time","Voluntary","Internship","Research","Ambassador","Other"]
-          - {label: "Start Date",          name: "start_date",      widget: "datetime", required: false,
-             hint: "Select date — time is not shown on the site", time_format: false}
-          - {label: "End Date",            name: "end_date",        widget: "datetime", required: false,
-             hint: "Leave blank if currently working here", time_format: false}
+          - {label: "Start Date",          name: "start_date",      widget: "date", required: false}
+          - {label: "End Date",            name: "end_date",        widget: "date", required: false,
+             hint: "Leave blank if currently working here"}
           - {label: "Currently Working",   name: "is_current",      widget: "boolean",  default: false, required: false}
           - {label: "Show Excerpt on Card",name: "show_excerpt",    widget: "boolean",  default: true,  required: false}
           - {label: "Description",         name: "description",     widget: "markdown", required: false}
@@ -216,7 +215,7 @@ collections:
     slug: "{{year}}{{month}}{{day}}-{{slug}}"
     fields:
       - {label: "Title",            name: "title",       widget: "string",  required: false}
-      - {label: "Date",             name: "date",        widget: "datetime",required: false}
+      - {label: "Date",             name: "date",        widget: "date",    required: false}
       - {label: "Pinned",           name: "pinned",      widget: "boolean", default: false, required: false}
 
       - label: "Category"
@@ -285,7 +284,7 @@ collections:
     slug: "{{year}}{{month}}{{day}}-{{slug}}"
     fields:
       - {label: "Title",            name: "title",      widget: "string",   required: false}
-      - {label: "Date",             name: "date",       widget: "datetime", required: false}
+      - {label: "Date",             name: "date",       widget: "date",     required: false}
       - {label: "Pinned",           name: "pinned",     widget: "boolean",  default: false, required: false}
 
       - label: "Publication Type"
