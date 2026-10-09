@@ -1,0 +1,38 @@
+---
+title: '1Webinar on From Idea to Publication: Writing a Conference Paper'
+date: 2025-09-03
+pinned: false
+category: Session
+custom_category: ''
+research_interests: []
+image: /assets/images/pasted-image-1791570251528.png
+issuer: IEEE JUST Student Branch
+issuer_label: Arranged by
+gallery:
+  - /assets/images/pasted-image-1791570289254.png
+  - /assets/images/pasted-image-1791570273249.png
+  - /assets/images/pasted-image-1791570393864.png
+  - /assets/images/pasted-image-1791570401677.png
+  - /assets/images/pasted-image-1791570413771.png
+description: 'Proud to have conducted the webinar 𝐅𝐫𝐨𝐦 𝐈𝐝𝐞𝐚 𝐭𝐨 𝐏𝐮𝐛𝐥𝐢𝐜𝐚𝐭𝐢𝐨𝐧: 𝐖𝐫𝐢𝐭𝐢𝐧𝐠 𝐚 𝐂𝐨𝐧𝐟𝐞𝐫𝐞𝐧𝐜𝐞 𝐏𝐚𝐩𝐞𝐫 on 3rd September 2025, organized by IEEE JUST Student Branch.'
+youtube: https://www.youtube.com/watch?v=uyn_Yupg8Ro
+link: https://edu.ieee.org/bd-just/from-idea-to-publication-writing-a-conference-paper/
+pdf_file: /assets/images/Idea to publication.pdf
+pdf_title: Presentation slide
+---
+
+During this interactive session for 1st to 4th-year students, I covered:
+
+✅How to develop and refine research ideas
+
+✅Organizing and managing research files and references
+
+✅Extracting key insights from existing papers
+
+✅Identifying research niches and formulating impactful problems
+
+✅Structuring and writing a conference paper for IEEE and other conferences
+
+✅Tips on the publication process and getting research published
+
+It was an enriching experience to guide students through the research and publication process and see their enthusiasm for learning.
