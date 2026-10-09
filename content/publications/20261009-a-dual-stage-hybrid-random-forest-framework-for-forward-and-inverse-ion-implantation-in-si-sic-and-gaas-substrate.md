@@ -5,12 +5,12 @@ pinned: true
 pub_type: Thesis
 status: ''
 authors:
+  - author: Abdullah Shadek Fahim
+    role: Primary Author
   - author: Md. Amzad Hossain, Dr. Eng. (Associate Professor, EEE, JUST)
     role: Supervisor
   - author: Jahedul Islam (Lecturer, EEE, JUST)
     role: Co-Supervisor
-  - author: Abdullah Shadek Fahim
-    role: Primary Author
 venue: Department of Electrical and Electronic Engineering, Jashore University of Science and Technology
 doi: ''
 link: ''
