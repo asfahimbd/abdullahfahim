@@ -142,6 +142,15 @@ collections:
       - {label: "Website URL",       name: "website",      widget: "string",  required: false,
          hint: "e.g. https://example.com — shown as a link on the card and detail page"}
       - {label: "Location",          name: "location",     widget: "string",  required: false}
+      - label: "Skills Used"
+        name: "skills_used"
+        widget: "relation"
+        collection: "skills"
+        search_fields: ["name"]
+        value_field: "name"
+        display_fields: ["name"]
+        multiple: true
+        required: false
       - label: "Roles"
         name: "roles"
         widget: "list"
@@ -172,15 +181,6 @@ collections:
          hint: "Upload a PDF — shown as an inline viewer in the detail page"}
       - {label: "PDF Heading",           name: "pdf_title", widget: "string", required: false,
          hint: "Heading shown above the PDF viewer, e.g. 'Experience Letter', 'Internship Report'"}
-      - label: "Skills Used"
-        name: "skills"
-        widget: "relation"
-        collection: "skills"
-        search_fields: ["name"]
-        value_field: "name"
-        display_fields: ["name"]
-        multiple: true
-        required: false
       - label: "YouTube Video URL"
         name: "youtube"
         widget: "string"
