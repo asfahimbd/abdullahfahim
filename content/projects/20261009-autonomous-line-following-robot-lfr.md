@@ -13,7 +13,7 @@ gallery:
   - /assets/images/pasted-image-1791562894791.png
   - /assets/images/pasted-image-1791562906670.png
 description: 'As part of the "Microprocessor and Embedded System Sessional" (Course Code: EEE 3210), I collaborated with six other students in Group 05, under the supervision of Lecturer Jahedul Islam, to develop an autonomous Line Following Robot (LFR). The primary objective was to engineer a robotic system capable of accurately tracking a predefined black path on a lighter surface while ensuring stable power management. The project resulted in a fully operational autonomous robot that utilizes an infrared sensor array to read the path in real-time, processing these signals to make continuous, dynamic adjustments to its steering and motor movements.'
-youtube: https://youtu.be/k0oosfOQM8Y
+youtube: https://www.youtube.com/watch?v=k0oosfOQM8Y
 link: ''
 pdf_file: /assets/images/LFR1[1].pdf
 pdf_title: Project Report
