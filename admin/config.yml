@@ -159,10 +159,13 @@ collections:
          hint: "Heading shown above the PDF viewer, e.g. 'Experience Letter', 'Internship Report'"}
       - label: "Skills Used"
         name: "skills"
-        widget: "list"
+        widget: "relation"
+        collection: "skills"
+        search_fields: ["name"]
+        value_field: "name"
+        display_fields: ["name"]
+        multiple: true
         required: false
-        hint: "Type a skill and press Enter — e.g. Python, MATLAB, LaTeX"
-        field: {label: "Skill", name: "skill", widget: "string"}
       - label: "YouTube Video URL"
         name: "youtube"
         widget: "string"
