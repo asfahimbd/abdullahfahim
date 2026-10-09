@@ -27,7 +27,7 @@ gallery:
   - /assets/images/fd2.jpg
   - /assets/images/fd3.jpg
 brief_abstract: We performed classical molecular dynamics simulations using Large-scale Atomic/Massively Parallel Simulator (LAMMPS) to investigate hydrogen implantation, retention, diffusion, and radiation damage in a Body-Centered Cubic (BCC) tungsten slab. We explored a parameter space comprising ten implantation energies (5–300 eV) and ten substrate temperatures (300 1500 K), with 1,000 independent simulations and ten statistical repeats per condition. Hydrogen retention exhibits a pronounced non-monotonic dependence on implantation energy,...
-pdf_file: ''
+pdf_file: /assets/images/191131_defense.pdf
 pdf_title: ''
 ---
 
