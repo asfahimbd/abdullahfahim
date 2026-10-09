@@ -1,6 +1,6 @@
 ---
 title: Outstanding Student Volunteer Award (Honourable Mention) 2025
-date: 2025-12-31T18:28:00
+date: 2025-12-31
 pinned: false
 category: Award
 custom_category: ''
@@ -10,6 +10,7 @@ issuer: IEEE Bangladesh Section
 issuer_label: 'Issued by:'
 gallery:
   - /assets/images/pasted-image-1791548951260.png
+  - /assets/images/pasted-image-1791558887601.png
 description: Recognition for being one of the outstanding student volunteers in IEEE Bangladesh Section. During this period I have arranged 26 events and 260% membership growth.
 youtube: ''
 link: ''
