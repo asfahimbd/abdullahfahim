@@ -5,10 +5,13 @@ pinned: true
 pub_type: Thesis
 status: ''
 authors:
-  - Abdullah Shadek Fahim
+  - author: Md. Amzad Hossain, Dr. Eng. (Associate Professor, EEE, JUST)
+    role: Supervisor
+  - author: Jahedul Islam (Lecturer, EEE, JUST)
+    role: Co-Supervisor
 venue: Department of Electrical and Electronic Engineering, Jashore University of Science and Technology
-doi: 'Superviser: Md. Amzad Hossain, Dr. Eng.'
-link: 'Co-Superviser: Jahedul Islam'
+doi: ''
+link: ''
 research_interests:
   - Machine Learning
   - SRIM/TRIM
