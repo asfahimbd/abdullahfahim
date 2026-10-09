@@ -25,8 +25,6 @@ collections:
           - {label: "Tagline",           name: "tagline",    widget: "string",  required: false}
           - {label: "Short Bio",         name: "bio",        widget: "text",    required: false}
           - {label: "Profile Photo",     name: "photo",      widget: "image",   required: false}
-          - {label: "Photo Focus X (0=left · 50=center · 100=right)", name: "photo_focus_x", widget: "number", value_type: "int", min: 0, max: 100, default: 50, required: false}
-          - {label: "Photo Focus Y (0=top · 50=center · 100=bottom)",  name: "photo_focus_y", widget: "number", value_type: "int", min: 0, max: 100, default: 50, required: false}
           - {label: "CV / Resume PDF (upload)", name: "cv_file", widget: "file", required: false,
              hint: "Upload your CV/resume PDF directly — takes priority over the URL below"}
           - {label: "Email",             name: "email",      widget: "string",  required: false}
@@ -50,7 +48,6 @@ collections:
           - {label: "Show Certificates",    name: "Certificates",   widget: "boolean", default: true, required: false}
           - {label: "Show Technical Talks", name: "TechnicalTalk",  widget: "boolean", default: true, required: false}
           - {label: "Show Achievements",    name: "Achievements",   widget: "boolean", default: true, required: false}
-          - {label: "Show Skills",          name: "Skills",         widget: "boolean", default: true, required: false}
 
       - label: "Footer"
         name: "footer"
@@ -71,6 +68,8 @@ collections:
       - {label: "Order (1=top)",     name: "order",       widget: "number",  default: 1,          required: false}
       - {label: "Level",             name: "level",       widget: "select",  options: ["University","College","School","Other"], default: "University", required: false}
       - {label: "Institution Name",  name: "institution", widget: "string",  required: false}
+      - {label: "Website URL",       name: "website",     widget: "string",  required: false,
+         hint: "e.g. https://example.com — shown as a link on the card and detail popup"}
       - {label: "Degree / Group",    name: "degree",      widget: "string",  required: false}
       - {label: "Passing Year",      name: "passing",     widget: "string",  required: false}
       - {label: "Location",          name: "location",    widget: "string",  required: false,
@@ -100,6 +99,16 @@ collections:
       - {label: "Description",       name: "description", widget: "text",    required: false}
       - {label: "Subjects Studied",  name: "subjects",    widget: "string",  required: false,
          hint: "Comma separated — e.g. Physics, Chemistry, Mathematics"}
+      - label: "YouTube Video URL"
+        name: "youtube"
+        widget: "string"
+        required: false
+        hint: "e.g. https://youtu.be/abc123 — shown as an embedded player in the detail popup"
+      - label: "Video Heading"
+        name: "youtube_title"
+        widget: "string"
+        required: false
+        hint: "Heading shown above the video. Leave blank for 'Video'"
 
   # ══════════════════════════════════════════
   # 3. EXPERIENCES
@@ -111,7 +120,11 @@ collections:
     slug: "{{slug}}"
     fields:
       - {label: "Organization",      name: "organization", widget: "string",  required: false}
+      - {label: "Description",        name: "body",         widget: "markdown", required: false,
+         hint: "Main description of this experience — supports bold, italic, lists, links"}
       - {label: "Logo",              name: "logo",         widget: "image",   required: false}
+      - {label: "Website URL",       name: "website",      widget: "string",  required: false,
+         hint: "e.g. https://example.com — shown as a link on the card and detail page"}
       - {label: "Location",          name: "location",     widget: "string",  required: false}
       - label: "Roles"
         name: "roles"
@@ -123,40 +136,39 @@ collections:
             name: "employment_type"
             widget: "select"
             required: false
-            options: ["Full Time","Part Time","Voluntary","Internship","Research","Other"]
-          - {label: "Start Date",          name: "start_date",      widget: "datetime", required: false}
-          - {label: "End Date",            name: "end_date",        widget: "datetime", required: false}
+            options: ["Full Time","Part Time","Voluntary","Internship","Research","Ambassador","Other"]
+          - {label: "Start Date",          name: "start_date",      widget: "datetime", required: false,
+             hint: "Select date — time is not shown on the site", time_format: false}
+          - {label: "End Date",            name: "end_date",        widget: "datetime", required: false,
+             hint: "Leave blank if currently working here", time_format: false}
           - {label: "Currently Working",   name: "is_current",      widget: "boolean",  default: false, required: false}
           - {label: "Show Excerpt on Card",name: "show_excerpt",    widget: "boolean",  default: true,  required: false}
-          - {label: "Description",         name: "description",     widget: "text",     required: false}
-      - label: "Skills Used"
-        name: "skills"
-        widget: "relation"
-        collection: "skills"
-        search_fields: ["name"]
-        value_field: "name"
-        display_fields: ["name"]
-        multiple: true
+          - {label: "Description",         name: "description",     widget: "markdown", required: false}
+          - {label: "Certificate (Image/PDF)",  name: "certificate", widget: "image",   required: false,
+             hint: "Upload certificate or document for this role — a 'View Certificate' button will appear in the detail page"}
+      - label: "Gallery / Photos"
+        name: "gallery"
+        widget: "list"
         required: false
-      - {label: "Full Details (Markdown)", name: "body",      widget: "markdown", required: false}
+        hint: "Upload photos related to this experience — they will appear as a slideshow in the detail page"
+        field: {label: "Photo", name: "image", widget: "image"}
+      - {label: "PDF Document (upload)", name: "pdf_file", widget: "file", required: false,
+         hint: "Upload a PDF — shown as an inline viewer in the detail page"}
+      - {label: "PDF Heading",           name: "pdf_title", widget: "string", required: false,
+         hint: "Heading shown above the PDF viewer, e.g. 'Experience Letter', 'Internship Report'"}
+      - label: "YouTube Video URL"
+        name: "youtube"
+        widget: "string"
+        required: false
+        hint: "e.g. https://youtu.be/abc123 — paste any YouTube link"
+      - label: "Video Heading"
+        name: "youtube_title"
+        widget: "string"
+        required: false
+        hint: "Heading above the video — leave blank to show 'Video'"
 
   # ══════════════════════════════════════════
-  # 4. SKILLS
-  # ══════════════════════════════════════════
-  - name: "skills"
-    label: "💡 Skills"
-    folder: "content/skills"
-    create: true
-    slug: "{{slug}}"
-    summary: "{{name}}"
-    fields:
-      - {label: "Skill Name",        name: "name",        widget: "string",  required: false}
-      - {label: "Short Description", name: "description", widget: "text",    required: false,
-         hint: "Brief description of this skill"}
-      - {label: "Order",             name: "order",       widget: "number",  default: 99, required: false}
-
-  # ══════════════════════════════════════════
-  # 5. RESEARCH INTERESTS
+  # 4. RESEARCH INTERESTS
   # ══════════════════════════════════════════
   - name: "interests"
     label: "🔬 Research Interests"
@@ -171,7 +183,7 @@ collections:
       - {label: "Order",             name: "order",       widget: "number",  default: 99, required: false}
 
   # ══════════════════════════════════════════
-  # 6. CUSTOM CATEGORIES
+  # 5. CUSTOM CATEGORIES
   # ══════════════════════════════════════════
   - name: "categories"
     label: "🗂 Custom Categories"
@@ -194,7 +206,7 @@ collections:
         default: "Standalone"
 
   # ══════════════════════════════════════════
-  # 7. PORTFOLIO ITEMS (Projects, Research, etc.)
+  # 6. PORTFOLIO ITEMS (Projects, Research, etc.)
   # ══════════════════════════════════════════
   - name: "projects"
     label: "📁 Portfolio Items"
@@ -215,7 +227,7 @@ collections:
           - {label: "📰 Journal",             value: "Journal"}
           - {label: "🎤 Conference",          value: "Conference"}
           - {label: "🎓 Academic Project",    value: "Academic Project"}
-          - {label: "💼 Freelance Project",   value: "Freelance Project"}
+          - {label: "🚀 Non-Academic Project", value: "Non-Academic Project"}
           - {label: "🧑‍💻 Training",           value: "Training"}
           - {label: "🌍 Field Work",          value: "Field Work"}
           - {label: "📜 Certificate",         value: "Certificate"}
@@ -226,39 +238,18 @@ collections:
 
       - label: "Custom Category"
         name: "custom_category"
-        widget: "relation"
-        collection: "categories"
-        search_fields: ["name"]
-        value_field: "name"
-        display_fields: ["name"]
+        widget: "string"
         required: false
-        hint: "Select a category you created in Custom Categories (only needed if 'Custom' selected above)"
-
-      - label: "Skills Used"
-        name: "skills"
-        widget: "relation"
-        collection: "skills"
-        search_fields: ["name"]
-        value_field: "name"
-        display_fields: ["name"]
-        multiple: true
-        required: false
+        hint: "Enter a custom category name (only needed if 'Custom' selected above)"
 
       - label: "Research Interests"
         name: "research_interests"
-        widget: "relation"
-        collection: "interests"
-        search_fields: ["name"]
-        value_field: "name"
-        display_fields: ["name"]
-        multiple: true
+        widget: "list"
         required: false
+        hint: "Add research interest tags — one per line"
+        field: {label: "Interest", name: "interest", widget: "string"}
 
       - {label: "Featured Image",    name: "image",       widget: "image",   required: false}
-      - {label: "Image Focal X (0-100)", name: "focus_x", widget: "number", default: 50, required: false,
-         hint: "Horizontal focal point for image crop"}
-      - {label: "Image Focal Y (0-100)", name: "focus_y", widget: "number", default: 50, required: false,
-         hint: "Vertical focal point for image crop"}
 
       - {label: "Issuer / Provider",   name: "issuer",      widget: "string",  required: false,
          hint: "For certificates: who issued this (e.g. Coursera, IEEE, BUET)"}
