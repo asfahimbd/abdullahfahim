@@ -318,8 +318,19 @@ collections:
         name: "authors"
         widget: "list"
         required: false
-        hint: "One author per entry — e.g. 'Abdullah S. Fahim', 'John Doe'"
-        field: {label: "Author Name", name: "author", widget: "string"}
+        hint: "One author per entry with their role (Primary Author, Co-Author, Supervisor, Co-Supervisor)"
+        fields:
+          - {label: "Author Name", name: "author", widget: "string"}
+          - label: "Role"
+            name: "role"
+            widget: "select"
+            required: false
+            default: "Co-Author"
+            options:
+              - {label: "🖊 Primary Author",  value: "Primary Author"}
+              - {label: "👥 Co-Author",        value: "Co-Author"}
+              - {label: "🎓 Supervisor",       value: "Supervisor"}
+              - {label: "🤝 Co-Supervisor",    value: "Co-Supervisor"}
 
       - {label: "Venue (Journal/Conference Name)", name: "venue", widget: "string", required: false,
          hint: "e.g. 'IEEE Transactions on Electron Devices' or 'Proc. ICECE 2024'"}
