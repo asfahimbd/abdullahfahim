@@ -1105,22 +1105,18 @@ function countCat(cat){
 /* ══ NAV ══ */
 function buildNav(){
   const homeLink=`<li class="nav-item"><a onclick="goHome()" style="cursor:pointer">Home</a></li>`;
-  // Publications counts (will be injected into Research dropdown)
-  const pubVisible=NAV_VISIBILITY['Publications']!==false&&ALL_PUBLICATIONS.length>0;
+  // Publication counts for Research dropdown
   const pubCount=ALL_PUBLICATIONS.length;
   const thesisCount=ALL_PUBLICATIONS.filter(p=>p.pub_type==='Thesis').length;
   const journalCount=ALL_PUBLICATIONS.filter(p=>p.pub_type==='Journal').length;
   const confCount=ALL_PUBLICATIONS.filter(p=>p.pub_type==='Conference').length;
-  const pubDropLinks=pubVisible?`<div class="dropdown-div"></div>
-    ${thesisCount?`<a onclick="location.hash='all-pub-Thesis'">📄 Thesis Pubs <span class="dd-cnt">${thesisCount}</span></a>`:''}
-    ${journalCount?`<a onclick="location.hash='all-pub-Journal'">📰 Journal Pubs <span class="dd-cnt">${journalCount}</span></a>`:''}
-    ${confCount?`<a onclick="location.hash='all-pub-Conference'">🎤 Conference Pubs <span class="dd-cnt">${confCount}</span></a>`:''}
-    <a onclick="location.hash='all-pub'" style="font-weight:700">All Publications <span class="dd-cnt">${pubCount}</span></a>`:'';
   document.getElementById('main-nav').innerHTML=homeLink+Object.entries(GROUPS).filter(([key])=>NAV_VISIBILITY[key]!==false).map(([key,g])=>{
     const tot=countGroup(key);
     if(g.hasDropdown){
-      const extraLinks=key==='Research'?pubDropLinks:'';
-      return`<li class="nav-item"><a onclick="showAll('${key}',null)" style="cursor:pointer">${g.label}${tot>0?` <span class="nav-cnt">${tot}</span>`:''} <span class="nav-arrow">▾</span></a><div class="dropdown">${g.subcats.map(cat=>`<a onclick="showAll('${key}','${cat}')">${cat} <span class="dd-cnt">${countCat(cat)}</span></a>`).join('')}<div class="dropdown-div"></div><a onclick="showAll('${key}',null)" style="font-weight:700">All ${g.label} <span class="dd-cnt">${tot}</span></a>${extraLinks}</div></li>`;
+      if(key==='Research'){
+        return`<li class="nav-item"><a onclick="location.hash='all-pub'" style="cursor:pointer">Research${pubCount>0?` <span class="nav-cnt">${pubCount}</span>`:''} <span class="nav-arrow">▾</span></a><div class="dropdown"><a onclick="location.hash='all-pub-Thesis'">Thesis <span class="dd-cnt">${thesisCount}</span></a><a onclick="location.hash='all-pub-Journal'">Journal <span class="dd-cnt">${journalCount}</span></a><a onclick="location.hash='all-pub-Conference'">Conference <span class="dd-cnt">${confCount}</span></a></div></li>`;
+      }
+      return`<li class="nav-item"><a onclick="showAll('${key}',null)" style="cursor:pointer">${g.label}${tot>0?` <span class="nav-cnt">${tot}</span>`:''} <span class="nav-arrow">▾</span></a><div class="dropdown">${g.subcats.map(cat=>`<a onclick="showAll('${key}','${cat}')">${cat} <span class="dd-cnt">${countCat(cat)}</span></a>`).join('')}<div class="dropdown-div"></div><a onclick="showAll('${key}',null)" style="font-weight:700">All ${g.label} <span class="dd-cnt">${tot}</span></a></div></li>`;
     }else{
       return`<li class="nav-item"><a onclick="showAll('${key}',null)">${g.label}${tot>0?` <span class="nav-cnt">${tot}</span>`:''}</a></li>`;
     }
@@ -1139,7 +1135,6 @@ function buildNav(){
 }
 
 function buildDrawer(){
-  const pubVisible=NAV_VISIBILITY['Publications']!==false&&ALL_PUBLICATIONS.length>0;
   const pubCount=ALL_PUBLICATIONS.length;
   const thesisCount=ALL_PUBLICATIONS.filter(p=>p.pub_type==='Thesis').length;
   const journalCount=ALL_PUBLICATIONS.filter(p=>p.pub_type==='Journal').length;
@@ -1149,13 +1144,10 @@ function buildDrawer(){
     Object.entries(GROUPS).filter(([key])=>NAV_VISIBILITY[key]!==false).map(([key,g])=>{
       const tot=countGroup(key);
       if(g.hasDropdown){
-        const pubLinks=key==='Research'&&pubVisible?[
-          thesisCount?`<a onclick="closeDrawer();setTimeout(()=>location.hash='all-pub-Thesis',300)">📄 Thesis Pubs <span class="dd-cnt">${thesisCount}</span></a>`:'',
-          journalCount?`<a onclick="closeDrawer();setTimeout(()=>location.hash='all-pub-Journal',300)">📰 Journal Pubs <span class="dd-cnt">${journalCount}</span></a>`:'',
-          confCount?`<a onclick="closeDrawer();setTimeout(()=>location.hash='all-pub-Conference',300)">🎤 Conference Pubs <span class="dd-cnt">${confCount}</span></a>`:'',
-          `<a onclick="closeDrawer();setTimeout(()=>location.hash='all-pub',300)" style="font-weight:700">All Publications <span class="dd-cnt">${pubCount}</span></a>`
-        ].filter(Boolean).join('') : '';
-        return`<div><button class="dg-btn" style="display:flex;justify-content:space-between"><span onclick="drawerGo('${key}',null)" style="flex:1;text-align:left">${g.label}${tot>0?` <span class="nav-cnt">${tot}</span>`:''}</span><span onclick="toggleDG('dg-${key}','dga-${key}')" style="padding:.2rem .4rem"><span id="dga-${key}" style="font-size:.55rem;transition:transform .2s">▾</span></span></button><div class="drawer-sub" id="dg-${key}">${g.subcats.map(cat=>`<a onclick="drawerGo('${key}','${cat}')">${cat} <span class="dd-cnt">${countCat(cat)}</span></a>`).join('')}<a onclick="drawerGo('${key}',null)" style="font-weight:700">All ${g.label} <span class="dd-cnt">${tot}</span></a>${pubLinks?`<div class="drawer-divider" style="margin:.3rem 0"></div>${pubLinks}`:''}</div></div>`;
+        if(key==='Research'){
+          return`<div><button class="dg-btn" style="display:flex;justify-content:space-between"><span onclick="closeDrawer();setTimeout(()=>location.hash='all-pub',300)" style="flex:1;text-align:left">Research${pubCount>0?` <span class="nav-cnt">${pubCount}</span>`:''}</span><span onclick="toggleDG('dg-Research','dga-Research')" style="padding:.2rem .4rem"><span id="dga-Research" style="font-size:.55rem;transition:transform .2s">▾</span></span></button><div class="drawer-sub" id="dg-Research"><a onclick="closeDrawer();setTimeout(()=>location.hash='all-pub-Thesis',300)">Thesis <span class="dd-cnt">${thesisCount}</span></a><a onclick="closeDrawer();setTimeout(()=>location.hash='all-pub-Journal',300)">Journal <span class="dd-cnt">${journalCount}</span></a><a onclick="closeDrawer();setTimeout(()=>location.hash='all-pub-Conference',300)">Conference <span class="dd-cnt">${confCount}</span></a></div></div>`;
+        }
+        return`<div><button class="dg-btn" style="display:flex;justify-content:space-between"><span onclick="drawerGo('${key}',null)" style="flex:1;text-align:left">${g.label}${tot>0?` <span class="nav-cnt">${tot}</span>`:''}</span><span onclick="toggleDG('dg-${key}','dga-${key}')" style="padding:.2rem .4rem"><span id="dga-${key}" style="font-size:.55rem;transition:transform .2s">▾</span></span></button><div class="drawer-sub" id="dg-${key}">${g.subcats.map(cat=>`<a onclick="drawerGo('${key}','${cat}')">${cat} <span class="dd-cnt">${countCat(cat)}</span></a>`).join('')}<a onclick="drawerGo('${key}',null)" style="font-weight:700">All ${g.label} <span class="dd-cnt">${tot}</span></a></div></div>`;
       }else{
         return`<div class="drawer-direct" onclick="drawerGo('${key}',null)">${g.label}${tot>0?`<span class="nav-cnt">${tot}</span>`:''}</div>`;
       }
@@ -1337,22 +1329,21 @@ function buildYearLabel(startDate, endDate, isCurrent){
   return sy;
 }
 
-/* Format ISO datetime → "Mon YYYY" for display (strips time part) */
+/* Format ISO date → "10 October, 2026" (with day) or "October 2026" (month-only) */
 function fmtDate(s){
   if(!s)return'';
   const raw=String(s).trim();
   if(!raw||raw==='null'||raw==='undefined')return'';
-  // Full 4-digit year only
   if(/^\d{4}$/.test(raw))return raw;
-  // 2-digit year → treat as 20xx
   if(/^\d{2}$/.test(raw))return'20'+raw;
-  // Strip time part (T...) and parse date portion only
   const datePart=raw.split('T')[0].split(' ')[0];
-  if(!/^\d{4}-\d{2}/.test(datePart))return datePart; // not ISO format, return raw
+  if(!/^\d{4}-\d{2}/.test(datePart))return datePart;
   const d=new Date(datePart+'T00:00:00Z');
   if(isNaN(d.getTime()))return datePart;
-  const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  return m[d.getUTCMonth()]+' '+d.getUTCFullYear();
+  const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const hasDay=/^\d{4}-\d{2}-\d{2}/.test(datePart);
+  if(hasDay)return d.getUTCDate()+' '+MONTHS[d.getUTCMonth()]+', '+d.getUTCFullYear();
+  return MONTHS[d.getUTCMonth()]+' '+d.getUTCFullYear();
 }
 
 function expHost(url){try{return new URL(url).hostname.replace(/^www\./,'');}catch{return url;}}
