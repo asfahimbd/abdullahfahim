@@ -11,6 +11,7 @@ issuer_label: ''
 gallery:
   - /assets/images/pasted-image-1791559209759.png
   - /assets/images/pasted-image-1791559220224.png
+  - /assets/images/pasted-image-1791559680345.png
 description: |-
   2nd Runner-Up position in the IEEE Bangladesh Section SYW Idea Pitching Competition 2025 at the IEEE Bangladesh Section Vitality Enhancement Summit 2025, held on 29th August, 2025 at Asia Hotel & Resorts, Dhaka, Bangladesh from IEEE Bangladesh Section!
   Idea Name: Lifelink: An AI-Based Donor–Recipient Tissue Compatibility System
