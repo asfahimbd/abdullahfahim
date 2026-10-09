@@ -5,7 +5,7 @@ pinned: false
 category: Certificate
 custom_category: ''
 research_interests: []
-image: ''
+image: /assets/images/ulkasemi.jpg
 issuer: ULKASEMI Pvt. Limited
 issuer_label: ''
 gallery: []
