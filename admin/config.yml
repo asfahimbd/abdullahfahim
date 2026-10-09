@@ -157,6 +157,12 @@ collections:
          hint: "Upload a PDF — shown as an inline viewer in the detail page"}
       - {label: "PDF Heading",           name: "pdf_title", widget: "string", required: false,
          hint: "Heading shown above the PDF viewer, e.g. 'Experience Letter', 'Internship Report'"}
+      - label: "Skills Used"
+        name: "skills"
+        widget: "list"
+        required: false
+        hint: "Type a skill and press Enter — e.g. Python, MATLAB, LaTeX"
+        field: {label: "Skill", name: "skill", widget: "string"}
       - label: "YouTube Video URL"
         name: "youtube"
         widget: "string"
@@ -167,15 +173,6 @@ collections:
         widget: "string"
         required: false
         hint: "Heading above the video — leave blank to show 'Video'"
-      - label: "Skills Used"
-        name: "skills"
-        widget: "relation"
-        collection: "skills"
-        search_fields: ["name"]
-        value_field: "name"
-        display_fields: ["name"]
-        multiple: true
-        required: false
       - {label: "Full Details (Markdown)", name: "body",      widget: "markdown", required: false}
 
   # ══════════════════════════════════════════
