@@ -5,7 +5,7 @@ pinned: false
 category: Award
 custom_category: ''
 research_interests: []
-image: ''
+image: /assets/images/cambrian award.jpg
 issuer: BSB-Cambrian Education Group
 issuer_label: ''
 gallery: []
