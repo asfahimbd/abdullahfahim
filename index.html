@@ -967,7 +967,8 @@ function pubCardHTML(p){
   const authBlock=p.authors_list.length?`<div class="pub-authors-block">
     ${pubAuthorsHTML(primaryList)}
     ${moreCount?`<span class="auth-more-btn" onclick="event.stopPropagation();toggleAuthMore('am-${p.id}',this)">▾ more authors</span><div class="auth-more-wrap" id="am-${p.id}" style="display:none">${pubAuthorsHTML(otherList)}</div>`:''}</div>`:'';
-  return`<div class="pub-card pub-card-${tc}" onclick="location.hash='pub-'+encodeURIComponent(String(p.id||''))">
+  const safeId=encodeURIComponent(p.id||'');
+  return`<div class="pub-card pub-card-${tc}" onclick="location.hash='pub-${safeId}'">
     ${galHTML}
     <div style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap;margin-bottom:.26rem">
       <span class="pub-type-badge pub-type-${tc}">${tc}</span>
