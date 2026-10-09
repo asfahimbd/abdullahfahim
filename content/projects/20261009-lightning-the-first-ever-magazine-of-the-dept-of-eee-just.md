@@ -17,7 +17,7 @@ description: |-
   I am immensely proud to have designed "LIGHTNING", the first-ever magazine of the Department of Electrical and Electronic Engineering (EEE).
 youtube: ''
 link: ''
-pdf_file: /assets/images/spread EEE_magazine 10-12-23 2.pdf
+pdf_file: ''
 pdf_title: ''
 ---
 
