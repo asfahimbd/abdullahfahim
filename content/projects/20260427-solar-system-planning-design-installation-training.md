@@ -5,7 +5,7 @@ pinned: false
 category: Certificate
 custom_category: ''
 research_interests: []
-image: ''
+image: /assets/images/daffodil.jpg
 issuer: Department of EEE, Daffodil International University (DIU)
 issuer_label: ''
 gallery: []
