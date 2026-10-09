@@ -5,7 +5,7 @@ pinned: false
 category: Certificate
 custom_category: ''
 research_interests: []
-image: ''
+image: /assets/images/IEEE VTS.jpg
 issuer: IEEE Bangladesh Section
 issuer_label: ''
 gallery: []
