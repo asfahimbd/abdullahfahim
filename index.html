@@ -967,7 +967,7 @@ function pubCardHTML(p){
   const authBlock=p.authors_list.length?`<div class="pub-authors-block">
     ${pubAuthorsHTML(primaryList)}
     ${moreCount?`<span class="auth-more-btn" onclick="event.stopPropagation();toggleAuthMore('am-${p.id}',this)">▾ more authors</span><div class="auth-more-wrap" id="am-${p.id}" style="display:none">${pubAuthorsHTML(otherList)}</div>`:''}</div>`:'';
-  return`<div class="pub-card pub-card-${tc}" onclick="location.hash='pub-${p.id}'">
+  return`<div class="pub-card pub-card-${tc}" onclick="location.hash='pub-'+encodeURIComponent(String(p.id||''))">
     ${galHTML}
     <div style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap;margin-bottom:.26rem">
       <span class="pub-type-badge pub-type-${tc}">${tc}</span>
@@ -994,11 +994,11 @@ function renderPublicationsSection(){
   const tot=ALL_PUBLICATIONS.length;
   return`<section class="section">
     <div class="section-header">
-      <h2 class="section-title">Publications</h2>
+      <h2 class="section-title">Research</h2>
       ${tot>4?`<span class="see-all-link" onclick="location.hash='all-pub'">See All (${tot})</span>`:`<span style="font-size:.72rem;color:var(--ink3)">Click for details</span>`}
     </div>
     <div class="pub-grid pub-grid-home">${shown.map(p=>pubCardHTML(p)).join('')}</div>
-    ${tot>4?`<div class="see-all-row"><button class="see-all-btn" onclick="location.hash='all-pub'">See All Publications (${tot})</button></div>`:''}
+    ${tot>4?`<div class="see-all-row"><button class="see-all-btn" onclick="location.hash='all-pub'">See All Research (${tot})</button></div>`:''}
   </section>`;
 }
 
@@ -1013,7 +1013,7 @@ function renderAllPubsPage(filterType){
   document.getElementById('app').innerHTML=`
   <div class="list-page">
     <button onclick="goHome()" class="btn btn-g" style="margin-bottom:1.1rem">← Home</button>
-    <h2 class="section-title" style="margin-bottom:1rem">Publications</h2>
+    <h2 class="section-title" style="margin-bottom:1rem">Research</h2>
     <div class="filter-tabs">
       <button class="ftab ${active==='All'?'active':''}" onclick="location.hash='all-pub'">All (${ALL_PUBLICATIONS.length})</button>
       ${cnt('Thesis')?`<button class="ftab ${active==='Thesis'?'active':''}" onclick="location.hash='all-pub-Thesis'">Thesis (${cnt('Thesis')})</button>`:''}
@@ -1177,7 +1177,7 @@ function route(){
   else if(hash.startsWith('view-exp-')){renderExpDetail(hash.replace('view-exp-',''));}
   else if(hash.startsWith('view-'))renderDetail(hash.replace('view-',''));
   else if(hash.startsWith('interest-')){showByInterest(decodeURIComponent(hash.replace('interest-','')));}
-  else if(hash.startsWith('pub-')){renderPubDetail(hash.replace('pub-',''));}
+  else if(hash.startsWith('pub-')){renderPubDetail(decodeURIComponent(hash.replace('pub-','')));}
   else if(hash==='all-pub'){renderAllPubsPage('All');}
   else if(hash.startsWith('all-pub-')){renderAllPubsPage(hash.replace('all-pub-',''));}
   else if(hash.startsWith('all-')){
