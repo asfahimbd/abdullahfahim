@@ -723,7 +723,7 @@ async function fetchExperiences(){
         if(!aEnd)return-1;if(!bEnd)return 1;
         return 0;
       });
-      const skills_list=parseYamlList(text,'skills_used','skill');
+      const skills_list=parseYamlList(text,'skills','skill');
       return{
         id:f.name.replace('.md',''),
         organization:fm.organization||'',
@@ -740,7 +740,7 @@ async function fetchExperiences(){
     // Single role entry
     const endDate=fm.end_date||'';
     const isCurrent=!endDate||endDate.toLowerCase().includes('present');
-    const skills_list=parseYamlList(text,'skills_used','skill');
+    const skills_list=parseYamlList(text,'skills','skill');
     return{
       id:f.name.replace('.md',''),
       organization:fm.organization||'',
