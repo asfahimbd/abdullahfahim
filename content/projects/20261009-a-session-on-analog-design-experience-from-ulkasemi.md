@@ -5,7 +5,7 @@ pinned: true
 category: Session
 custom_category: ''
 research_interests: []
-image: /assets/images/pasted-image-1791573119293.png
+image: /assets/images/daffodil.jpg
 issuer: EEE Club, JUST
 issuer_label: Arranged by
 gallery:
