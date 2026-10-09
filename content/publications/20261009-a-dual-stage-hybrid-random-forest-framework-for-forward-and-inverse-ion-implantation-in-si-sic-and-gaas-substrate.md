@@ -9,6 +9,8 @@ authors:
     role: Supervisor
   - author: Jahedul Islam (Lecturer, EEE, JUST)
     role: Co-Supervisor
+  - author: Abdullah Shadek Fahim
+    role: Primary Author
 venue: Department of Electrical and Electronic Engineering, Jashore University of Science and Technology
 doi: ''
 link: ''
