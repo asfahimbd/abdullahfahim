@@ -1,7 +1,7 @@
 ---
 title: 'Webinar on From Idea to Publication: Writing a Conference Paper'
 date: 2025-09-03
-pinned: false
+pinned: true
 category: Session
 custom_category: ''
 research_interests: []
