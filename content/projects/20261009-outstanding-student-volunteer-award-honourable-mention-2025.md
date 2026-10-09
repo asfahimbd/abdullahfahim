@@ -13,7 +13,7 @@ gallery:
   - /assets/images/pasted-image-1791558887601.png
 description: Recognition for being one of the outstanding student volunteers in IEEE Bangladesh Section. During this period I have arranged 26 events and 260% membership growth.
 youtube: ''
-link: ''
+link: https://lnkd.in/p/guex2SXy
 pdf_file: ''
 pdf_title: ''
 ---
