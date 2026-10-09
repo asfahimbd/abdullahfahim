@@ -224,9 +224,6 @@ collections:
         widget: "select"
         required: false
         options:
-          - {label: "📄 Thesis",              value: "Thesis"}
-          - {label: "📰 Journal",             value: "Journal"}
-          - {label: "🎤 Conference",          value: "Conference"}
           - {label: "🎓 Academic Project",    value: "Academic Project"}
           - {label: "🚀 Non-Academic Project", value: "Non-Academic Project"}
           - {label: "🧑‍💻 Training",           value: "Training"}
@@ -279,10 +276,10 @@ collections:
          hint: "Heading shown above the PDF viewer, e.g. 'Full Paper', 'Research Report'"}
 
   # ══════════════════════════════════════════
-  # 7. PUBLICATIONS (Thesis, Journal, Conference)
+  # 7. RESEARCH (Thesis, Journal, Conference)
   # ══════════════════════════════════════════
   - name: "publications"
-    label: "📚 Publications"
+    label: "🔬 Research"
     folder: "content/publications"
     create: true
     slug: "{{year}}{{month}}{{day}}-{{slug}}"
@@ -318,9 +315,12 @@ collections:
         name: "authors"
         widget: "list"
         required: false
-        hint: "One author per entry with their role (Primary Author, Co-Author, Supervisor, Co-Supervisor)"
+        hint: "Add one entry per role. For Co-Author: enter multiple names comma-separated in a single entry (e.g. 'Alice, Bob, Charlie') — no need to add separate entries for each co-author."
         fields:
-          - {label: "Author Name", name: "author", widget: "string"}
+          - label: "Name(s)"
+            name: "author"
+            widget: "string"
+            hint: "One name, or comma-separated names for Co-Author role (e.g. 'Alice, Bob, Charlie')"
           - label: "Role"
             name: "role"
             widget: "select"
@@ -360,8 +360,8 @@ collections:
         hint: "Upload images — shown as a slideshow on the card and detail page"
         field: {label: "Image / Slide", name: "image", widget: "image"}
 
-      - {label: "Brief Abstract (shown on card)", name: "brief_abstract", widget: "text", required: false,
-         hint: "Short 1-3 sentence summary shown on the homepage card. NOT shown on the detail page."}
+      - {label: "Brief Abstract (shown on card)", name: "brief_abstract", widget: "markdown", required: false,
+         hint: "Short summary shown on the homepage card — supports bold, italic, lists. NOT shown on the detail page."}
       - {label: "Full Abstract / Details (shown on detail page)", name: "body", widget: "markdown", required: false,
          hint: "Full abstract and any additional details — shown only when someone clicks through to the detail page"}
 
