@@ -2,7 +2,7 @@
 title: Best Student Performance Award 2017 – BSB-Cambrian Education Group
 date: 2017-01-01
 pinned: false
-category: Certificate
+category: Award
 custom_category: ''
 research_interests: []
 image: ''
