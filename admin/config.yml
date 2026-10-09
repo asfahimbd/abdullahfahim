@@ -102,35 +102,9 @@ collections:
       - {label: "Description",       name: "description", widget: "text",    required: false}
       - {label: "Subjects Studied",  name: "subjects",    widget: "string",  required: false,
          hint: "Comma separated — e.g. Physics, Chemistry, Mathematics"}
-      - label: "YouTube Video URL"
-        name: "youtube"
-        widget: "string"
-        required: false
-        hint: "e.g. https://youtu.be/abc123 — shown as an embedded player in the detail popup"
-      - label: "Video Heading"
-        name: "youtube_title"
-        widget: "string"
-        required: false
-        hint: "Heading shown above the video. Leave blank for 'Video'"
 
   # ══════════════════════════════════════════
-  # 3. SKILLS  (defined before Experiences so relation widgets can find it)
-  # ══════════════════════════════════════════
-  - name: "skills"
-    label: "💡 Skills"
-    folder: "content/skills"
-    create: true
-    slug: "{{slug}}"
-    identifier_field: "name"
-    summary: "{{name}}"
-    fields:
-      - {label: "Skill Name",        name: "name",        widget: "string",  required: false}
-      - {label: "Short Description", name: "description", widget: "text",    required: false,
-         hint: "Brief description of this skill"}
-      - {label: "Order",             name: "order",       widget: "number",  default: 99, required: false}
-
-  # ══════════════════════════════════════════
-  # 4. EXPERIENCES
+  # 3. EXPERIENCES
   # ══════════════════════════════════════════
   - name: "experiences"
     label: "💼 Experiences"
@@ -139,8 +113,6 @@ collections:
     slug: "{{slug}}"
     fields:
       - {label: "Organization",      name: "organization", widget: "string",  required: false}
-      - {label: "Description",        name: "body",         widget: "markdown", required: false,
-         hint: "Main description of this experience — supports bold, italic, lists, links"}
       - {label: "Logo",              name: "logo",         widget: "image",   required: false}
       - {label: "Website URL",       name: "website",      widget: "string",  required: false,
          hint: "e.g. https://example.com — shown as a link on the card and detail page"}
@@ -162,7 +134,7 @@ collections:
              hint: "Leave blank if currently working here", time_format: false}
           - {label: "Currently Working",   name: "is_current",      widget: "boolean",  default: false, required: false}
           - {label: "Show Excerpt on Card",name: "show_excerpt",    widget: "boolean",  default: true,  required: false}
-          - {label: "Description",         name: "description",     widget: "markdown", required: false}
+          - {label: "Description",         name: "description",     widget: "text",     required: false}
           - {label: "Certificate (Image/PDF)",  name: "certificate", widget: "image",   required: false,
              hint: "Upload certificate or document for this role — a 'View Certificate' button will appear in the detail page"}
       - label: "Gallery / Photos"
@@ -175,16 +147,6 @@ collections:
          hint: "Upload a PDF — shown as an inline viewer in the detail page"}
       - {label: "PDF Heading",           name: "pdf_title", widget: "string", required: false,
          hint: "Heading shown above the PDF viewer, e.g. 'Experience Letter', 'Internship Report'"}
-      - label: "YouTube Video URL"
-        name: "youtube"
-        widget: "string"
-        required: false
-        hint: "e.g. https://youtu.be/abc123 — paste any YouTube link"
-      - label: "Video Heading"
-        name: "youtube_title"
-        widget: "string"
-        required: false
-        hint: "Heading above the video — leave blank to show 'Video'"
       - label: "Skills Used"
         name: "skills"
         widget: "relation"
@@ -194,6 +156,22 @@ collections:
         display_fields: ["name"]
         multiple: true
         required: false
+      - {label: "Full Details (Markdown)", name: "body",      widget: "markdown", required: false}
+
+  # ══════════════════════════════════════════
+  # 4. SKILLS
+  # ══════════════════════════════════════════
+  - name: "skills"
+    label: "💡 Skills"
+    folder: "content/skills"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{name}}"
+    fields:
+      - {label: "Skill Name",        name: "name",        widget: "string",  required: false}
+      - {label: "Short Description", name: "description", widget: "text",    required: false,
+         hint: "Brief description of this skill"}
+      - {label: "Order",             name: "order",       widget: "number",  default: 99, required: false}
 
   # ══════════════════════════════════════════
   # 5. RESEARCH INTERESTS
