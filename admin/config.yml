@@ -114,7 +114,22 @@ collections:
         hint: "Heading shown above the video. Leave blank for 'Video'"
 
   # ══════════════════════════════════════════
-  # 3. EXPERIENCES
+  # 3. SKILLS  (defined before Experiences so relation widgets can find it)
+  # ══════════════════════════════════════════
+  - name: "skills"
+    label: "💡 Skills"
+    folder: "content/skills"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{name}}"
+    fields:
+      - {label: "Skill Name",        name: "name",        widget: "string",  required: false}
+      - {label: "Short Description", name: "description", widget: "text",    required: false,
+         hint: "Brief description of this skill"}
+      - {label: "Order",             name: "order",       widget: "number",  default: 99, required: false}
+
+  # ══════════════════════════════════════════
+  # 4. EXPERIENCES
   # ══════════════════════════════════════════
   - name: "experiences"
     label: "💼 Experiences"
@@ -177,21 +192,6 @@ collections:
         required: false
         hint: "Heading above the video — leave blank to show 'Video'"
       - {label: "Full Details (Markdown)", name: "body",      widget: "markdown", required: false}
-
-  # ══════════════════════════════════════════
-  # 4. SKILLS
-  # ══════════════════════════════════════════
-  - name: "skills"
-    label: "💡 Skills"
-    folder: "content/skills"
-    create: true
-    slug: "{{slug}}"
-    summary: "{{name}}"
-    fields:
-      - {label: "Skill Name",        name: "name",        widget: "string",  required: false}
-      - {label: "Short Description", name: "description", widget: "text",    required: false,
-         hint: "Brief description of this skill"}
-      - {label: "Order",             name: "order",       widget: "number",  default: 99, required: false}
 
   # ══════════════════════════════════════════
   # 5. RESEARCH INTERESTS
