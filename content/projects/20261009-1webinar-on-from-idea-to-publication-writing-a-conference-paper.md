@@ -1,5 +1,5 @@
 ---
-title: '1Webinar on From Idea to Publication: Writing a Conference Paper'
+title: 'Webinar on From Idea to Publication: Writing a Conference Paper'
 date: 2025-09-03
 pinned: false
 category: Session
