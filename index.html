@@ -180,12 +180,22 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .pub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:1rem}
 .pub-grid-home{grid-template-columns:repeat(2,1fr)}
 @media(max-width:640px){.pub-grid-home{grid-template-columns:1fr}}
-/* Author role badges */
-.auth-role{display:inline-block;font-size:.58rem;font-weight:700;padding:.05rem .32rem;border-radius:999px;margin-left:.22rem;vertical-align:middle;line-height:1.5}
+/* Author role tags — tag appears BEFORE name */
+.auth-role{display:inline-flex;align-items:center;font-size:.57rem;font-weight:700;padding:.04rem .3rem;border-radius:4px;margin-right:.24rem;vertical-align:middle;line-height:1.6;white-space:nowrap;flex-shrink:0}
 .auth-role-Primary-Author{background:var(--blue-l);color:var(--blue)}
 .auth-role-Co-Author{background:var(--teal-l);color:var(--teal)}
 .auth-role-Supervisor{background:var(--amber-l);color:var(--amber)}
 .auth-role-Co-Supervisor{background:var(--purple-l);color:var(--purple)}
+/* Author block container */
+.pub-authors-block{background:var(--surface2);border-radius:8px;padding:.44rem .66rem .3rem;margin-bottom:.52rem;border-left:2.5px solid var(--blue-m)}
+.auth-entry{display:flex;align-items:center;flex-wrap:wrap;margin-bottom:.2rem;font-size:.71rem;color:var(--ink);line-height:1.55}
+.auth-entry:last-child{margin-bottom:0}
+.auth-name{color:var(--ink)}
+.auth-more-btn{display:inline-flex;align-items:center;cursor:pointer;color:var(--blue);font-size:.62rem;font-weight:700;padding:.04rem .32rem;border-radius:5px;background:var(--blue-l);margin-top:.2rem;border:1px solid var(--blue-m);transition:all .14s;user-select:none}
+.auth-more-btn:hover{background:var(--blue);color:#fff}
+.auth-more-wrap{margin-top:.2rem}
+/* Abstract label */
+.pub-abstract-label{font-size:.59rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.18rem}
 .pub-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:var(--r);padding:1.1rem 1.1rem .9rem;cursor:pointer;transition:all .21s;display:flex;flex-direction:column;overflow:hidden;box-shadow:var(--shadow)}
 .pub-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px)}
 .pub-card.pub-card-Journal{border-left-color:var(--blue)}
@@ -927,19 +937,36 @@ function stopPubSlides(){
   for(const k in _pubGal)delete _pubGal[k];
 }
 
-/* ── Publication card HTML ── */
+/* ── Author helpers ── */
+const _AUTH_EMOJI={'Primary Author':'🖊','Supervisor':'🎓','Co-Supervisor':'🤝','Co-Author':'👥'};
 function pubAuthorsHTML(list){
   if(!list||!list.length)return'';
   return list.map(a=>{
-    const role=(a.role||'Co-Author').replace(/\s+/g,'-');
-    return`<span>${a.name||a}<span class="auth-role auth-role-${role}">${a.role||'Co-Author'}</span></span>`;
-  }).join('<span style="color:var(--ink3)"> · </span>');
+    const role=a.role||'Co-Author';
+    const cls=role.replace(/\s+/g,'-');
+    const emoji=_AUTH_EMOJI[role]||'';
+    return`<span class="auth-entry"><span class="auth-role auth-role-${cls}">${emoji} ${role}</span><span class="auth-name">${a.name||a}</span></span>`;
+  }).join('');
 }
+function toggleAuthMore(id,btn){
+  const el=document.getElementById(id);if(!el)return;
+  const open=el.style.display==='none';
+  el.style.display=open?'block':'none';
+  btn.innerHTML=open?'▴ hide':'▾ more authors';
+}
+
+/* ── Publication card HTML ── */
 function pubCardHTML(p){
   const tc=p.pub_type||'Journal';
   const sk=(p.status||'').replace(/\s+/g,'-');
   const galHTML=p.gallery.length?renderPubMiniGallery(p.id,p.gallery):'';
-  const authHTML=pubAuthorsHTML(p.authors_list);
+  // Authors: card shows only Primary Author; others expandable
+  const primaryList=p.authors_list.filter(a=>a.role==='Primary Author');
+  const otherList=p.authors_list.filter(a=>a.role!=='Primary Author');
+  const moreCount=otherList.length;
+  const authBlock=p.authors_list.length?`<div class="pub-authors-block">
+    ${pubAuthorsHTML(primaryList)}
+    ${moreCount?`<span class="auth-more-btn" onclick="event.stopPropagation();toggleAuthMore('am-${p.id}',this)">▾ more authors</span><div class="auth-more-wrap" id="am-${p.id}" style="display:none">${pubAuthorsHTML(otherList)}</div>`:''}</div>`:'';
   return`<div class="pub-card pub-card-${tc}" onclick="location.hash='pub-${p.id}'">
     ${galHTML}
     <div style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap;margin-bottom:.26rem">
@@ -948,9 +975,9 @@ function pubCardHTML(p){
     </div>
     ${p.date?`<div style="font-size:.64rem;color:var(--ink3);margin-bottom:.18rem">📅 ${fmtDate(p.date)}</div>`:''}
     <h3>${p.title}</h3>
-    ${p.venue?`<div style="font-size:.67rem;color:var(--ink3);margin-bottom:.2rem;font-style:italic">📖 ${p.venue}</div>`:''}
-    ${authHTML?`<div style="font-size:.68rem;color:var(--ink2);line-height:1.75;margin-bottom:.28rem;flex-wrap:wrap">${authHTML}</div>`:''}
-    ${p.brief_abstract?`<p style="font-size:.74rem;color:var(--ink2);line-height:1.6;flex:1;margin-bottom:.3rem">${p.brief_abstract}</p>`:''}
+    ${p.venue?`<div style="font-size:.67rem;color:var(--ink3);margin-bottom:.3rem;font-style:italic">📖 ${p.venue}</div>`:''}
+    ${authBlock}
+    ${p.brief_abstract?`<div style="flex:1;margin-bottom:.3rem"><div class="pub-abstract-label">Abstract</div><div style="font-size:.73rem;color:var(--ink2);line-height:1.65">${md2html(p.brief_abstract)}</div></div>`:''}
     <div style="display:flex;gap:.55rem;flex-wrap:wrap;align-items:center;margin-top:.25rem">
       ${p.doi?`<a href="https://doi.org/${p.doi}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--blue);text-decoration:none;font-size:.63rem;font-weight:600">DOI →</a>`:''}
       ${p.link?`<a href="${p.link}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--blue);text-decoration:none;font-size:.63rem;font-weight:600">🌐 ${expHost(p.link)}</a>`:''}
@@ -1023,9 +1050,7 @@ function renderPubDetail(id){
       <h1 class="detail-title" style="font-size:1.52rem;line-height:1.3">${p.title}</h1>
       ${p.venue?`<div style="font-size:.82rem;color:var(--ink3);font-style:italic;margin:.4rem 0 .25rem">📖 ${p.venue}</div>`:''}
       ${p.date?`<div style="font-size:.75rem;color:var(--ink3);margin-bottom:.5rem">📅 ${fmtDate(p.date)}</div>`:''}
-      ${p.authors_list.length?`<div style="font-size:.79rem;color:var(--ink2);margin:.45rem 0 .7rem;line-height:1.9">
-        <span style="font-weight:700;color:var(--ink)">Authors: </span>${pubAuthorsHTML(p.authors_list)}
-      </div>`:''}
+      ${p.authors_list.length?`<div class="pub-authors-block" style="margin:.45rem 0 .7rem">${pubAuthorsHTML(p.authors_list)}</div>`:''}
       <div style="display:flex;gap:.62rem;flex-wrap:wrap;margin-top:.55rem">
         ${p.doi?`<a href="https://doi.org/${p.doi}" target="_blank" rel="noopener" class="btn btn-p" style="font-size:.74rem">📄 DOI: ${p.doi}</a>`:''}
         ${p.link?`<a href="${p.link}" target="_blank" rel="noopener" class="btn btn-g" style="font-size:.74rem">🌐 View Paper</a>`:''}
