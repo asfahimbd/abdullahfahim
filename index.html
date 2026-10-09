@@ -644,7 +644,6 @@ async function fetchEducation(){
       photo:fixImg(fm.photo||''),
      certificate:fixImg(fm.certificate||''),transcript:fixImg(fm.transcript||''),   // large photo for modal
       description:fm.description||'',subjects:fm.subjects||'',
-      youtube:fm.youtube||'',youtubeTitle:fm.youtube_title||'',
       order:parseInt(fm.order||99),passingYearNum:parseInt(passingYear||0)};
   }));
   // Sort by passing year descending (most recent first)
@@ -733,14 +732,12 @@ async function fetchExperiences(){
         isMultiRole:true,
         isCurrent:!sortedRoles[0].end_date||sortedRoles[0].end_date===''||sortedRoles[0].end_date.toLowerCase().includes('present'),
         body,skills_list,gallery,pdfFile,pdfTitle,
-        website:fm.website||'',
-        youtube:fm.youtube||'',youtubeTitle:fm.youtube_title||''
+        website:fm.website||''
       };
     }
     // Single role entry
     const endDate=fm.end_date||'';
     const isCurrent=!endDate||endDate.toLowerCase().includes('present');
-    const skills_list=parseYamlList(text,'skills','skill');
     return{
       id:f.name.replace('.md',''),
       organization:fm.organization||'',
@@ -751,12 +748,11 @@ async function fetchExperiences(){
       location:fm.location||'',
       description:fm.description||'',
       logo:fixImg(fm.logo||''),
-      isMultiRole:false,body,skills_list,
+      isMultiRole:false,body,
       showExcerpt:fm.show_excerpt==='true'||fm.show_excerpt===true,
       certificate:fixImg(fm.certificate||''),
       gallery,pdfFile,pdfTitle,
-      website:fm.website||'',
-      youtube:fm.youtube||'',youtubeTitle:fm.youtube_title||''
+      website:fm.website||''
     };
   }));
   const v=items.filter(Boolean).sort((a,b)=>{
@@ -1341,10 +1337,6 @@ function openEduModal(i){
           </div>`:''}
         </div>
       </div>`:''}
-      ${e.youtube?`<div style="margin-top:1.4rem">
-        <div style="font-size:.7rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.7rem">${e.youtubeTitle||'Video'}</div>
-        <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/${getYtId(e.youtube)}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture" allowfullscreen></iframe></div>
-      </div>`:''}
     </div>`;
   document.getElementById('edu-modal').classList.add('open');document.body.style.overflow='hidden';
 }
@@ -1397,7 +1389,7 @@ async function renderPdfCanvas(url,cid){
     const lib=await loadPdfJs();
     const doc=await lib.getDocument({url,withCredentials:false}).promise;
     el.innerHTML='';
-    for(let p=1;p<=doc.numPages;p++){
+    for(let p=1;p<=Math.min(doc.numPages,30);p++){
       const page=await doc.getPage(p);
       const vp=page.getViewport({scale:1.5});
       const c=document.createElement('canvas');
@@ -1645,7 +1637,6 @@ function renderExpDetail(id){
     </div>
     ${item.skills_list&&item.skills_list.length?`<div class="detail-section"><div style="font-size:.68rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.7rem">Skills</div><div style="display:flex;gap:.4rem;flex-wrap:wrap">${item.skills_list.map(sk=>`<button onclick="location.hash='skill-'+encodeURIComponent('${sk}')" style="padding:.28rem .62rem;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border2);background:var(--surface2);color:var(--ink2);transition:all .17s" onmouseover="this.style.background='var(--blue-l)';this.style.borderColor='var(--blue-m)';this.style.color='var(--blue)'" onmouseout="this.style.background='var(--surface2)';this.style.borderColor='var(--border2)';this.style.color='var(--ink2)'">${sk}</button>`).join('')}</div></div>`:''}
     ${item.body?`<div class="detail-section"><h3 style="margin-bottom:.85rem">Full Details</h3><div class="detail-body">${md2html(item.body)}</div></div>`:''}
-    ${item.youtube?`<div class="detail-section"><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-bottom:.6rem">${item.youtubeTitle||'Video'}</h3><div class="yt-wrap"><iframe src="https://www.youtube.com/embed/${getYtId(item.youtube)}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture" allowfullscreen></iframe></div></div>`:''}
     ${item.pdfFile?`<div class="detail-section"><div class="pdf-embed-wrap">
       <div class="pdf-embed-title">📄 ${item.pdfTitle||'Document'} <a href="${item.pdfFile}" target="_blank" rel="noopener" style="margin-left:auto;font-size:.72rem;color:var(--blue);text-decoration:none;font-weight:600">↗ খুলুন</a></div>
       <div class="pdf-embed-body"><div class="pdf-canvas-wrap" id="${expPdfCid}">
