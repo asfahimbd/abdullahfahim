@@ -142,15 +142,6 @@ collections:
       - {label: "Website URL",       name: "website",      widget: "string",  required: false,
          hint: "e.g. https://example.com — shown as a link on the card and detail page"}
       - {label: "Location",          name: "location",     widget: "string",  required: false}
-      - label: "Skills Used"
-        name: "skills_used"
-        widget: "relation"
-        collection: "skills"
-        search_fields: ["name"]
-        value_field: "name"
-        display_fields: ["name"]
-        multiple: true
-        required: false
       - label: "Roles"
         name: "roles"
         widget: "list"
@@ -192,6 +183,15 @@ collections:
         required: false
         hint: "Heading above the video — leave blank to show 'Video'"
       - {label: "Full Details (Markdown)", name: "body",      widget: "markdown", required: false}
+      - label: "Skills Used"
+        name: "skills"
+        widget: "relation"
+        collection: "skills"
+        search_fields: ["name"]
+        value_field: "name"
+        display_fields: ["name"]
+        multiple: true
+        required: false
 
   # ══════════════════════════════════════════
   # 5. RESEARCH INTERESTS
