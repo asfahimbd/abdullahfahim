@@ -1,6 +1,6 @@
 ---
 title: A Dual-Stage Hybrid Random Forest Framework for Forward and  Inverse Ion Implantation in Si, SiC, and GaAs Substrate
-date: 2026-03-07T17:04:00
+date: 2026-03-07
 pinned: true
 pub_type: Thesis
 status: ''
@@ -13,20 +13,20 @@ authors:
     role: Co-Supervisor
 venue: Department of Electrical and Electronic Engineering, Jashore University of Science and Technology
 doi: ''
-link: ''
+link: https://ion-implant-surrogate.onrender.com
 research_interests:
   - Machine Learning
   - SRIM/TRIM
   - Surrogate Modeling
   - Ion Implantation
   - Inverse Process Design
-image: /assets/images/pasted-image-1791543993517.png
+image: /assets/images/11.jpg
 gallery:
-  - /assets/images/pasted-image-1791544018984.png
-  - /assets/images/pasted-image-1791544040580.png
-  - /assets/images/pasted-image-1791544077213.png
-  - /assets/images/pasted-image-1791544100195.png
-  - /assets/images/pasted-image-1791544125457.png
+  - /assets/images/114.jpg
+  - /assets/images/115.jpg
+  - /assets/images/111.jpg
+  - /assets/images/116.jpg
+  - /assets/images/112.jpg
 brief_abstract: In this thesis, a dual-stage gatekeeper-constrained Random Forest surrogate has been developed for the field of semiconductor ion implantation modeling in Si, SiC, and GaAs across five ions (B, Mg, P, Ar, As). This surrogate predicts nine implantation quantities about 715 times faster than a standard SRIM run, with R2 above 0.94 for projected range and SRIM-level error against published SIMS data. The framework also offers constraint-based inverse recipe generation for target depths. Therefore, this surrogate could be useful for fast and efficient implantation process design.
 pdf_file: /assets/images/191131_defense.pdf
 pdf_title: Undergraduate Thesis Defense Slide
