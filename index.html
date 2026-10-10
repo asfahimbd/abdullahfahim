@@ -1230,7 +1230,7 @@ function renderHome(loading=false){
 <div class="hero-bio-section" style="padding-top:0;padding-bottom:1.2rem">
   <div style="margin-bottom:.6rem"><span style="font-size:.7rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em">Research Interests</span></div>
   <div style="display:flex;gap:.5rem;flex-wrap:wrap">
-    ${ALL_INTERESTS.map(ri=>`<button onclick="location.hash='interest-'+encodeURIComponent(this.dataset.name);" data-name="${ri.name}"
+    ${ALL_INTERESTS.map(ri=>`<button onclick="location.hash='interest-'+encodeURIComponent('${ri.name.replace(/'/g,"\\'")}');" data-name="${ri.name}"
       style="padding:.3rem .75rem;border-radius:999px;font-size:.73rem;font-weight:600;cursor:pointer;border:1.5px solid var(--blue-m);background:var(--blue-l);color:var(--blue);transition:all .17s"
       onmouseover="this.style.background='var(--blue)';this.style.color='#fff'"
       onmouseout="this.style.background='var(--blue-l)';this.style.color='var(--blue)'"
@@ -2180,14 +2180,18 @@ function renderDesignDetail(id){
 function showByInterest(interest){
   document.body.style.overflow='';
   stopPubSlides();
-  const items=ALL_PROJECTS.filter(p=>(p.interests_list||[]).some(i=>i.toLowerCase()===interest.toLowerCase()));
+  const match=i=>i.toLowerCase()===interest.toLowerCase();
+  const projects=ALL_PROJECTS.filter(p=>(p.interests_list||[]).some(match));
+  const pubs=ALL_PUBLICATIONS.filter(p=>(p.interests_list||[]).some(match));
+  const total=projects.length+pubs.length;
   document.getElementById('app').innerHTML=`
   <div class="list-page">
     <button onclick="goHome()" class="btn btn-g" style="margin-bottom:1.1rem">← Home</button>
     <h2 class="section-title" style="margin-bottom:.4rem">Research Interest: ${interest}</h2>
-    <p style="font-size:.78rem;color:var(--ink3);margin-bottom:1.2rem">${items.length} related item(s)</p>
-    ${items.length?`<div class="grid">${items.map(p=>cardHTML(p)).join('')}</div>`:
-      `<div class="empty"><p>No items tagged with this research interest yet.</p></div>`}
+    <p style="font-size:.78rem;color:var(--ink3);margin-bottom:1.2rem">${total} related item(s)</p>
+    ${projects.length?`<h3 style="font-size:.78rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.7rem">Projects</h3><div class="grid">${projects.map(p=>cardHTML(p)).join('')}</div>`:''}
+    ${pubs.length?`<h3 style="font-size:.78rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin:1.2rem 0 .7rem">Publications</h3><div class="pub-grid">${pubs.map(p=>pubCardHTML(p)).join('')}</div>`:''}
+    ${total===0?`<div class="empty"><p>No items tagged with this research interest yet.</p></div>`:''}
   </div>`;
   window.scrollTo(0,0);
 }
