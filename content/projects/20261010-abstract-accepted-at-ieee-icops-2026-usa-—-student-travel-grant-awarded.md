@@ -1,7 +1,7 @@
 ---
 title: Abstract Accepted at IEEE ICOPS 2026, USA — Student Travel Grant Awarded
 date: 2026-04-04
-pinned: false
+pinned: true
 category: Award
 custom_category: ''
 research_interests:
