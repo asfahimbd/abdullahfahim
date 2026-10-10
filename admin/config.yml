@@ -24,6 +24,15 @@ collections:
           - { label: "Tagline",          name: "tagline",         widget: "string",  required: false }
           - { label: "Bio",              name: "bio",             widget: "text",    required: false }
           - { label: "Profile Photo",    name: "photo",           widget: "image",   required: false }
+          - label: "🌐 Favicon (Browser Tab Icon)"
+            name: "favicon"
+            widget: "image"
+            required: false
+            hint: >
+              Browser tab ও bookmark-এ যে ছবি দেখায়। সর্বোচ্চ ফলাফলের জন্য:
+              আকার: 32×32 বা 64×64 px (বর্গাকার হতে হবে)।
+              Format: PNG সবচেয়ে ভালো; ICO, SVG বা JPG-ও চলবে।
+              File size: 20 KB-এর নিচে রাখুন।
           - { label: "Email",            name: "email",           widget: "string",  required: false }
           - { label: "GitHub URL",       name: "github",          widget: "string",  required: false }
           - { label: "LinkedIn URL",     name: "linkedin",        widget: "string",  required: false }
