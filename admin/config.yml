@@ -399,4 +399,10 @@ collections:
       - {label: "Cover Image",      name: "cover_image",  widget: "image",    required: false,
          hint: "Main image shown on the card and detail page"}
       - {label: "Short Description",name: "description",  widget: "text",     required: false}
+      - {label: "Issuer / Provider", name: "issuer",      widget: "string",   required: false,
+         hint: "Who made or commissioned this — e.g. IEEE JUST Student Branch, JUST CSE Dept"}
+      - {label: "Issuer Label (custom text)", name: "issuer_label", widget: "string", required: false,
+         hint: "Custom label — e.g. 'Made for', 'Commissioned by'. Leave blank for default 'Issued by'"}
       - {label: "Full Details",     name: "body",         widget: "markdown",  required: false}
+      - {label: "YouTube Video URL", name: "youtube",     widget: "string",   required: false}
+      - {label: "External Link",    name: "link",         widget: "string",   required: false}
