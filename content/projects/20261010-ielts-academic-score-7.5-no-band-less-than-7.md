@@ -5,7 +5,7 @@ pinned: false
 category: Award
 custom_category: ''
 research_interests: []
-image: /assets/images/pasted-image-1791605629347.png
+image: /assets/images/pasted-image-1791606347885.png
 issuer: The British Council, IDP, and Cambridge English
 issuer_label: ''
 gallery:
