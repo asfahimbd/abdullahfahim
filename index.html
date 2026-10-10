@@ -102,8 +102,8 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .icon-btn:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-1px);box-shadow:var(--shadow)}
 .icon-btn svg,.icon-btn img{width:15px;height:15px;flex-shrink:0}
 .hero-stat-btns{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.55rem}
-.hero-stat-btn{display:inline-flex;align-items:center;gap:.3rem;padding:.35rem .8rem;border-radius:999px;font-size:.72rem;font-weight:700;cursor:pointer;border:1.5px solid var(--black-m);background:var(--black-l);color:var(--blue);transition:all .18s;text-decoration:none}
-.hero-stat-btn:hover{background:var(--blue);color:#fff;transform:translateY(-1px);box-shadow:var(--shadow)}
+.hero-stat-btn{display:inline-flex;align-items:center;gap:.3rem;padding:.35rem .8rem;border-radius:999px;font-size:.72rem;font-weight:700;cursor:pointer;border:1.5px solid var(--blue);background:var(--blue-l);color:var(--blue);transition:all .18s;text-decoration:none}
+.hero-stat-btn:hover{background:var(--black);color:#fff;transform:translateY(-1px);box-shadow:var(--shadow)}
 /* Full-width bio */
 .hero-bio-full{
   font-size:.91rem;color:var(--ink2);line-height:1.85;
@@ -1258,9 +1258,9 @@ function renderHome(loading=false){
         ${h.tagline?`<div class="hero-tagline">${h.tagline}</div>`:''}
         <div class="hero-icon-btns">${iconBtns}</div>
         <div class="hero-stat-btns">
-          <span class="hero-stat-btn" onclick="location.hash='all-pub'">Explore My Research</span>
+          <span class="hero-stat-btn" onclick="location.hash='all-pub'">Explore my research</span>
           <span class="hero-stat-btn" onclick="location.hash='all-edu'">B.Sc. CGPA: 3.80/4.00</span>
-          <span class="hero-stat-btn" onclick="location.hash='all-Achievements'"> IELTS: 7.5</span>
+          <span class="hero-stat-btn" onclick="location.hash='all-Achievements'">IELTS: 7.5</span>
         </div>
       </div>
     </div>
@@ -2096,6 +2096,8 @@ async function fetchDesigns(){
       category:fm.category||'',
       description:fm.description||'',
       image:fixImg(fm.cover_image||''),
+      issuer:fm.issuer||'',issuerLabel:fm.issuer_label||'',
+      youtube:fm.youtube||'',link:fm.link||'',
       body,
       pinned:fm.pinned==='true'||fm.pinned===true
     };
@@ -2164,9 +2166,12 @@ function renderDesignDetail(id){
       ${d.image?`<div style="width:100%;padding-top:75%;position:relative;border-radius:10px;overflow:hidden;margin-bottom:1.3rem;background:var(--surface2)"><img src="${d.image}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;cursor:zoom-in" onclick="openImgLightbox(this.src)" onerror="this.parentElement.style.display='none'"></div>`:''}
       ${d.category?`<span class="badge badge-dynamic">${d.category}</span>`:''}
       ${d.date?`<div style="font-size:.74rem;color:var(--ink3);margin-top:.3rem;margin-bottom:.15rem">📅 ${fmtDate(d.date)}</div>`:''}
+      ${d.issuer?`<div style="font-size:.78rem;color:var(--ink3);margin-bottom:.15rem">🏢 ${d.issuerLabel||'Issued by'}: <strong>${d.issuer}</strong></div>`:''}
       <h1 class="detail-title">${d.title}</h1>
       ${d.description?`<p style="color:var(--ink2);margin-top:.4rem;font-size:.86rem">${d.description}</p>`:''}
+      ${d.link?`<a href="${d.link}" target="_blank" rel="noopener" class="btn btn-p" style="margin-top:.85rem">View Design ↗</a>`:''}
     </div>
+    ${d.youtube?`<div class="detail-section"><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-bottom:.4rem">Video</h3><div class="yt-wrap"><iframe src="https://www.youtube.com/embed/${getYtId(d.youtube)}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture" allowfullscreen></iframe></div></div>`:''}
     ${d.body?`<div class="detail-section"><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-bottom:.82rem">Details</h3><div class="detail-body">${md2html(d.body)}</div></div>`:''}
   </div>`;
   window.scrollTo(0,0);
