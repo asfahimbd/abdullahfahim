@@ -15,7 +15,6 @@ link: ''
 research_interests:
   - Gas Sensing
   - Density Functional Theory (DFT)
-  - Band Structure
   - Materials Studio
 image: /assets/images/ss1.jpg
 gallery:

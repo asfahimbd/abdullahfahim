@@ -14,12 +14,9 @@ doi: ''
 link: ''
 research_interests:
   - Fusion Reactor
-  - Hydrogen Implantation
-  - LAAMPS
   - Machine Learning
   - Materials Studio
   - SRIM/TRIM
-  - Python
   - Molecular Dynamics
   - Radiation Damage
   - Plasma-facing Materials

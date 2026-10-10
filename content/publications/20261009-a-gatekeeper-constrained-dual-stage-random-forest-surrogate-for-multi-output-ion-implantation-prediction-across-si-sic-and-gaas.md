@@ -18,7 +18,6 @@ research_interests:
   - Surrogate Modeling
   - Ion Implantation
   - Random Forest
-  - Python
   - Data Generation Pipeline
   - Silicon Carbide
   - Gallium arsenide (GaAs)

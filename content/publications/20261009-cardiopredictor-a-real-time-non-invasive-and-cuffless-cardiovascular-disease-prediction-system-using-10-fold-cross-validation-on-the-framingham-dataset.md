@@ -15,7 +15,6 @@ link: ''
 research_interests:
   - Cardiovascular Disease
   - Non-invasive & Cuffless
-  - Gradient Boosting
   - 10-Fold Cross-Validation
   - AI-driven Biomedical Instrumentation
   - Embedded Systems for Healthcare Applications
