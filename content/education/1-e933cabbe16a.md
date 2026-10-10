@@ -6,7 +6,7 @@ passing: '2017'
 gpa: 5.00/5.00
 rank: ''
 location: Abdur Rahman Rd, Chattogram, Bangladesh
-website: ''
+website: https://gmhsctg.tsmts.com/
 icon: 🎓
 icon_bg: var(--blue-l)
 logo: /assets/images/pasted-image-1779131540791.png
