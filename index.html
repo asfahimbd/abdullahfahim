@@ -183,6 +183,10 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .pub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:1rem}
 .pub-grid-home{grid-template-columns:repeat(2,1fr)}
 @media(max-width:640px){.pub-grid-home{grid-template-columns:1fr}}
+@media(max-width:600px){
+  .hero-stat-btns{justify-content:center}
+  .ri-tags{justify-content:center}
+}
 /* Author role tags — tag appears BEFORE name */
 .auth-role{display:inline-flex;align-items:center;font-size:.57rem;font-weight:700;padding:.04rem .3rem;border-radius:4px;margin-right:.24rem;vertical-align:middle;line-height:1.6;white-space:nowrap;flex-shrink:0}
 .auth-role-Primary-Author{background:var(--blue-l);color:var(--blue)}
@@ -1020,6 +1024,7 @@ function renderAllPubsPage(filterType){
   <div class="list-page">
     <button onclick="goHome()" class="btn btn-g" style="margin-bottom:1.1rem">← Home</button>
     <h2 class="section-title" style="margin-bottom:1rem">Research</h2>
+    ${renderInterestTags()}
     <div class="filter-tabs">
       <button class="ftab ${active==='All'?'active':''}" onclick="location.hash='all-pub'">All (${ALL_PUBLICATIONS.length})</button>
       ${cnt('Thesis')?`<button class="ftab ${active==='Thesis'?'active':''}" onclick="location.hash='all-pub-Thesis'">Thesis (${cnt('Thesis')})</button>`:''}
@@ -1276,20 +1281,23 @@ const LOC_ICON_SM=`<svg style="width:10px;height:10px;display:inline-block;verti
 const LOC_ICON_MD=`<svg style="width:13px;height:13px;display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:3px" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`;
 
 /* ══ HOME ══ */
-function renderHome(loading=false){
-  if(!loading)stopPubSlides();
-  const h=HERO;
-  const interestsSection=ALL_INTERESTS.length?`
-<div class="hero-bio-section" style="padding-top:0;padding-bottom:1.2rem">
+function renderInterestTags(){
+  if(!ALL_INTERESTS.length)return'';
+  return`<div class="hero-bio-section" style="padding-top:0;padding-bottom:1.2rem">
   <div style="margin-bottom:.6rem"><span style="font-size:.7rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em">Research Interests</span></div>
-  <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+  <div class="ri-tags" style="display:flex;gap:.5rem;flex-wrap:wrap">
     ${ALL_INTERESTS.map(ri=>`<button onclick="location.hash='interest-'+encodeURIComponent('${ri.name.replace(/'/g,"\\'")}');" data-name="${ri.name}"
       style="padding:.3rem .75rem;border-radius:999px;font-size:.73rem;font-weight:600;cursor:pointer;border:1.5px solid var(--blue-m);background:var(--blue-l);color:var(--blue);transition:all .17s"
       onmouseover="this.style.background='var(--blue)';this.style.color='#fff'"
       onmouseout="this.style.background='var(--blue-l)';this.style.color='var(--blue)'"
       title="${ri.description||ri.name}">${ri.name}</button>`).join('')}
   </div>
-</div>`:'';
+</div>`;
+}
+
+function renderHome(loading=false){
+  if(!loading)stopPubSlides();
+  const h=HERO;
   const iconBtns=[
     h.email?`<a href="mailto:${h.email}" class="icon-btn" title="Email">${ICONS.email} Email</a>`:'',
     h.linkedin?`<a href="${h.linkedin}" target="_blank" class="icon-btn" title="LinkedIn">${ICONS.linkedin} LinkedIn</a>`:'',
@@ -1318,7 +1326,6 @@ function renderHome(loading=false){
       </div>
     </div>
   </section>
-  ${interestsSection}
   ${h.bio?`<div class="hero-bio-section"><p class="hero-bio-full">${h.bio}</p></div>`:''}
   </div>
 
@@ -1366,7 +1373,8 @@ function renderHome(loading=false){
   <!-- PUBLICATIONS -->
   ${loading?'':(ALL_PUBLICATIONS.length&&NAV_VISIBILITY['Publications']!==false?renderPublicationsSection()+'<div class="divider"><hr></div>':'')}
 
-  <!-- RESEARCH (Pinned thesis first) -->
+  <!-- RESEARCH INTERESTS + RESEARCH (Pinned thesis first) -->
+  ${loading?'':renderInterestTags()}
   ${loading?renderSkelSection('Research'):renderResearchPreview()}
 
   <div class="divider"><hr></div>
