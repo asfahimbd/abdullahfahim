@@ -2,407 +2,378 @@ backend:
   name: github
   repo: asfahimbd/abdullahfahim
   branch: main
-  client_id: Ov23liPSGiyh6XED26AR
-  client_secret: 1c95cf1cc4b0af9a06830204bc7971d4fc75a7fb
-  base_url: https://oauth-proxy.asfahimbd.workers.dev
+  base_url: https://oauth-proxy.asfahimbd.workers.dev   # your Cloudflare auth worker
 
 media_folder: "assets/images"
 public_folder: "/assets/images"
 
 collections:
 
-  # ══════════════════════════════════════════
-  # 1. SITE SETTINGS
-  # ══════════════════════════════════════════
-  - name: "site_settings"
-    label: "⚙ Site Settings"
+  # ════════════════════════════════════════
+  #   SETTINGS
+  # ════════════════════════════════════════
+  - name: "settings"
+    label: "⚙️ Settings"
     files:
-      - label: "Profile Info"
-        name: "hero"
+
+      - name: "hero"
+        label: "Profile & Site Settings"
         file: "content/settings/hero.md"
         fields:
-          - {label: "Full Name",         name: "name",       widget: "string",  required: false}
-          - {label: "Tagline",           name: "tagline",    widget: "string",  required: false}
-          - {label: "Short Bio",         name: "bio",        widget: "text",    required: false}
-          - {label: "Profile Photo",     name: "photo",      widget: "image",   required: false}
-          - {label: "CV / Resume PDF (upload)", name: "cv_file", widget: "file", required: false,
-             hint: "Upload your CV/resume PDF directly — takes priority over the URL below"}
-          - {label: "Email",             name: "email",      widget: "string",  required: false}
-          - {label: "LinkedIn URL",      name: "linkedin",   widget: "string",  required: false}
-          - {label: "GitHub URL",        name: "github",     widget: "string",  required: false}
-          - {label: "ORCID URL",         name: "orcid",      widget: "string",  required: false}
-          - {label: "Facebook URL",      name: "facebook",   widget: "string",  required: false}
-          - {label: "YouTube URL",       name: "youtube",    widget: "string",  required: false}
-          - {label: "Resume PDF URL",    name: "resume",     widget: "string",  required: false,
-             hint: "Google Drive / Docs share link"}
+          - { label: "Full Name",        name: "name",            widget: "string" }
+          - { label: "Tagline",          name: "tagline",         widget: "string",  required: false }
+          - { label: "Bio",              name: "bio",             widget: "text",    required: false }
+          - { label: "Profile Photo",    name: "photo",           widget: "image",   required: false }
+          - { label: "Email",            name: "email",           widget: "string",  required: false }
+          - { label: "GitHub URL",       name: "github",          widget: "string",  required: false }
+          - { label: "LinkedIn URL",     name: "linkedin",        widget: "string",  required: false }
+          - { label: "ORCID",            name: "orcid",           widget: "string",  required: false }
+          - { label: "Facebook URL",     name: "facebook",        widget: "string",  required: false }
+          - { label: "YouTube Channel",  name: "youtube_channel", widget: "string",  required: false }
+          - { label: "Resume URL",       name: "resume",          widget: "string",  required: false }
+          - label: "CV File (Upload)"
+            name: "cv_file"
+            widget: "image"
+            required: false
+            hint: "Uploaded file takes priority over Resume URL above."
+          - label: "🔒 Screenshot Protection"
+            name: "screenshot_protection"
+            widget: "boolean"
+            default: false
+            hint: >
+              Enables sitewide protection: blocks right-click, text selection,
+              Ctrl+S (save), Ctrl+U (view source), Ctrl+P (print), F12 (DevTools),
+              and image drag. Note: cannot block external screen recorders.
 
-      - label: "Nav Visibility"
-        name: "nav_visibility"
+      - name: "nav_visibility"
+        label: "Navigation Visibility"
         file: "content/settings/nav_visibility.md"
         fields:
-          - {label: "Show Education",       name: "Education",      widget: "boolean", default: true, required: false}
-          - {label: "Show Experiences",     name: "Experiences",    widget: "boolean", default: true, required: false}
-          - {label: "Show Publications",    name: "Publications",   widget: "boolean", default: true, required: false}
-          - {label: "Show Research",        name: "Research",       widget: "boolean", default: true, required: false}
-          - {label: "Show Projects",        name: "Projects",       widget: "boolean", default: true, required: false}
-          - {label: "Show Training",        name: "Training",       widget: "boolean", default: true, required: false}
-          - {label: "Show Certificates",    name: "Certificates",   widget: "boolean", default: true, required: false}
-          - {label: "Show Technical Talks", name: "TechnicalTalk",  widget: "boolean", default: true, required: false}
-          - {label: "Show Achievements",    name: "Achievements",   widget: "boolean", default: true, required: false}
-          - {label: "Show My Design",       name: "MyDesign",       widget: "boolean", default: true, required: false}
+          - { label: "Show Publications",         name: "Publications",   widget: "boolean", default: true }
+          - { label: "Show Research",             name: "Research",       widget: "boolean", default: true }
+          - { label: "Show Projects",             name: "Projects",       widget: "boolean", default: true }
+          - { label: "Show Experiences",          name: "Experiences",    widget: "boolean", default: true }
+          - { label: "Show Training & Field Work",name: "Training",       widget: "boolean", default: true }
+          - { label: "Show Certificates",         name: "Certificates",   widget: "boolean", default: true }
+          - { label: "Show Technical Talk",       name: "TechnicalTalk",  widget: "boolean", default: true }
+          - { label: "Show Achievements",         name: "Achievements",   widget: "boolean", default: true }
+          - { label: "Show My Design",            name: "MyDesign",       widget: "boolean", default: true }
+          - { label: "Show Education",            name: "Education",      widget: "boolean", default: true }
 
-      - label: "Footer"
-        name: "footer"
+      - name: "footer"
+        label: "Footer"
         file: "content/settings/footer.md"
         fields:
-          - {label: "Footer Text", name: "footer_text", widget: "string", required: false,
-             hint: "Text shown at the bottom of every page — e.g. '© 2026 Your Name · Your Institution'"}
+          - { label: "Footer Copyright Text", name: "footer_text", widget: "string", required: false }
 
-  # ══════════════════════════════════════════
-  # 2. EDUCATION
-  # ══════════════════════════════════════════
-  - name: "education"
-    label: "🎓 Education"
-    folder: "content/education"
+
+  # ════════════════════════════════════════
+  #   PUBLICATIONS
+  # ════════════════════════════════════════
+  - name: "publications"
+    label: "📄 Publications"
+    folder: "content/publications"
     create: true
-    slug: "{{order}}-{{slug}}"
+    slug: "{{year}}-{{month}}-{{slug}}"
     fields:
-      - {label: "Order (1=top)",     name: "order",       widget: "number",  default: 1,          required: false}
-      - {label: "Level",             name: "level",       widget: "select",  options: ["University","College","School","Other"], default: "University", required: false}
-      - {label: "Institution Name",  name: "institution", widget: "string",  required: false}
-      - {label: "Website URL",       name: "website",     widget: "string",  required: false,
-         hint: "e.g. https://example.com — shown as a link on the card and detail popup"}
-      - {label: "Degree / Group",    name: "degree",      widget: "string",  required: false}
-      - {label: "Passing Year",      name: "passing",     widget: "string",  required: false}
-      - {label: "Location",          name: "location",    widget: "string",  required: false,
-         hint: "e.g. Jashore, Bangladesh — leave blank to hide"}
-      - {label: "GPA / Result",      name: "gpa",         widget: "string",  required: false}
-      - {label: "Rank / Position",   name: "rank",        widget: "string",  required: false,
-         hint: "e.g. 3rd / 95 students — leave blank to hide"}
-      - {label: "Institution Logo (icon for card)", name: "logo", widget: "image", required: false,
-         hint: "Upload PNG/JPG logo — shown as the small icon on the education card. Replaces the emoji icon below."}
-      - {label: "Icon (emoji — used if no logo uploaded)", name: "icon", widget: "string", default: "🎓", required: false}
-      - label: "Icon Background Color (used if no logo)"
-        name: "icon_bg"
+      - { label: "Title", name: "title", widget: "string" }
+      - label: "Type"
+        name: "pub_type"
+        widget: "select"
+        options: ["Journal", "Conference", "Thesis"]
+        default: "Journal"
+      - label: "Status"
+        name: "status"
         widget: "select"
         required: false
-        options:
-          - {label: "Blue",   value: "var(--blue-l)"}
-          - {label: "Teal",   value: "var(--teal-l)"}
-          - {label: "Amber",  value: "var(--amber-l)"}
-          - {label: "Rose",   value: "var(--rose-l)"}
-        default: "var(--blue-l)"
-      - {label: "Institute Photo (shown in detail popup)", name: "photo", widget: "image", required: false,
-         hint: "Large photo of the campus or institute — shown when someone clicks to expand this education entry"}
-      - {label: "Certificate (PDF/Image)",  name: "certificate", widget: "image",   required: false,
-         hint: "Upload your degree certificate or relevant document"}
-      - {label: "Transcript (PDF/Image)",   name: "transcript",  widget: "image",   required: false,
-         hint: "Upload your academic transcript or marksheet"}
-      - {label: "Description",       name: "description", widget: "text",    required: false}
-      - {label: "Subjects Studied",  name: "subjects",    widget: "string",  required: false,
-         hint: "Comma separated — e.g. Physics, Chemistry, Mathematics"}
-      - label: "YouTube Video URL"
-        name: "youtube"
-        widget: "string"
+        options: ["Published", "Accepted", "Under Review", "In Preparation", "Preprint"]
+        default: "Published"
+      - { label: "Date",         name: "date",  widget: "string", required: false, hint: "e.g. 2024-06-15 or April 2024" }
+      - { label: "Venue / Journal Name", name: "venue", widget: "string", required: false }
+      - { label: "DOI",          name: "doi",   widget: "string", required: false }
+      - { label: "Link / URL",   name: "link",  widget: "string", required: false }
+      - { label: "Brief Abstract", name: "brief_abstract", widget: "text", required: false }
+      - { label: "Featured Image", name: "image", widget: "image", required: false }
+      - label: "Gallery"
+        name: "gallery"
+        widget: "list"
         required: false
-        hint: "e.g. https://youtu.be/abc123 — shown as an embedded player in the detail popup"
-      - label: "Video Heading"
-        name: "youtube_title"
-        widget: "string"
+        field: { label: "Image", name: "image", widget: "image" }
+      - label: "Authors"
+        name: "authors"
+        widget: "list"
         required: false
-        hint: "Heading shown above the video. Leave blank for 'Video'"
+        fields:
+          - { label: "Name", name: "name", widget: "string" }
+          - label: "Role"
+            name: "role"
+            widget: "select"
+            required: false
+            options: ["", "corresponding", "equal"]
+            default: ""
+      - label: "Research Interests"
+        name: "research_interests"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Interest", name: "interest", widget: "string" }
+      - { label: "PDF File",   name: "pdf_file",   widget: "image",  required: false }
+      - { label: "PDF Title",  name: "pdf_title",  widget: "string", required: false }
+      - { label: "Pinned (show at top)", name: "pinned", widget: "boolean", default: false }
+      - label: "🙈 Hidden — Hide from site"
+        name: "hidden"
+        widget: "boolean"
+        default: false
+        hint: "Completely hides this publication from the public site. Still editable in CMS."
+      - label: "🚫 Hide Abstract"
+        name: "hide_abstract"
+        widget: "boolean"
+        default: false
+        hint: "Shows the publication card (title, status) but hides abstract and full body. Useful while under review."
+      - label: "🔒 Private Note (CMS only)"
+        name: "private_note"
+        widget: "text"
+        required: false
+        hint: "Internal notes — never displayed on the public site."
+      - { label: "Full Content / Notes", name: "body", widget: "markdown", required: false }
 
-  # ══════════════════════════════════════════
-  # 3. EXPERIENCES
-  # ══════════════════════════════════════════
+
+  # ════════════════════════════════════════
+  #   PROJECTS, CERTIFICATES, AWARDS, etc.
+  # ════════════════════════════════════════
+  - name: "projects"
+    label: "🗂️ Projects & More"
+    folder: "content/projects"
+    create: true
+    slug: "{{year}}-{{month}}-{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options:
+          - "Undergraduate Thesis"
+          - "Academic Project"
+          - "Non-Academic Project"
+          - "Training"
+          - "Field Work"
+          - "Certificate"
+          - "Session"
+          - "Technical Talk"
+          - "Award"
+          - "Achievement"
+        default: "Academic Project"
+      - label: "Custom Category (optional override)"
+        name: "custom_category"
+        widget: "string"
+        required: false
+        hint: "If set, this replaces the Category on the site (useful for dynamic categories)."
+      - { label: "Date", name: "date", widget: "string", required: false, hint: "e.g. 2024-06-15 or June 2024" }
+      - { label: "Issuer / Organization", name: "issuer",       widget: "string", required: false }
+      - { label: "Issuer Label",          name: "issuer_label", widget: "string", required: false, hint: "e.g. 'Organized by'. Leave blank for default." }
+      - { label: "Description",           name: "description",  widget: "text",   required: false }
+      - { label: "Featured Image",        name: "image",        widget: "image",  required: false }
+      - label: "Gallery"
+        name: "gallery"
+        widget: "list"
+        required: false
+        field: { label: "Image", name: "image", widget: "image" }
+      - { label: "Link / URL",   name: "link",     widget: "string", required: false }
+      - { label: "YouTube URL",  name: "youtube",  widget: "string", required: false }
+      - { label: "PDF File",     name: "pdf_file", widget: "image",  required: false }
+      - { label: "PDF Title",    name: "pdf_title",widget: "string", required: false }
+      - label: "Research Interests"
+        name: "research_interests"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Interest", name: "interest", widget: "string" }
+      - { label: "Pinned (show at top)", name: "pinned", widget: "boolean", default: false }
+      - label: "🙈 Hidden — Hide from site"
+        name: "hidden"
+        widget: "boolean"
+        default: false
+        hint: "Completely hides this item from the public site. Still editable in CMS."
+      - label: "🚫 Hide Description"
+        name: "hide_description"
+        widget: "boolean"
+        default: false
+        hint: "Shows the card (title, image) but hides description and full body content."
+      - label: "🔒 Private Note (CMS only)"
+        name: "private_note"
+        widget: "text"
+        required: false
+        hint: "Internal notes — never displayed on the public site."
+      - { label: "Full Content / Body", name: "body", widget: "markdown", required: false }
+
+
+  # ════════════════════════════════════════
+  #   EXPERIENCES
+  # ════════════════════════════════════════
   - name: "experiences"
     label: "💼 Experiences"
     folder: "content/experiences"
     create: true
     slug: "{{slug}}"
     fields:
-      - {label: "Organization",      name: "organization", widget: "string",  required: false}
-      - {label: "Description",        name: "body",         widget: "markdown", required: false,
-         hint: "Main description of this experience — supports bold, italic, lists, links"}
-      - {label: "Logo",              name: "logo",         widget: "image",   required: false}
-      - {label: "Website URL",       name: "website",      widget: "string",  required: false,
-         hint: "e.g. https://example.com — shown as a link on the card and detail page"}
-      - {label: "Location",          name: "location",     widget: "string",  required: false}
-      - label: "Roles"
+      - { label: "Organization",  name: "organization", widget: "string" }
+      - { label: "Logo",          name: "logo",         widget: "image",  required: false }
+      - { label: "Location",      name: "location",     widget: "string", required: false }
+      - { label: "Website",       name: "website",      widget: "string", required: false }
+      - { label: "YouTube URL",   name: "youtube",      widget: "string", required: false }
+      - { label: "YouTube Title", name: "youtube_title",widget: "string", required: false }
+      # ── Single Role ────────────────────
+      - label: "Role / Title"
+        name: "role"
+        widget: "string"
+        required: false
+        hint: "For a single role. Leave blank if using Multiple Roles below."
+      - label: "Employment Type"
+        name: "employment_type"
+        widget: "select"
+        required: false
+        options: ["Full Time", "Part Time", "Voluntary", "Internship", "Research", "Other"]
+        default: "Full Time"
+      - { label: "Start Date", name: "start_date", widget: "string", required: false, hint: "e.g. January 2023" }
+      - { label: "End Date",   name: "end_date",   widget: "string", required: false, hint: "Leave blank or write 'Present' if current." }
+      - { label: "Description", name: "description", widget: "text", required: false }
+      - { label: "Show excerpt on card", name: "show_excerpt", widget: "boolean", default: false }
+      - { label: "Certificate", name: "certificate", widget: "image", required: false }
+      # ── Multiple Roles (promotions) ────
+      - label: "Multiple Roles (for promotions at same org)"
         name: "roles"
         widget: "list"
         required: false
+        hint: "Use this when you had multiple roles/promotions at the same organization. Leave empty for single role above."
         fields:
-          - {label: "Role / Title",        name: "role",            widget: "string",  required: false}
+          - { label: "Role Title", name: "role", widget: "string" }
           - label: "Employment Type"
             name: "employment_type"
             widget: "select"
-            required: false
-            options: ["Full Time","Part Time","Voluntary","Internship","Research","Ambassador","Other"]
-          - {label: "Start Date",          name: "start_date",      widget: "datetime", required: false, time_format: false}
-          - {label: "End Date",            name: "end_date",        widget: "datetime", required: false, time_format: false,
-             hint: "Leave blank if currently working here"}
-          - {label: "Currently Working",   name: "is_current",      widget: "boolean",  default: false, required: false}
-          - {label: "Show Excerpt on Card",name: "show_excerpt",    widget: "boolean",  default: true,  required: false}
-          - {label: "Description",         name: "description",     widget: "markdown", required: false}
-          - {label: "Certificate (Image/PDF)",  name: "certificate", widget: "image",   required: false,
-             hint: "Upload certificate or document for this role — a 'View Certificate' button will appear in the detail page"}
-      - label: "Gallery / Photos"
+            options: ["Full Time", "Part Time", "Voluntary", "Internship", "Research", "Other"]
+            default: "Full Time"
+          - { label: "Start Date", name: "start_date", widget: "string" }
+          - { label: "End Date",   name: "end_date",   widget: "string", required: false }
+          - { label: "Description", name: "description", widget: "text", required: false }
+      # ── Media & Extras ─────────────────
+      - label: "Gallery"
         name: "gallery"
         widget: "list"
         required: false
-        hint: "Upload photos related to this experience — they will appear as a slideshow in the detail page"
-        field: {label: "Photo", name: "image", widget: "image"}
-      - {label: "PDF Document (upload)", name: "pdf_file", widget: "file", required: false,
-         hint: "Upload a PDF — shown as an inline viewer in the detail page"}
-      - {label: "PDF Heading",           name: "pdf_title", widget: "string", required: false,
-         hint: "Heading shown above the PDF viewer, e.g. 'Experience Letter', 'Internship Report'"}
-      - label: "YouTube Video URL"
-        name: "youtube"
-        widget: "string"
+        field: { label: "Image", name: "image", widget: "image" }
+      - { label: "PDF File",  name: "pdf_file",  widget: "image",  required: false }
+      - { label: "PDF Title", name: "pdf_title", widget: "string", required: false }
+      - label: "🙈 Hidden — Hide from site"
+        name: "hidden"
+        widget: "boolean"
+        default: false
+        hint: "Completely hides this experience from the public site."
+      - label: "🔒 Private Note (CMS only)"
+        name: "private_note"
+        widget: "text"
         required: false
-        hint: "e.g. https://youtu.be/abc123 — paste any YouTube link"
-      - label: "Video Heading"
-        name: "youtube_title"
-        widget: "string"
-        required: false
-        hint: "Heading above the video — leave blank to show 'Video'"
+        hint: "Internal notes — never displayed on the public site."
+      - { label: "Full Content / Body", name: "body", widget: "markdown", required: false }
 
-  # ══════════════════════════════════════════
-  # 4. RESEARCH INTERESTS
-  # ══════════════════════════════════════════
+
+  # ════════════════════════════════════════
+  #   MY DESIGN
+  # ════════════════════════════════════════
+  - name: "designs"
+    label: "🎨 My Design"
+    folder: "content/designs"
+    create: true
+    slug: "{{year}}-{{month}}-{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options: ["Flyer", "Banner", "T-shirt", "Book", "Prospectus", "Booklet", "Proceedings", "Video"]
+        default: "Flyer"
+      - { label: "Date",          name: "date",        widget: "string", required: false, hint: "e.g. 2024-03-15" }
+      - { label: "Cover Image",   name: "cover_image", widget: "image",  required: false }
+      - { label: "Description",   name: "description", widget: "text",   required: false }
+      - { label: "Issuer / Organization", name: "issuer",       widget: "string", required: false }
+      - { label: "Issuer Label",          name: "issuer_label", widget: "string", required: false, hint: "e.g. 'Organized by'. Leave blank for default." }
+      - { label: "YouTube URL",   name: "youtube", widget: "string", required: false }
+      - { label: "Link / URL",    name: "link",    widget: "string", required: false }
+      - { label: "Pinned (show at top)", name: "pinned", widget: "boolean", default: false }
+      - label: "🙈 Hidden — Hide from site"
+        name: "hidden"
+        widget: "boolean"
+        default: false
+        hint: "Completely hides this design from the public site."
+      - label: "🔒 Private Note (CMS only)"
+        name: "private_note"
+        widget: "text"
+        required: false
+        hint: "Internal notes — never displayed on the public site."
+      - { label: "Body / Notes", name: "body", widget: "markdown", required: false }
+
+
+  # ════════════════════════════════════════
+  #   EDUCATION
+  # ════════════════════════════════════════
+  - name: "education"
+    label: "🎓 Education"
+    folder: "content/education"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - label: "Level"
+        name: "level"
+        widget: "select"
+        options: ["BSc", "MSc", "PhD", "HSC", "SSC", "Diploma", "Certificate", "Other"]
+        default: "BSc"
+      - { label: "Institution",          name: "institution", widget: "string" }
+      - { label: "Degree / Program",     name: "degree",      widget: "string",  required: false }
+      - { label: "Passing Year / Date",  name: "passing",     widget: "string",  required: false, hint: "e.g. 01 January, 2025 or 2025" }
+      - { label: "GPA / CGPA",          name: "gpa",         widget: "string",  required: false }
+      - { label: "Rank / Position",      name: "rank",        widget: "string",  required: false }
+      - { label: "Location",             name: "location",    widget: "string",  required: false }
+      - { label: "Website",              name: "website",     widget: "string",  required: false }
+      - { label: "Icon (emoji)",         name: "icon",        widget: "string",  default: "🎓", required: false }
+      - { label: "Icon Background",      name: "icon_bg",     widget: "string",  default: "var(--blue-l)", required: false }
+      - { label: "Logo (small, for card)", name: "logo",      widget: "image",   required: false }
+      - { label: "Photo (large, for modal)", name: "photo",   widget: "image",   required: false }
+      - { label: "Certificate",          name: "certificate", widget: "image",   required: false }
+      - { label: "Transcript",           name: "transcript",  widget: "image",   required: false }
+      - { label: "Description",          name: "description", widget: "text",    required: false }
+      - { label: "Subjects / Courses",   name: "subjects",    widget: "text",    required: false }
+      - { label: "YouTube URL",          name: "youtube",          widget: "string", required: false }
+      - { label: "YouTube Title",        name: "youtube_title",    widget: "string", required: false }
+      - { label: "Display Order",        name: "order",       widget: "number",  default: 99, hint: "Lower = shown first" }
+
+
+  # ════════════════════════════════════════
+  #   RESEARCH INTERESTS
+  # ════════════════════════════════════════
   - name: "interests"
     label: "🔬 Research Interests"
     folder: "content/interests"
     create: true
     slug: "{{slug}}"
-    summary: "{{name}}"
     fields:
-      - {label: "Interest Name",     name: "name",        widget: "string",  required: false,
-         hint: "e.g. Ion Implantation, Machine Learning, Semiconductor Physics"}
-      - {label: "Short Description", name: "description", widget: "text",    required: false}
-      - {label: "Order",             name: "order",       widget: "number",  default: 99, required: false}
+      - { label: "Interest Name", name: "name",        widget: "string" }
+      - { label: "Description",   name: "description", widget: "text",   required: false }
+      - { label: "Display Order", name: "order",       widget: "number", default: 99, hint: "Lower = shown first" }
 
-  # ══════════════════════════════════════════
-  # 5. CUSTOM CATEGORIES
-  # ══════════════════════════════════════════
+
+  # ════════════════════════════════════════
+  #   CUSTOM CATEGORIES
+  # ════════════════════════════════════════
   - name: "categories"
-    label: "🗂 Custom Categories"
+    label: "📁 Custom Categories"
     folder: "content/categories"
     create: true
     slug: "{{slug}}"
-    summary: "{{icon}} {{name}} → {{parent_group}}"
     fields:
-      - {label: "Category Name",  name: "name",         widget: "string",  required: false}
-      - {label: "Icon (emoji)",   name: "icon",         widget: "string",  default: "📌", required: false}
-      - label: "Add to Group"
+      - { label: "Category Name", name: "name", widget: "string" }
+      - { label: "Icon (emoji)",  name: "icon", widget: "string", default: "📌" }
+      - label: "Parent Group"
         name: "parent_group"
         widget: "select"
-        required: false
-        options:
-          - {label: "Research",         value: "Research"}
-          - {label: "Projects",         value: "Projects"}
-          - {label: "Experiences",      value: "Experiences"}
-          - {label: "Standalone",       value: "Standalone"}
         default: "Standalone"
-
-  # ══════════════════════════════════════════
-  # 6. PORTFOLIO ITEMS (Projects, Research, etc.)
-  # ══════════════════════════════════════════
-  - name: "projects"
-    label: "📁 Portfolio Items"
-    folder: "content/projects"
-    create: true
-    slug: "{{year}}{{month}}{{day}}-{{slug}}"
-    fields:
-      - {label: "Title",            name: "title",       widget: "string",   required: false}
-      - {label: "Date",             name: "date",        widget: "datetime", required: false, time_format: false}
-      - {label: "Pinned",           name: "pinned",      widget: "boolean",  default: false, required: false}
-
-      - label: "Category"
-        name: "category"
-        widget: "select"
-        required: false
-        options:
-          - {label: "🎓 Academic Project",    value: "Academic Project"}
-          - {label: "🚀 Non-Academic Project", value: "Non-Academic Project"}
-          - {label: "🧑‍💻 Training",           value: "Training"}
-          - {label: "🌍 Field Work",          value: "Field Work"}
-          - {label: "📜 Certificate",         value: "Certificate"}
-          - {label: "🎙 Session",             value: "Session"}
-          - {label: "🏆 Award",               value: "Award"}
-          - {label: "✏️ Custom",              value: "Custom"}
-        default: "Academic Project"
-
-      - label: "Custom Category"
-        name: "custom_category"
-        widget: "string"
-        required: false
-        hint: "Enter a custom category name (only needed if 'Custom' selected above)"
-
-      - label: "Research Interests"
-        name: "research_interests"
-        widget: "relation"
-        collection: "interests"
-        search_fields: ["name"]
-        value_field: "name"
-        display_fields: ["name"]
-        multiple: true
-        required: false
-        hint: "🔬 Research Interests section থেকে add করা interests এখানে select করো"
-
-      - {label: "Featured Image",    name: "image",       widget: "image",   required: false}
-
-      - {label: "Issuer / Provider",   name: "issuer",      widget: "string",  required: false,
-         hint: "For certificates: who issued this (e.g. Coursera, IEEE, BUET)"}
-      - {label: "Issuer Label (custom text)", name: "issuer_label", widget: "string", required: false,
-         hint: "Custom label for 'Issued by' — e.g. 'Presented by', 'Awarded by'. Leave blank for default 'Issued by'"}
-
-      - label: "Slides / Gallery Images"
-        name: "gallery"
-        widget: "list"
-        required: false
-        hint: "Upload image files (JPG, PNG, WebP). For PDF slides, convert pages to images first."
-        field: {label: "Image / Slide", name: "image", widget: "image"}
-
-      - {label: "Short Description", name: "description", widget: "text",     required: false}
-      - {label: "Full Details",      name: "body",        widget: "markdown", required: false}
-      - {label: "YouTube Video URL", name: "youtube",     widget: "string",   required: false}
-      - {label: "External Link",     name: "link",        widget: "string",   required: false}
-
-      - {label: "PDF Document (upload)", name: "pdf_file", widget: "file", required: false,
-         hint: "Upload a PDF — it will show as an inline viewer on the project page (no download button)"}
-      - {label: "PDF Heading",       name: "pdf_title",   widget: "string",   required: false,
-         hint: "Heading shown above the PDF viewer, e.g. 'Full Paper', 'Research Report'"}
-
-  # ══════════════════════════════════════════
-  # 7. RESEARCH (Thesis, Journal, Conference)
-  # ══════════════════════════════════════════
-  - name: "publications"
-    label: "🔬 Research"
-    folder: "content/publications"
-    create: true
-    slug: "{{year}}{{month}}{{day}}-{{slug}}"
-    fields:
-      - {label: "Title",            name: "title",      widget: "string",   required: false}
-      - {label: "Date",             name: "date",       widget: "datetime", required: false, time_format: false}
-      - {label: "Pinned",           name: "pinned",     widget: "boolean",  default: false, required: false}
-
-      - label: "Publication Type"
-        name: "pub_type"
-        widget: "select"
-        required: false
-        options:
-          - {label: "📄 Thesis",      value: "Thesis"}
-          - {label: "📰 Journal",     value: "Journal"}
-          - {label: "🎤 Conference",  value: "Conference"}
-        default: "Journal"
-
-      - label: "Publication Status"
-        name: "status"
-        widget: "select"
-        required: false
-        options:
-          - {label: "✅ Published",        value: "Published"}
-          - {label: "✔ Accepted",          value: "Accepted"}
-          - {label: "🔄 Under Review",     value: "Under Review"}
-          - {label: "🔁 Revision",         value: "Revision"}
-          - {label: "📤 Preprint",         value: "Preprint"}
-          - {label: "📝 In Preparation",   value: "In Preparation"}
-        default: "Published"
-
-      - label: "Authors"
-        name: "authors"
-        widget: "list"
-        required: false
-        hint: "Add one entry per role. For Co-Author: enter multiple names comma-separated in a single entry (e.g. 'Alice, Bob, Charlie') — no need to add separate entries for each co-author."
-        fields:
-          - label: "Name(s)"
-            name: "author"
-            widget: "string"
-            hint: "One name, or comma-separated names for Co-Author role (e.g. 'Alice, Bob, Charlie')"
-          - label: "Role"
-            name: "role"
-            widget: "select"
-            required: false
-            default: "Co-Author"
-            options:
-              - {label: "🖊 Primary Author",  value: "Primary Author"}
-              - {label: "👥 Co-Author",        value: "Co-Author"}
-              - {label: "🎓 Supervisor",       value: "Supervisor"}
-              - {label: "🤝 Co-Supervisor",    value: "Co-Supervisor"}
-
-      - {label: "Venue (Journal/Conference Name)", name: "venue", widget: "string", required: false,
-         hint: "e.g. 'IEEE Transactions on Electron Devices' or 'Proc. ICECE 2024'"}
-
-      - {label: "DOI",              name: "doi",        widget: "string",   required: false,
-         hint: "e.g. 10.1109/TED.2024.123456 — linked as https://doi.org/..."}
-      - {label: "External Link",    name: "link",       widget: "string",   required: false,
-         hint: "Paper page, arXiv, ResearchGate, etc."}
-
-      - label: "Research Interests"
-        name: "research_interests"
-        widget: "relation"
-        collection: "interests"
-        search_fields: ["name"]
-        value_field: "name"
-        display_fields: ["name"]
-        multiple: true
-        required: false
-        hint: "Tag this paper with research interests from your Research Interests collection"
-
-      - {label: "Featured Image",   name: "image",      widget: "image",    required: false}
-
-      - label: "Gallery / Slide Images"
-        name: "gallery"
-        widget: "list"
-        required: false
-        hint: "Upload images — shown as a slideshow on the card and detail page"
-        field: {label: "Image / Slide", name: "image", widget: "image"}
-
-      - {label: "Brief Abstract (shown on card)", name: "brief_abstract", widget: "markdown", required: false,
-         hint: "Short summary shown on the homepage card — supports bold, italic, lists. NOT shown on the detail page."}
-      - {label: "Full Abstract / Details (shown on detail page)", name: "body", widget: "markdown", required: false,
-         hint: "Full abstract and any additional details — shown only when someone clicks through to the detail page"}
-
-      - {label: "Preprint PDF (upload)", name: "pdf_file", widget: "file", required: false,
-         hint: "Upload your preprint PDF — shown as an inline viewer on the detail page"}
-      - {label: "PDF Heading",      name: "pdf_title",  widget: "string",   required: false,
-         hint: "Heading above the PDF viewer, e.g. 'Preprint', 'Full Paper'"}
-
-  # ══════════════════════════════════════════
-  # 8. MY DESIGN (Flyer, Banner, T-shirt, etc.)
-  # ══════════════════════════════════════════
-  - name: "designs"
-    label: "🎨 My Design"
-    folder: "content/designs"
-    create: true
-    slug: "{{year}}{{month}}{{day}}-{{slug}}"
-    fields:
-      - {label: "Title",            name: "title",        widget: "string",   required: false}
-      - {label: "Date",             name: "date",         widget: "datetime", required: false, time_format: false}
-      - {label: "Pinned",           name: "pinned",       widget: "boolean",  default: false, required: false}
-      - label: "Category"
-        name: "category"
-        widget: "select"
-        required: false
-        options:
-          - {label: "🗞 Flyer",         value: "Flyer"}
-          - {label: "🖼 Banner",        value: "Banner"}
-          - {label: "👕 T-shirt",       value: "T-shirt"}
-          - {label: "📖 Book",          value: "Book"}
-          - {label: "📋 Prospectus",    value: "Prospectus"}
-          - {label: "📒 Booklet",       value: "Booklet"}
-          - {label: "📑 Proceedings",   value: "Proceedings"}
-          - {label: "🎬 Video",         value: "Video"}
-        default: "Flyer"
-      - {label: "Cover Image",      name: "cover_image",  widget: "image",    required: false,
-         hint: "Main image shown on the card and detail page"}
-      - {label: "Short Description",name: "description",  widget: "text",     required: false}
-      - {label: "Issuer / Provider", name: "issuer",      widget: "string",   required: false,
-         hint: "Who made or commissioned this — e.g. IEEE JUST Student Branch, JUST CSE Dept"}
-      - {label: "Issuer Label (custom text)", name: "issuer_label", widget: "string", required: false,
-         hint: "Custom label — e.g. 'Made for', 'Commissioned by'. Leave blank for default 'Issued by'"}
-      - {label: "Full Details",     name: "body",         widget: "markdown",  required: false}
-      - {label: "YouTube Video URL", name: "youtube",     widget: "string",   required: false}
-      - {label: "External Link",    name: "link",         widget: "string",   required: false}
+        options: ["Standalone", "Projects", "Training", "Certificates", "TechnicalTalk", "Achievements"]
+        hint: "'Standalone' creates a new top-level nav section."
