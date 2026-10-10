@@ -13,8 +13,8 @@ venue: Solid State Communication
 doi: 10.2139/ssrn.7030770
 link: ''
 research_interests:
-  - Gas Sensing
   - Density Functional Theory (DFT)
+  - Gas Sensing
   - Materials Studio
 image: /assets/images/ss1.jpg
 gallery:
