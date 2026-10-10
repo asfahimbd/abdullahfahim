@@ -49,6 +49,7 @@ collections:
           - {label: "Show Certificates",    name: "Certificates",   widget: "boolean", default: true, required: false}
           - {label: "Show Technical Talks", name: "TechnicalTalk",  widget: "boolean", default: true, required: false}
           - {label: "Show Achievements",    name: "Achievements",   widget: "boolean", default: true, required: false}
+      - {label: "Show My Design",       name: "MyDesign",       widget: "boolean", default: true, required: false}
 
       - label: "Footer"
         name: "footer"
@@ -368,3 +369,34 @@ collections:
          hint: "Upload your preprint PDF — shown as an inline viewer on the detail page"}
       - {label: "PDF Heading",      name: "pdf_title",  widget: "string",   required: false,
          hint: "Heading above the PDF viewer, e.g. 'Preprint', 'Full Paper'"}
+
+  # ══════════════════════════════════════════
+  # 8. MY DESIGN (Flyer, Banner, T-shirt, etc.)
+  # ══════════════════════════════════════════
+  - name: "designs"
+    label: "🎨 My Design"
+    folder: "content/designs"
+    create: true
+    slug: "{{year}}{{month}}{{day}}-{{slug}}"
+    fields:
+      - {label: "Title",            name: "title",        widget: "string",   required: false}
+      - {label: "Date",             name: "date",         widget: "datetime", required: false, time_format: false}
+      - {label: "Pinned",           name: "pinned",       widget: "boolean",  default: false, required: false}
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        required: false
+        options:
+          - {label: "🗞 Flyer",         value: "Flyer"}
+          - {label: "🖼 Banner",        value: "Banner"}
+          - {label: "👕 T-shirt",       value: "T-shirt"}
+          - {label: "📖 Book",          value: "Book"}
+          - {label: "📋 Prospectus",    value: "Prospectus"}
+          - {label: "📒 Booklet",       value: "Booklet"}
+          - {label: "📑 Proceedings",   value: "Proceedings"}
+          - {label: "🎬 Video",         value: "Video"}
+        default: "Flyer"
+      - {label: "Cover Image",      name: "cover_image",  widget: "image",    required: false,
+         hint: "Main image shown on the card and detail page"}
+      - {label: "Short Description",name: "description",  widget: "text",     required: false}
+      - {label: "Full Details",     name: "body",         widget: "markdown",  required: false}
