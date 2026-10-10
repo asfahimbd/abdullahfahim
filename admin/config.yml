@@ -49,7 +49,7 @@ collections:
           - {label: "Show Certificates",    name: "Certificates",   widget: "boolean", default: true, required: false}
           - {label: "Show Technical Talks", name: "TechnicalTalk",  widget: "boolean", default: true, required: false}
           - {label: "Show Achievements",    name: "Achievements",   widget: "boolean", default: true, required: false}
-      - {label: "Show My Design",       name: "MyDesign",       widget: "boolean", default: true, required: false}
+          - {label: "Show My Design",       name: "MyDesign",       widget: "boolean", default: true, required: false}
 
       - label: "Footer"
         name: "footer"
