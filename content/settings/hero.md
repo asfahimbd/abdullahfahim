@@ -6,6 +6,7 @@ bio: |-
 
   Having served as the Chairperson and currently serving as a Mentor of the IEEE JUST Student Branch, I am dedicated to fostering professional growth, leadership, and collaboration within the engineering community. My diverse background combining technical engineering expertise, leadership, and digital design drives my commitment to cutting-edge Research and Design.
 photo: /assets/images/fahim profile picture.png
+favicon: /assets/images/favicon.jpg
 email: 191131.eee@student.just.edu.bd
 github: https://github.com/abdullahFahim19/
 linkedin: https://www.linkedin.com/in/abdullah-fahim7640/
