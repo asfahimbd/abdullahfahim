@@ -1176,15 +1176,68 @@ function drawerGo(k,s){closeDrawer();setTimeout(()=>showAll(k,s),300);}
 function openDrawer(){document.getElementById('side-drawer').classList.add('open');document.getElementById('drawer-overlay').classList.add('open');document.body.style.overflow='hidden';}
 function closeDrawer(){document.getElementById('side-drawer').classList.remove('open');document.getElementById('drawer-overlay').classList.remove('open');document.body.style.overflow='';}
 
+/* ══ CACHE ══ */
+const CACHE_KEY='pf_cache_v3';
+const CACHE_TTL=8*60*1000; // 8 minutes
+
+function saveCache(){
+  try{
+    localStorage.setItem(CACHE_KEY,JSON.stringify({
+      ts:Date.now(),hero:HERO,edu:EDUCATION_DATA,interests:ALL_INTERESTS,
+      projects:ALL_PROJECTS,publications:ALL_PUBLICATIONS,designs:ALL_DESIGNS,
+      experiences:ALL_EXPERIENCES,navVis:NAV_VISIBILITY
+    }));
+  }catch(e){}
+}
+
+function loadCache(){
+  try{
+    const raw=localStorage.getItem(CACHE_KEY);if(!raw)return false;
+    const d=JSON.parse(raw);
+    if(Date.now()-d.ts>CACHE_TTL)return false;
+    if(d.hero)HERO=d.hero;
+    if(d.edu)EDUCATION_DATA=d.edu;
+    if(d.interests)ALL_INTERESTS=d.interests;
+    if(d.projects)ALL_PROJECTS=d.projects;
+    if(d.publications)ALL_PUBLICATIONS=d.publications;
+    if(d.designs)ALL_DESIGNS=d.designs;
+    if(d.experiences)ALL_EXPERIENCES=d.experiences;
+    if(d.navVis)NAV_VISIBILITY=d.navVis;
+    return true;
+  }catch(e){return false;}
+}
+
 /* ══ INIT ══ */
 async function init(){
-  dbg('Fetching...','ok');renderHome(true);
-  await Promise.all([fetchSettings(),fetchEducation(),fetchCategories(),fetchInterests(),fetchExperiences(),fetchNavVisibility()]);
-  ALL_PROJECTS=await fetchProjects();
-  dbg(`Projects: ${ALL_PROJECTS.length}`,'ok');
-  ALL_PUBLICATIONS=await fetchPublications();
-  ALL_DESIGNS=await fetchDesigns();
+  dbg('Fetching...','ok');
+
+  // Show cached content instantly if available
+  const fromCache=loadCache();
+  if(fromCache){
+    buildNav();if(HERO.photo)updateNavPhoto(HERO.photo);buildFooter();fetchFooterSettings();route();
+    dbg('Rendered from cache','ok');
+    // Refresh in background silently — update footer text after
+    fetchAllData().then(()=>{saveCache();fetchFooterSettings();});
+    return;
+  }
+
+  renderHome(true);
+  await fetchAllData();
+  saveCache();
   buildNav();if(HERO.photo)updateNavPhoto(HERO.photo);buildFooter();fetchFooterSettings();route();
+}
+
+async function fetchAllData(){
+  // Run ALL fetches in parallel — no sequential awaits
+  const[,,,,,,projects,publications,designs]=await Promise.all([
+    fetchSettings(),fetchEducation(),fetchCategories(),fetchInterests(),
+    fetchExperiences(),fetchNavVisibility(),
+    fetchProjects(),fetchPublications(),fetchDesigns()
+  ]);
+  if(projects)ALL_PROJECTS=projects;
+  if(publications)ALL_PUBLICATIONS=publications;
+  if(designs)ALL_DESIGNS=designs;
+  dbg(`Done — ${ALL_PROJECTS.length} projects, ${ALL_PUBLICATIONS.length} pubs, ${ALL_DESIGNS.length} designs`,'ok');
 }
 function route(){
   const hash=window.location.hash.replace('#','');
