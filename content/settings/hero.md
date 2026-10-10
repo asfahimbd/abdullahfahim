@@ -1,6 +1,6 @@
 ---
 name: Abdullah Shadek Fahim
-tagline: PhD Aspirant | B.Sc. in EEE (CGPA 3.80) | Research Assistant at ILAMPS | Forward & Inverse ML in Semiconductor Processing | Data Driven Surrogate Modelling | Mentor, IEEE JUST SB | IELTS 7.5
+tagline: B.Sc. in EEE | Research Assistant at ILAMPS | Forward & Inverse ML in Semiconductor Processing | Data Driven Surrogate Modelling | Mentor, IEEE JUST SB
 bio: |-
   I am a result-oriented and self-motivated Electrical and Electronic Engineering (EEE) graduate from Jashore University of Science and Technology (JUST) Bangladesh, graduating 2nd in my cohort with a CGPA of 3.80/4.00. I am passionate about leveraging engineering principles to solve real-world problems through innovative, research-driven solutions.
 
