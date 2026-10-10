@@ -8,16 +8,16 @@ bio: |-
 
   I am now looking to contribute to global research teams tackling challenges in computational semiconductor physics, applied AI, and technology.
 photo: /assets/images/fahim profile picture.png
-photo_focus_x: 50
-photo_focus_y: 50
 cv_file: /assets/images/Curriculum Vitae of Abdullah Shadek Fahim.pdf
-email: fahim.just.19@gmail.com
+email: 191131.eee@student.just.edu.bd
 linkedin: https://www.linkedin.com/in/abdullah-fahim7640/
 github: https://github.com/abdullahFahim19/
-orcid: https://orcid.org/0009-0003-8210-9930
+orcid: 0009-0003-8210-9930
 facebook: http://facebook.com/abdsfahim
 youtube: https://www.youtube.com/@abdsfahim
 resume: ''
 fiverr: http://fiverr.com/asfahimbd
+photo_focus_x: 50
+photo_focus_y: 50
 youtube_channel: http://youtube.com/@abdsfahim
 ---
