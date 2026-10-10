@@ -456,7 +456,7 @@ function dbg(msg,type='ok'){
 /* ══ FALLBACK DATA ══ */
 let HERO={name:"Abdullah Shadek Fahim",tagline:"",
   bio:"",
-  photo:"",email:"asfahimbd@gmail.com",orcid:"",resume:"",
+  photo:"",favicon:"",email:"asfahimbd@gmail.com",orcid:"",resume:"",
   github:"https://github.com/abdullahFahim19",
   linkedin:"https://linkedin.com/in/abdullah-fahim7640",
   facebook:"",youtube_channel:""
@@ -654,6 +654,7 @@ async function fetchSettings(){
     dbg(`settings: name="${fm.name}" bio="${(fm.bio||'').slice(0,30)}..."`,'ok');
     if(fm.name)HERO.name=fm.name;if(fm.tagline)HERO.tagline=fm.tagline;
     if(fm.bio)HERO.bio=fm.bio;if(fm.photo)HERO.photo=fixImg(fm.photo);
+    if(fm.favicon)HERO.favicon=fixImg(fm.favicon);
     if(fm.email)HERO.email=fm.email;if(fm.github)HERO.github=fm.github;
     if(fm.linkedin)HERO.linkedin=fm.linkedin;
       if(fm.orcid)HERO.orcid=fm.orcid;
@@ -664,6 +665,7 @@ async function fetchSettings(){
     if(fm.youtube_channel)HERO.youtube_channel=fm.youtube_channel;
     if(fm.screenshot_protection==='true'||fm.screenshot_protection===true)SCREENSHOT_PROTECTION=true;
     if(HERO.photo)updateNavPhoto(HERO.photo);
+    if(HERO.favicon)updateFavicon(HERO.favicon);
   }catch(e){dbg(`settings: ${e.message}`,'err');}
 }
 
@@ -1137,6 +1139,17 @@ function updateNavPhoto(url){
   });
 }
 
+function updateFavicon(url){
+  if(!url)return;
+  ['icon','shortcut icon','apple-touch-icon','apple-touch-icon-precomposed'].forEach(rel=>{
+    let el=document.querySelector(`link[rel="${rel}"]`);
+    if(!el){el=document.createElement('link');el.rel=rel;document.head.appendChild(el);}
+    el.href=url;el.type='';
+  });
+  const ms=document.querySelector('meta[name="msapplication-TileImage"]');
+  if(ms)ms.content=url;
+}
+
 /* ══ COUNTS ══ */
 function countGroup(k){
   if(k==='Experiences') return ALL_EXPERIENCES.length;
@@ -1255,7 +1268,7 @@ async function init(){
   const fromCache=loadCache();
   applyScreenshotProtection();
   if(fromCache){
-    buildNav();if(HERO.photo)updateNavPhoto(HERO.photo);buildFooter();fetchFooterSettings();route();
+    buildNav();if(HERO.photo)updateNavPhoto(HERO.photo);if(HERO.favicon)updateFavicon(HERO.favicon);buildFooter();fetchFooterSettings();route();
     dbg('Rendered from cache','ok');
     // Refresh in background silently — update footer text after
     fetchAllData().then(()=>{saveCache();fetchFooterSettings();});
@@ -1265,7 +1278,7 @@ async function init(){
   renderHome(true);
   await fetchAllData();
   saveCache();
-  buildNav();if(HERO.photo)updateNavPhoto(HERO.photo);buildFooter();fetchFooterSettings();route();
+  buildNav();if(HERO.photo)updateNavPhoto(HERO.photo);if(HERO.favicon)updateFavicon(HERO.favicon);buildFooter();fetchFooterSettings();route();
 }
 
 async function fetchAllData(){
