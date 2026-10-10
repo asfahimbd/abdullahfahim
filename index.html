@@ -102,8 +102,8 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .icon-btn:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-1px);box-shadow:var(--shadow)}
 .icon-btn svg,.icon-btn img{width:15px;height:15px;flex-shrink:0}
 .hero-stat-btns{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.55rem}
-.hero-stat-btn{display:inline-flex;align-items:center;gap:.3rem;padding:.35rem .8rem;border-radius:999px;font-size:.72rem;font-weight:700;cursor:pointer;border:1.5px solid var(--blue);background:var(--blue-l);color:var(--blue);transition:all .18s;text-decoration:none}
-.hero-stat-btn:hover{background:var(--black);color:#fff;transform:translateY(-1px);box-shadow:var(--shadow)}
+.hero-stat-btn{display:inline-flex;align-items:center;gap:.3rem;padding:.35rem .8rem;border-radius:999px;font-size:.72rem;font-weight:700;cursor:pointer;border:1.5px solid var(--blue);background:var(--blue);color:#fff;transition:all .18s;text-decoration:none}
+.hero-stat-btn:hover{background:#111;border-color:#111;color:#fff;transform:translateY(-1px);box-shadow:var(--shadow)}
 /* Full-width bio */
 .hero-bio-full{
   font-size:.91rem;color:var(--ink2);line-height:1.85;
@@ -376,7 +376,6 @@ footer{text-align:center;padding:2.2rem;color:var(--ink3);border-top:1px solid v
     A.S.<span>FAHIM</span>
   </div>
   <ul class="nav-links" id="main-nav"></ul>
-  <a href="/admin/" class="nav-login">Login</a>
   <button class="hamburger" onclick="openDrawer()" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
@@ -427,6 +426,7 @@ footer{text-align:center;padding:2.2rem;color:var(--ink3);border-top:1px solid v
 <footer id="site-footer">
   <div style="display:flex;align-items:center;justify-content:center;gap:.8rem;margin-bottom:.6rem;flex-wrap:wrap" id="footer-socials"></div>
   <div id="footer-copyright">© 2026 Abdullah Shadek Fahim · Jashore University of Science and Technology</div>
+  <div style="margin-top:.55rem"><a href="/admin/" style="font-size:.64rem;color:var(--ink3);text-decoration:none;opacity:.55;transition:opacity .17s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.55'">⚙ Admin Login</a></div>
 </footer>
 
 <script>
@@ -1259,8 +1259,8 @@ function renderHome(loading=false){
         <div class="hero-icon-btns">${iconBtns}</div>
         <div class="hero-stat-btns">
           <span class="hero-stat-btn" onclick="location.hash='all-pub'">Explore my research</span>
-          <span class="hero-stat-btn" onclick="location.hash='all-edu'">B.Sc. CGPA: 3.80/4.00</span>
-          <span class="hero-stat-btn" onclick="location.hash='all-Achievements'">IELTS: 7.5</span>
+          <span class="hero-stat-btn" onclick="location.hash='all-edu'">BSc CGPA: 3.80/4.00</span>
+          <span class="hero-stat-btn" onclick="location.hash='view-20261010-ielts-academic-score-7.5-no-band-less-than-7'">IELTS: 7.5</span>
         </div>
       </div>
     </div>
