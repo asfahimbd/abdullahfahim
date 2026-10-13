@@ -16,7 +16,7 @@ youtube: ''
 pdf_file: ''
 pdf_title: ''
 research_interests: []
-pinned: false
+pinned: true
 hidden: false
 hide_description: false
 private_note: ''
