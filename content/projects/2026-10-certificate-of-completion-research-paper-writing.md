@@ -2,7 +2,7 @@
 title: Certificate of Completion - Research Paper Writing
 category: Certificate
 custom_category: ''
-date: 13 October, 2026
+date: 2026-10-13
 issuer: Amar ischool
 issuer_label: ''
 description: |-
