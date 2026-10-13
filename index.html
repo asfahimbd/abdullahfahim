@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Portfolio of Abdullah Shadek Fahim | EEE Researcher & Professional</title>
+<title>Abdullah Shadek Fahim | EEE Researcher & Professional</title>
 <link rel="icon" href="https://avatars.githubusercontent.com/u/86173987?v=4" type="image/jpeg"/>
 <link rel="shortcut icon" href="https://avatars.githubusercontent.com/u/86173987?v=4"/>
 <link rel="apple-touch-icon" href="https://avatars.githubusercontent.com/u/86173987?v=4"/>
@@ -696,12 +696,25 @@ function applyScreenshotProtection(){
 /* ── Parse date string to timestamp for sorting ── */
 function dateToTs(str){
   if(!str)return 0;
-  // Try various formats: "24 April, 2026", "April 2025", "2025", ISO etc
+  const months={january:0,february:1,march:2,april:3,may:4,june:5,
+    july:6,august:7,september:8,october:9,november:10,december:11,
+    jan:0,feb:1,mar:2,apr:3,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+  // ISO / standard formats → let browser parse
   const d=new Date(str);
   if(!isNaN(d.getTime()))return d.getTime();
-  // Try "DD MMMM, YYYY"
-  const m=str.match(/(\d{4})/);
-  return m?parseInt(m[1])*1e6:0;
+  const s=str.trim().toLowerCase();
+  // "June 2024" / "Jun 2024"
+  let m=s.match(/^([a-z]+)\s+(\d{4})$/);
+  if(m&&months[m[1]]!==undefined)return new Date(parseInt(m[2]),months[m[1]],1).getTime();
+  // "24 April 2026" / "24 April, 2026"
+  m=s.match(/^(\d{1,2})\s+([a-z]+),?\s+(\d{4})$/);
+  if(m&&months[m[2]]!==undefined)return new Date(parseInt(m[3]),months[m[2]],parseInt(m[1])).getTime();
+  // "April 24, 2026"
+  m=s.match(/^([a-z]+)\s+(\d{1,2}),?\s+(\d{4})$/);
+  if(m&&months[m[1]]!==undefined)return new Date(parseInt(m[3]),months[m[1]],parseInt(m[2])).getTime();
+  // Bare year "2025"
+  m=str.match(/\b(\d{4})\b/);
+  return m?parseInt(m[1])*1e10:0;
 }
 async function fetchEducation(){
   const files=await ghList('content/education');if(!files)return;
