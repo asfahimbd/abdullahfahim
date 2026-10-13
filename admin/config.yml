@@ -97,7 +97,14 @@ collections:
         required: false
         options: ["Published", "Accepted", "Under Review", "In Preparation", "Preprint"]
         default: "Published"
-      - { label: "Date",         name: "date",  widget: "string", required: false, hint: "e.g. 2024-06-15 or April 2024" }
+      - label: "Date"
+        name: "date"
+        widget: "datetime"
+        required: false
+        format: "YYYY-MM-DD"
+        date_format: "DD MMM YYYY"
+        time_format: false
+        hint: "Date picker থেকে select করুন — সঠিক sort-এর জন্য এটি জরুরি।"
       - { label: "Venue / Journal Name", name: "venue", widget: "string", required: false }
       - { label: "DOI",          name: "doi",   widget: "string", required: false }
       - { label: "Link / URL",   name: "link",  widget: "string", required: false }
@@ -177,7 +184,14 @@ collections:
         widget: "string"
         required: false
         hint: "If set, this replaces the Category on the site (useful for dynamic categories)."
-      - { label: "Date", name: "date", widget: "string", required: false, hint: "e.g. 2024-06-15 or June 2024" }
+      - label: "Date"
+        name: "date"
+        widget: "datetime"
+        required: false
+        format: "YYYY-MM-DD"
+        date_format: "DD MMM YYYY"
+        time_format: false
+        hint: "Date picker থেকে select করুন — সঠিক sort-এর জন্য এটি জরুরি।"
       - { label: "Issuer / Organization", name: "issuer",       widget: "string", required: false }
       - { label: "Issuer Label",          name: "issuer_label", widget: "string", required: false, hint: "e.g. 'Organized by'. Leave blank for default." }
       - { label: "Description",           name: "description",  widget: "text",   required: false }
@@ -300,7 +314,14 @@ collections:
         widget: "select"
         options: ["Flyer", "Banner", "T-shirt", "Book", "Prospectus", "Booklet", "Proceedings", "Video"]
         default: "Flyer"
-      - { label: "Date",          name: "date",        widget: "string", required: false, hint: "e.g. 2024-03-15" }
+      - label: "Date"
+        name: "date"
+        widget: "datetime"
+        required: false
+        format: "YYYY-MM-DD"
+        date_format: "DD MMM YYYY"
+        time_format: false
+        hint: "Date picker থেকে select করুন — সঠিক sort-এর জন্য এটি জরুরি।"
       - { label: "Cover Image",   name: "cover_image", widget: "image",  required: false }
       - { label: "Description",   name: "description", widget: "text",   required: false }
       - { label: "Issuer / Organization", name: "issuer",       widget: "string", required: false }
