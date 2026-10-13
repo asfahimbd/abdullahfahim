@@ -456,7 +456,7 @@ function dbg(msg,type='ok'){
 /* ══ FALLBACK DATA ══ */
 let HERO={name:"Abdullah Shadek Fahim",tagline:"",
   bio:"",
-  photo:"",favicon:"",email:"asfahimbd@gmail.com",orcid:"",resume:"",
+  photo:"",email:"asfahimbd@gmail.com",orcid:"",resume:"",
   github:"https://github.com/abdullahFahim19",
   linkedin:"https://linkedin.com/in/abdullah-fahim7640",
   facebook:"",youtube_channel:""
@@ -467,7 +467,6 @@ let ALL_EXPERIENCES=[];
 let ALL_INTERESTS=[];
 let ALL_PUBLICATIONS=[];
 let ALL_DESIGNS=[];
-let SCREENSHOT_PROTECTION=false;
 const _pubGal={};
 
 let GROUPS={
@@ -654,7 +653,6 @@ async function fetchSettings(){
     dbg(`settings: name="${fm.name}" bio="${(fm.bio||'').slice(0,30)}..."`,'ok');
     if(fm.name)HERO.name=fm.name;if(fm.tagline)HERO.tagline=fm.tagline;
     if(fm.bio)HERO.bio=fm.bio;if(fm.photo)HERO.photo=fixImg(fm.photo);
-    if(fm.favicon)HERO.favicon=fixImg(fm.favicon);
     if(fm.email)HERO.email=fm.email;if(fm.github)HERO.github=fm.github;
     if(fm.linkedin)HERO.linkedin=fm.linkedin;
       if(fm.orcid)HERO.orcid=fm.orcid;
@@ -663,58 +661,19 @@ async function fetchSettings(){
     else if(fm.resume)HERO.resume=fixImg(fm.resume);
     if(fm.facebook)HERO.facebook=fm.facebook;
     if(fm.youtube_channel)HERO.youtube_channel=fm.youtube_channel;
-    if(fm.screenshot_protection==='true'||fm.screenshot_protection===true)SCREENSHOT_PROTECTION=true;
     if(HERO.photo)updateNavPhoto(HERO.photo);
-    if(HERO.favicon)updateFavicon(HERO.favicon);
   }catch(e){dbg(`settings: ${e.message}`,'err');}
-}
-
-/* ── Screenshot / screen-recording protection ── */
-let _protApplied=false;
-function applyScreenshotProtection(){
-  if(!SCREENSHOT_PROTECTION||_protApplied)return;
-  _protApplied=true;
-  // Disable right-click
-  document.addEventListener('contextmenu',e=>e.preventDefault());
-  // Block common capture shortcuts
-  document.addEventListener('keydown',e=>{
-    if(e.key==='PrintScreen'){e.preventDefault();return;}
-    if(e.key==='F12'){e.preventDefault();return;}
-    if((e.ctrlKey||e.metaKey)&&['s','u','p'].includes(e.key.toLowerCase())){e.preventDefault();return;}
-    if((e.ctrlKey||e.metaKey)&&e.shiftKey&&['i','j','c'].includes(e.key.toLowerCase())){e.preventDefault();return;}
-  });
-  // CSS: disable text selection, image drag, printing
-  const st=document.createElement('style');
-  st.id='screenshot-protection';
-  st.textContent=
-    '*{-webkit-user-select:none!important;user-select:none!important;}'
-    +'img{pointer-events:none!important;-webkit-user-drag:none!important;}'
-    +'@media print{body{visibility:hidden!important;}}';
-  document.head.appendChild(st);
 }
 
 /* ── Parse date string to timestamp for sorting ── */
 function dateToTs(str){
   if(!str)return 0;
-  const months={january:0,february:1,march:2,april:3,may:4,june:5,
-    july:6,august:7,september:8,october:9,november:10,december:11,
-    jan:0,feb:1,mar:2,apr:3,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
-  // ISO / standard formats → let browser parse
+  // Try various formats: "24 April, 2026", "April 2025", "2025", ISO etc
   const d=new Date(str);
   if(!isNaN(d.getTime()))return d.getTime();
-  const s=str.trim().toLowerCase();
-  // "June 2024" / "Jun 2024"
-  let m=s.match(/^([a-z]+)\s+(\d{4})$/);
-  if(m&&months[m[1]]!==undefined)return new Date(parseInt(m[2]),months[m[1]],1).getTime();
-  // "24 April 2026" / "24 April, 2026"
-  m=s.match(/^(\d{1,2})\s+([a-z]+),?\s+(\d{4})$/);
-  if(m&&months[m[2]]!==undefined)return new Date(parseInt(m[3]),months[m[2]],parseInt(m[1])).getTime();
-  // "April 24, 2026"
-  m=s.match(/^([a-z]+)\s+(\d{1,2}),?\s+(\d{4})$/);
-  if(m&&months[m[1]]!==undefined)return new Date(parseInt(m[3]),months[m[1]],parseInt(m[2])).getTime();
-  // Bare year "2025"
-  m=str.match(/\b(\d{4})\b/);
-  return m?parseInt(m[1])*1e10:0;
+  // Try "DD MMMM, YYYY"
+  const m=str.match(/(\d{4})/);
+  return m?parseInt(m[1])*1e6:0;
 }
 async function fetchEducation(){
   const files=await ghList('content/education');if(!files)return;
@@ -803,7 +762,6 @@ async function fetchExperiences(){
       });
       return{
         id:f.name.replace('.md',''),
-        hidden:fm.hidden==='true'||fm.hidden===true,
         organization:fm.organization||'',
         logo:fixImg(fm.logo||''),
         location:fm.location||'',
@@ -820,7 +778,6 @@ async function fetchExperiences(){
     const isCurrent=!endDate||endDate.toLowerCase().includes('present');
     return{
       id:f.name.replace('.md',''),
-      hidden:fm.hidden==='true'||fm.hidden===true,
       organization:fm.organization||'',
       role:fm.role||fm.title||'',
       type:fm.employment_type||'Full Time',
@@ -837,7 +794,7 @@ async function fetchExperiences(){
       youtube:fm.youtube||'',youtubeTitle:fm.youtube_title||''
     };
   }));
-  const v=items.filter(Boolean).filter(item=>!item.hidden).sort((a,b)=>{
+  const v=items.filter(Boolean).sort((a,b)=>{
     // Current first
     const aC=a.isCurrent?1:0,bC=b.isCurrent?1:0;
     if(bC!==aC)return bC-aC;
@@ -874,19 +831,16 @@ async function fetchProjects(){
       }
     }
     const interests_list=parseYamlList(text,'research_interests','interest');
-    const _hideDesc=fm.hide_description==='true'||fm.hide_description===true;
-    return{id:f.name.replace('.md',''),
-      hidden:fm.hidden==='true'||fm.hidden===true,
-      title:fm.title||'Untitled',
+    return{id:f.name.replace('.md',''),title:fm.title||'Untitled',
       category:fm.custom_category||fm.category||'',issuer:fm.issuer||'',issuerLabel:fm.issuer_label||'',
       image:fixImg(fm.image||''),gallery,
-      description:_hideDesc?'':(fm.description||''),date:fm.date||'',
-      link:fm.link||'',youtube:fm.youtube||'',body:_hideDesc?'':body,
+      description:fm.description||'',date:fm.date||'',
+      link:fm.link||'',youtube:fm.youtube||'',body,
       pdfFile:fixImg(fm.pdf_file||''),pdfTitle:fm.pdf_title||'',
       interests_list,pinned:fm.pinned==='true'||fm.pinned===true};
   }));
-  // Filter hidden, sort: pinned first, then by date desc
-  const sorted=items.filter(Boolean).filter(item=>!item.hidden).sort((a,b)=>{
+  // Sort: pinned first, then by date desc
+  const sorted=items.filter(Boolean).sort((a,b)=>{
     if(b.pinned!==a.pinned)return b.pinned?1:-1;
     return dateToTs(b.date)-dateToTs(a.date);
   });
@@ -921,10 +875,8 @@ async function fetchPublications(){
     const featImg=fixImg(fm.image||'');
     // Combine featured image + gallery (deduplicated)
     const allImgs=featImg?[featImg,...gallery.filter(g=>g!==featImg)]:gallery;
-    const _hideAbs=fm.hide_abstract==='true'||fm.hide_abstract===true;
     return{
       id:f.name.replace('.md',''),
-      hidden:fm.hidden==='true'||fm.hidden===true,
       title:fm.title||'Untitled',
       pub_type:fm.pub_type||'Journal',
       status:fm.status||'',
@@ -932,15 +884,14 @@ async function fetchPublications(){
       venue:fm.venue||'',
       doi:fm.doi||'',
       link:fm.link||'',
-      brief_abstract:_hideAbs?'':(fm.brief_abstract||''),
-      body:_hideAbs?'':body,
-      authors_list,interests_list,
+      brief_abstract:fm.brief_abstract||'',
+      body,authors_list,interests_list,
       image:featImg,gallery:allImgs,
       pdfFile:fixImg(fm.pdf_file||''),pdfTitle:fm.pdf_title||'',
       pinned:fm.pinned==='true'||fm.pinned===true
     };
   }));
-  const sorted=items.filter(Boolean).filter(item=>!item.hidden).sort((a,b)=>{
+  const sorted=items.filter(Boolean).sort((a,b)=>{
     if(b.pinned!==a.pinned)return b.pinned?1:-1;
     return dateToTs(b.date)-dateToTs(a.date);
   });
@@ -1152,17 +1103,6 @@ function updateNavPhoto(url){
   });
 }
 
-function updateFavicon(url){
-  if(!url)return;
-  ['icon','shortcut icon','apple-touch-icon','apple-touch-icon-precomposed'].forEach(rel=>{
-    let el=document.querySelector(`link[rel="${rel}"]`);
-    if(!el){el=document.createElement('link');el.rel=rel;document.head.appendChild(el);}
-    el.href=url;el.type='';
-  });
-  const ms=document.querySelector('meta[name="msapplication-TileImage"]');
-  if(ms)ms.content=url;
-}
-
 /* ══ COUNTS ══ */
 function countGroup(k){
   if(k==='Experiences') return ALL_EXPERIENCES.length;
@@ -1250,7 +1190,7 @@ function saveCache(){
     localStorage.setItem(CACHE_KEY,JSON.stringify({
       ts:Date.now(),hero:HERO,edu:EDUCATION_DATA,interests:ALL_INTERESTS,
       projects:ALL_PROJECTS,publications:ALL_PUBLICATIONS,designs:ALL_DESIGNS,
-      experiences:ALL_EXPERIENCES,navVis:NAV_VISIBILITY,screenshotProt:SCREENSHOT_PROTECTION
+      experiences:ALL_EXPERIENCES,navVis:NAV_VISIBILITY
     }));
   }catch(e){}
 }
@@ -1268,7 +1208,6 @@ function loadCache(){
     if(d.designs)ALL_DESIGNS=d.designs;
     if(d.experiences)ALL_EXPERIENCES=d.experiences;
     if(d.navVis)NAV_VISIBILITY=d.navVis;
-    if(d.screenshotProt)SCREENSHOT_PROTECTION=d.screenshotProt;
     return true;
   }catch(e){return false;}
 }
@@ -1279,9 +1218,8 @@ async function init(){
 
   // Show cached content instantly if available
   const fromCache=loadCache();
-  applyScreenshotProtection();
   if(fromCache){
-    buildNav();if(HERO.photo)updateNavPhoto(HERO.photo);if(HERO.favicon)updateFavicon(HERO.favicon);buildFooter();fetchFooterSettings();route();
+    buildNav();if(HERO.photo)updateNavPhoto(HERO.photo);buildFooter();fetchFooterSettings();route();
     dbg('Rendered from cache','ok');
     // Refresh in background silently — update footer text after
     fetchAllData().then(()=>{saveCache();fetchFooterSettings();});
@@ -1291,7 +1229,7 @@ async function init(){
   renderHome(true);
   await fetchAllData();
   saveCache();
-  buildNav();if(HERO.photo)updateNavPhoto(HERO.photo);if(HERO.favicon)updateFavicon(HERO.favicon);buildFooter();fetchFooterSettings();route();
+  buildNav();if(HERO.photo)updateNavPhoto(HERO.photo);buildFooter();fetchFooterSettings();route();
 }
 
 async function fetchAllData(){
@@ -1305,7 +1243,6 @@ async function fetchAllData(){
   if(publications)ALL_PUBLICATIONS=publications;
   if(designs)ALL_DESIGNS=designs;
   dbg(`Done — ${ALL_PROJECTS.length} projects, ${ALL_PUBLICATIONS.length} pubs, ${ALL_DESIGNS.length} designs`,'ok');
-  applyScreenshotProtection();
 }
 function route(){
   const hash=window.location.hash.replace('#','');
@@ -2215,7 +2152,6 @@ async function fetchDesigns(){
     const{fm,body}=parseFM(text);
     return{
       id:f.name.replace('.md',''),
-      hidden:fm.hidden==='true'||fm.hidden===true,
       title:fm.title||'Untitled',
       date:fm.date||'',
       category:fm.category||'',
@@ -2227,7 +2163,7 @@ async function fetchDesigns(){
       pinned:fm.pinned==='true'||fm.pinned===true
     };
   }));
-  return items.filter(Boolean).filter(item=>!item.hidden).sort((a,b)=>{
+  return items.filter(Boolean).sort((a,b)=>{
     if(b.pinned!==a.pinned)return b.pinned?1:-1;
     return dateToTs(b.date)-dateToTs(a.date);
   });
