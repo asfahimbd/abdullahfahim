@@ -9,11 +9,11 @@ description: |-
   I’m pleased to share that I have successfully completed the Research Paper Writing Course offered by Amar iSchool. This course contains 45 Lessons of more than 5hours.
 
   I enrolled in this course in January 2026. However, my limited time did not allow me to complete it as planned. I’m glad that I was finally able to accomplish this goal.
-image: ''
+image: /assets/images/1791865197609-certificate.png
 gallery: []
 link: ''
 youtube: ''
-pdf_file: /assets/images/1791865197609-certificate.png
+pdf_file: ''
 pdf_title: ''
 research_interests: []
 pinned: false
