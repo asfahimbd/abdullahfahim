@@ -2,7 +2,7 @@
 title: Defense - A Dual-Stage Hybrid Random Forest Framework for Forward and Inverse Modeling of Ion Implantation in Si, SiC, and GaAs Substrates
 date: 2026-03-07
 pinned: false
-category: Session
+category: Presentation
 custom_category: ''
 research_interests: []
 image: /assets/images/pasted-image-1791968296411.png
