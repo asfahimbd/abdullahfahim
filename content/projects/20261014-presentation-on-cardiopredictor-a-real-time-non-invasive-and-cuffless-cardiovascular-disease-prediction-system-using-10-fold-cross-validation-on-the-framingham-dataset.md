@@ -2,7 +2,7 @@
 title: 'Presentation on CardioPredictor: A Real-time Non-Invasive and Cuffless Cardiovascular Disease Prediction System Using 10-Fold Cross-Validation on the Framingham Dataset'
 date: 2025-08-31
 pinned: true
-category: Session
+category: Presentation
 custom_category: ''
 research_interests: []
 image: /assets/images/pasted-image-1791967809565.png
