@@ -475,7 +475,7 @@ let GROUPS={
   Experiences:{label:"Experiences",subcats:["Full Time","Part Time","Voluntary","Internship","Research","Other"],hasDropdown:true},
   Training:{label:"Training & Field Works",subcats:["Training","Field Work"],hasDropdown:true},
   Certificates:{label:"Certificates",subcats:["Certificate"],hasDropdown:false},
-  TechnicalTalk:{label:"Presentations",subcats:["Presentation","Presentations"],hasDropdown:false},
+  TechnicalTalk:{label:"Presentations",subcats:["Session","Presentation","Presentations"],hasDropdown:false},
   Achievements:{label:"Achievements",subcats:["Award","Achievement"],hasDropdown:false},
   MyDesign:{label:"My Design",subcats:["Flyer","Banner","T-shirt","Book","Prospectus","Booklet","Proceedings","Video"],hasDropdown:false}
 };
@@ -1601,7 +1601,7 @@ function truncate(text,words){
   return w.length<=words?text:w.slice(0,words).join(' ')+'…';
 }
 function cardHTML(p){
-  const known=['Undergraduate Thesis','Thesis','Journal','Conference','Academic Project','Non-Academic Project','Full Time','Voluntary','Certificate','Presentation','Award','Training','Field Work'];
+  const known=['Undergraduate Thesis','Thesis','Journal','Conference','Academic Project','Non-Academic Project','Full Time','Voluntary','Certificate','Presentation', 'Session', 'Award','Training','Field Work'];
   const bc=known.includes(p.category)?'badge-'+p.category.replace(/\s+/g,''):'badge-dynamic';
   const hasImg=!!p.image;
   const excerpt=truncate(p.description, hasImg?20:38);
@@ -1836,7 +1836,7 @@ function renderDetail(id){
   stopPubSlides();
   const item=ALL_PROJECTS.find(p=>p.id===id);if(!item){goHome();return;}
   const gKey=Object.keys(GROUPS).find(k=>GROUPS[k].subcats.includes(item.category))||'';
-  const known=['Undergraduate Thesis','Thesis','Journal','Conference','Academic Project','Non-Academic Project','Full Time','Voluntary','Certificate','Presentation','Award','Training','Field Work'];
+  const known=['Undergraduate Thesis','Thesis','Journal','Conference','Academic Project','Non-Academic Project','Full Time','Voluntary','Certificate','Presentation', 'Session','Award','Training','Field Work'];
   const bc=known.includes(item.category)?'badge-'+item.category.replace(/\s+/g,''):'badge-dynamic';
   document.getElementById('app').innerHTML=`
   <div class="detail-page">
