@@ -2,7 +2,7 @@
 title: Poster Presentation on A Hybrid Random Forest Surrogate Model for Accelerated Ion Implantation Simulation in Si, SiC, and GaAs Substrates Enabling Fast and Energy-Efficient Design of Solar and EV Power Devices
 date: 2025-11-19
 pinned: false
-category: Session
+category: Presentation
 custom_category: ''
 research_interests: []
 image: /assets/images/pasted-image-1791968684157.png
