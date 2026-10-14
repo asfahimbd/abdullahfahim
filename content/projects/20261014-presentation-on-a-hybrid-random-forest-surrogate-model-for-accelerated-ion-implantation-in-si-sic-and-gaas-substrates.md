@@ -2,7 +2,7 @@
 title: Presentation on A Hybrid Random Forest Surrogate Model for Accelerated Ion Implantation in Si, SiC, and GaAs Substrates
 date: 2026-05-15
 pinned: false
-category: Session
+category: Presentation
 custom_category: ''
 research_interests: []
 image: /assets/images/pasted-image-1791967559385.png
