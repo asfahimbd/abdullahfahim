@@ -229,7 +229,7 @@ collections:
           - {label: "🧑‍💻 Training",           value: "Training"}
           - {label: "🌍 Field Work",          value: "Field Work"}
           - {label: "📜 Certificate",         value: "Certificate"}
-          - {label: "🎙 Session",             value: "Session"}
+          - {label: "🎙 Presentation",             value: "Presentation"}
           - {label: "🏆 Award",               value: "Award"}
           - {label: "✏️ Custom",              value: "Custom"}
         default: "Academic Project"
