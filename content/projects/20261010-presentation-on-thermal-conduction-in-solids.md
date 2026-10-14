@@ -2,7 +2,7 @@
 title: Presentation on Thermal Conduction in solids
 date: 2023-03-20
 pinned: false
-category: Session
+category: Presentation
 custom_category: ''
 research_interests: []
 image: /assets/images/pasted-image-1791626503819.png
