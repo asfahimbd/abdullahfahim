@@ -22,7 +22,7 @@ description: |-
 
   It was a course of approximately 12 hours with 4 different modules and 13 assignments, including one that was peer-reviewed by other learners.
 youtube: ''
-link: https://www.coursera.org/account/accomplishments/certificate/XKGO9MCP3N42
+link: https://www.coursera.org/account/accomplishments/verify/XKGO9MCP3N42
 pdf_file: /assets/images/Coursera XKGO9MCP3N42.pdf
 pdf_title: ''
 ---
