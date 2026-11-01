@@ -18,7 +18,7 @@ description: |-
   Conducted by: Shuvo Dev Sir, Lecturer, Dept. of EEE, JUST
 
   This project has been a practical learning on PID control, understanding the dynamics of accelerometer tilt angles and gyroscope angular velocity, all crucial for achieving real-time balance using Arduino Nano and MPU6050 sensor.
-youtube: https://youtube.com/shorts/v1N-tdn5eZ4
+youtube: https://youtube.com/shorts/A8XbfgGKCzU?feature=share
 link: ''
 pdf_file: ''
 pdf_title: ''
