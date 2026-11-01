@@ -281,6 +281,13 @@ nav{position:sticky;top:0;z-index:200;background:rgba(248,247,243,.96);backdrop-
 .detail-body strong{color:var(--ink)}
 .yt-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:10px;margin-top:.82rem}
 .yt-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.yt-shorts{padding-bottom:0!important;height:560px;max-width:315px}
+.detail-body blockquote{border-left:3px solid var(--blue-m);padding:.35rem .85rem;margin:.5rem 0;color:var(--ink3);background:var(--blue-l);border-radius:0 7px 7px 0;font-style:italic}
+.detail-body ol{margin-left:1.2rem;margin-bottom:.74rem}
+.md-table{width:100%;border-collapse:collapse;font-size:.83rem;border-radius:8px;overflow:hidden}
+.md-table th{background:var(--surface2);font-weight:700;padding:.5rem .8rem;text-align:left;border:1px solid var(--border2);color:var(--ink);border-bottom:2px solid var(--border2)}
+.md-table td{padding:.42rem .8rem;border:1px solid var(--border);color:var(--ink2)}
+.md-table tbody tr:hover td{background:var(--blue-l)}
 
 /* ════ GALLERY SLIDER ════ */
 .gallery-wrap{position:relative;margin-top:1rem}
@@ -456,7 +463,7 @@ function dbg(msg,type='ok'){
 /* ══ FALLBACK DATA ══ */
 let HERO={name:"Abdullah Shadek Fahim",tagline:"",
   bio:"",
-  photo:"",email:"asfahimbd@gmail.com",orcid:"",resume:"",
+  photo:"",favicon:"",email:"asfahimbd@gmail.com",orcid:"",resume:"",
   github:"https://github.com/abdullahFahim19",
   linkedin:"https://linkedin.com/in/abdullah-fahim7640",
   facebook:"",youtube_channel:""
@@ -467,6 +474,7 @@ let ALL_EXPERIENCES=[];
 let ALL_INTERESTS=[];
 let ALL_PUBLICATIONS=[];
 let ALL_DESIGNS=[];
+let SCREENSHOT_PROTECTION=false;
 const _pubGal={};
 
 let GROUPS={
@@ -475,7 +483,7 @@ let GROUPS={
   Experiences:{label:"Experiences",subcats:["Full Time","Part Time","Voluntary","Internship","Research","Other"],hasDropdown:true},
   Training:{label:"Training & Field Works",subcats:["Training","Field Work"],hasDropdown:true},
   Certificates:{label:"Certificates",subcats:["Certificate"],hasDropdown:false},
-  TechnicalTalk:{label:"Presentations",subcats:["Session","Presentation","Presentations"],hasDropdown:false},
+  TechnicalTalk:{label:"Technical Talk",subcats:["Session","Technical Talk"],hasDropdown:false},
   Achievements:{label:"Achievements",subcats:["Award","Achievement"],hasDropdown:false},
   MyDesign:{label:"My Design",subcats:["Flyer","Banner","T-shirt","Book","Prospectus","Booklet","Proceedings","Video"],hasDropdown:false}
 };
@@ -653,6 +661,7 @@ async function fetchSettings(){
     dbg(`settings: name="${fm.name}" bio="${(fm.bio||'').slice(0,30)}..."`,'ok');
     if(fm.name)HERO.name=fm.name;if(fm.tagline)HERO.tagline=fm.tagline;
     if(fm.bio)HERO.bio=fm.bio;if(fm.photo)HERO.photo=fixImg(fm.photo);
+    if(fm.favicon)HERO.favicon=fixImg(fm.favicon);
     if(fm.email)HERO.email=fm.email;if(fm.github)HERO.github=fm.github;
     if(fm.linkedin)HERO.linkedin=fm.linkedin;
       if(fm.orcid)HERO.orcid=fm.orcid;
@@ -661,19 +670,58 @@ async function fetchSettings(){
     else if(fm.resume)HERO.resume=fixImg(fm.resume);
     if(fm.facebook)HERO.facebook=fm.facebook;
     if(fm.youtube_channel)HERO.youtube_channel=fm.youtube_channel;
+    if(fm.screenshot_protection==='true'||fm.screenshot_protection===true)SCREENSHOT_PROTECTION=true;
     if(HERO.photo)updateNavPhoto(HERO.photo);
+    if(HERO.favicon)updateFavicon(HERO.favicon);
   }catch(e){dbg(`settings: ${e.message}`,'err');}
+}
+
+/* ── Screenshot / screen-recording protection ── */
+let _protApplied=false;
+function applyScreenshotProtection(){
+  if(!SCREENSHOT_PROTECTION||_protApplied)return;
+  _protApplied=true;
+  // Disable right-click
+  document.addEventListener('contextmenu',e=>e.preventDefault());
+  // Block common capture shortcuts
+  document.addEventListener('keydown',e=>{
+    if(e.key==='PrintScreen'){e.preventDefault();return;}
+    if(e.key==='F12'){e.preventDefault();return;}
+    if((e.ctrlKey||e.metaKey)&&['s','u','p'].includes(e.key.toLowerCase())){e.preventDefault();return;}
+    if((e.ctrlKey||e.metaKey)&&e.shiftKey&&['i','j','c'].includes(e.key.toLowerCase())){e.preventDefault();return;}
+  });
+  // CSS: disable text selection, image drag, printing
+  const st=document.createElement('style');
+  st.id='screenshot-protection';
+  st.textContent=
+    '*{-webkit-user-select:none!important;user-select:none!important;}'
+    +'img{pointer-events:none!important;-webkit-user-drag:none!important;}'
+    +'@media print{body{visibility:hidden!important;}}';
+  document.head.appendChild(st);
 }
 
 /* ── Parse date string to timestamp for sorting ── */
 function dateToTs(str){
   if(!str)return 0;
-  // Try various formats: "24 April, 2026", "April 2025", "2025", ISO etc
+  const months={january:0,february:1,march:2,april:3,may:4,june:5,
+    july:6,august:7,september:8,october:9,november:10,december:11,
+    jan:0,feb:1,mar:2,apr:3,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+  // ISO / standard formats → let browser parse
   const d=new Date(str);
   if(!isNaN(d.getTime()))return d.getTime();
-  // Try "DD MMMM, YYYY"
-  const m=str.match(/(\d{4})/);
-  return m?parseInt(m[1])*1e6:0;
+  const s=str.trim().toLowerCase();
+  // "June 2024" / "Jun 2024"
+  let m=s.match(/^([a-z]+)\s+(\d{4})$/);
+  if(m&&months[m[1]]!==undefined)return new Date(parseInt(m[2]),months[m[1]],1).getTime();
+  // "24 April 2026" / "24 April, 2026"
+  m=s.match(/^(\d{1,2})\s+([a-z]+),?\s+(\d{4})$/);
+  if(m&&months[m[2]]!==undefined)return new Date(parseInt(m[3]),months[m[2]],parseInt(m[1])).getTime();
+  // "April 24, 2026"
+  m=s.match(/^([a-z]+)\s+(\d{1,2}),?\s+(\d{4})$/);
+  if(m&&months[m[1]]!==undefined)return new Date(parseInt(m[3]),months[m[1]],parseInt(m[2])).getTime();
+  // Bare year "2025"
+  m=str.match(/\b(\d{4})\b/);
+  return m?parseInt(m[1])*1e10:0;
 }
 async function fetchEducation(){
   const files=await ghList('content/education');if(!files)return;
@@ -762,6 +810,7 @@ async function fetchExperiences(){
       });
       return{
         id:f.name.replace('.md',''),
+        hidden:fm.hidden==='true'||fm.hidden===true,
         organization:fm.organization||'',
         logo:fixImg(fm.logo||''),
         location:fm.location||'',
@@ -778,6 +827,7 @@ async function fetchExperiences(){
     const isCurrent=!endDate||endDate.toLowerCase().includes('present');
     return{
       id:f.name.replace('.md',''),
+      hidden:fm.hidden==='true'||fm.hidden===true,
       organization:fm.organization||'',
       role:fm.role||fm.title||'',
       type:fm.employment_type||'Full Time',
@@ -794,7 +844,7 @@ async function fetchExperiences(){
       youtube:fm.youtube||'',youtubeTitle:fm.youtube_title||''
     };
   }));
-  const v=items.filter(Boolean).sort((a,b)=>{
+  const v=items.filter(Boolean).filter(item=>!item.hidden).sort((a,b)=>{
     // Current first
     const aC=a.isCurrent?1:0,bC=b.isCurrent?1:0;
     if(bC!==aC)return bC-aC;
@@ -831,16 +881,19 @@ async function fetchProjects(){
       }
     }
     const interests_list=parseYamlList(text,'research_interests','interest');
-    return{id:f.name.replace('.md',''),title:fm.title||'Untitled',
+    const _hideDesc=fm.hide_description==='true'||fm.hide_description===true;
+    return{id:f.name.replace('.md',''),
+      hidden:fm.hidden==='true'||fm.hidden===true,
+      title:fm.title||'Untitled',
       category:fm.custom_category||fm.category||'',issuer:fm.issuer||'',issuerLabel:fm.issuer_label||'',
       image:fixImg(fm.image||''),gallery,
-      description:fm.description||'',date:fm.date||'',
-      link:fm.link||'',youtube:fm.youtube||'',body,
+      description:_hideDesc?'':(fm.description||''),date:fm.date||'',
+      link:fm.link||'',youtube:fm.youtube||'',body:_hideDesc?'':body,
       pdfFile:fixImg(fm.pdf_file||''),pdfTitle:fm.pdf_title||'',
       interests_list,pinned:fm.pinned==='true'||fm.pinned===true};
   }));
-  // Sort: pinned first, then by date desc
-  const sorted=items.filter(Boolean).sort((a,b)=>{
+  // Filter hidden, sort: pinned first, then by date desc
+  const sorted=items.filter(Boolean).filter(item=>!item.hidden).sort((a,b)=>{
     if(b.pinned!==a.pinned)return b.pinned?1:-1;
     return dateToTs(b.date)-dateToTs(a.date);
   });
@@ -875,8 +928,10 @@ async function fetchPublications(){
     const featImg=fixImg(fm.image||'');
     // Combine featured image + gallery (deduplicated)
     const allImgs=featImg?[featImg,...gallery.filter(g=>g!==featImg)]:gallery;
+    const _hideAbs=fm.hide_abstract==='true'||fm.hide_abstract===true;
     return{
       id:f.name.replace('.md',''),
+      hidden:fm.hidden==='true'||fm.hidden===true,
       title:fm.title||'Untitled',
       pub_type:fm.pub_type||'Journal',
       status:fm.status||'',
@@ -884,14 +939,15 @@ async function fetchPublications(){
       venue:fm.venue||'',
       doi:fm.doi||'',
       link:fm.link||'',
-      brief_abstract:fm.brief_abstract||'',
-      body,authors_list,interests_list,
+      brief_abstract:_hideAbs?'':(fm.brief_abstract||''),
+      body:_hideAbs?'':body,
+      authors_list,interests_list,
       image:featImg,gallery:allImgs,
       pdfFile:fixImg(fm.pdf_file||''),pdfTitle:fm.pdf_title||'',
       pinned:fm.pinned==='true'||fm.pinned===true
     };
   }));
-  const sorted=items.filter(Boolean).sort((a,b)=>{
+  const sorted=items.filter(Boolean).filter(item=>!item.hidden).sort((a,b)=>{
     if(b.pinned!==a.pinned)return b.pinned?1:-1;
     return dateToTs(b.date)-dateToTs(a.date);
   });
@@ -1103,6 +1159,17 @@ function updateNavPhoto(url){
   });
 }
 
+function updateFavicon(url){
+  if(!url)return;
+  ['icon','shortcut icon','apple-touch-icon','apple-touch-icon-precomposed'].forEach(rel=>{
+    let el=document.querySelector(`link[rel="${rel}"]`);
+    if(!el){el=document.createElement('link');el.rel=rel;document.head.appendChild(el);}
+    el.href=url;el.type='';
+  });
+  const ms=document.querySelector('meta[name="msapplication-TileImage"]');
+  if(ms)ms.content=url;
+}
+
 /* ══ COUNTS ══ */
 function countGroup(k){
   if(k==='Experiences') return ALL_EXPERIENCES.length;
@@ -1183,14 +1250,15 @@ function closeDrawer(){document.getElementById('side-drawer').classList.remove('
 
 /* ══ CACHE ══ */
 const CACHE_KEY='pf_cache_v3';
-const CACHE_TTL=8*60*1000; // 8 minutes
+const CACHE_TTL=30*60*1000; // 30 minutes (commit-check handles freshness)
+let CACHE_TS=0; // timestamp of last saved cache
 
 function saveCache(){
   try{
     localStorage.setItem(CACHE_KEY,JSON.stringify({
       ts:Date.now(),hero:HERO,edu:EDUCATION_DATA,interests:ALL_INTERESTS,
       projects:ALL_PROJECTS,publications:ALL_PUBLICATIONS,designs:ALL_DESIGNS,
-      experiences:ALL_EXPERIENCES,navVis:NAV_VISIBILITY
+      experiences:ALL_EXPERIENCES,navVis:NAV_VISIBILITY,screenshotProt:SCREENSHOT_PROTECTION
     }));
   }catch(e){}
 }
@@ -1200,6 +1268,7 @@ function loadCache(){
     const raw=localStorage.getItem(CACHE_KEY);if(!raw)return false;
     const d=JSON.parse(raw);
     if(Date.now()-d.ts>CACHE_TTL)return false;
+    CACHE_TS=d.ts;
     if(d.hero)HERO=d.hero;
     if(d.edu)EDUCATION_DATA=d.edu;
     if(d.interests)ALL_INTERESTS=d.interests;
@@ -1208,8 +1277,29 @@ function loadCache(){
     if(d.designs)ALL_DESIGNS=d.designs;
     if(d.experiences)ALL_EXPERIENCES=d.experiences;
     if(d.navVis)NAV_VISIBILITY=d.navVis;
+    if(d.screenshotProt)SCREENSHOT_PROTECTION=d.screenshotProt;
     return true;
   }catch(e){return false;}
+}
+
+/* ── Check if GitHub has a newer commit than our cache ── */
+async function hasNewerCommit(){
+  if(!CACHE_TS)return false;
+  try{
+    const url=`${PROXY}/repos/${REPO}/commits?per_page=1&sha=${BRANCH}`;
+    const r=await fetch(url,GH_HEADERS);if(!r.ok)return false;
+    const j=await r.json();
+    if(!Array.isArray(j)||!j[0])return false;
+    const commitTs=new Date(j[0].commit.committer.date).getTime();
+    return commitTs>CACHE_TS;
+  }catch(e){return false;}
+}
+
+function rebuildPage(){
+  buildNav();
+  if(HERO.photo)updateNavPhoto(HERO.photo);
+  if(HERO.favicon)updateFavicon(HERO.favicon);
+  buildFooter();fetchFooterSettings();route();
 }
 
 /* ══ INIT ══ */
@@ -1218,18 +1308,27 @@ async function init(){
 
   // Show cached content instantly if available
   const fromCache=loadCache();
+  applyScreenshotProtection();
   if(fromCache){
-    buildNav();if(HERO.photo)updateNavPhoto(HERO.photo);buildFooter();fetchFooterSettings();route();
+    rebuildPage();
     dbg('Rendered from cache','ok');
-    // Refresh in background silently — update footer text after
-    fetchAllData().then(()=>{saveCache();fetchFooterSettings();});
+    // Background: check if CMS has newer commits → bust cache if yes
+    hasNewerCommit().then(newer=>{
+      if(newer){
+        dbg('New CMS update detected — refreshing','ok');
+        localStorage.removeItem(CACHE_KEY);
+        fetchAllData().then(()=>{saveCache();rebuildPage();fetchFooterSettings();});
+      } else {
+        fetchAllData().then(()=>{saveCache();fetchFooterSettings();});
+      }
+    });
     return;
   }
 
   renderHome(true);
   await fetchAllData();
   saveCache();
-  buildNav();if(HERO.photo)updateNavPhoto(HERO.photo);buildFooter();fetchFooterSettings();route();
+  rebuildPage();
 }
 
 async function fetchAllData(){
@@ -1243,6 +1342,7 @@ async function fetchAllData(){
   if(publications)ALL_PUBLICATIONS=publications;
   if(designs)ALL_DESIGNS=designs;
   dbg(`Done — ${ALL_PROJECTS.length} projects, ${ALL_PUBLICATIONS.length} pubs, ${ALL_DESIGNS.length} designs`,'ok');
+  applyScreenshotProtection();
 }
 function route(){
   const hash=window.location.hash.replace('#','');
@@ -1567,7 +1667,7 @@ function renderProjectsPreview(){
   </section>`;
 }
 
-/* ── Other groups (Training, Certs, Presentations, Awards) ── */
+/* ── Other groups (Training, Certs, Sessions, Awards) ── */
 function renderOtherPreviews(){
   return['Training','Certificates','TechnicalTalk','Achievements'].map(key=>{
     const g=GROUPS[key];if(!g)return'';
@@ -1601,7 +1701,7 @@ function truncate(text,words){
   return w.length<=words?text:w.slice(0,words).join(' ')+'…';
 }
 function cardHTML(p){
-  const known=['Undergraduate Thesis','Thesis','Journal','Conference','Academic Project','Non-Academic Project','Full Time','Voluntary','Certificate','Presentation', 'Session', 'Award','Training','Field Work'];
+  const known=['Undergraduate Thesis','Thesis','Journal','Conference','Academic Project','Non-Academic Project','Full Time','Voluntary','Certificate','Session','Award','Training','Field Work'];
   const bc=known.includes(p.category)?'badge-'+p.category.replace(/\s+/g,''):'badge-dynamic';
   const hasImg=!!p.image;
   const excerpt=truncate(p.description, hasImg?20:38);
@@ -1651,7 +1751,7 @@ function openEduModal(i){
       </div>`:''}
       ${e.youtube?`<div style="margin-top:1.4rem">
         <div style="font-size:.7rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.7rem">${e.youtubeTitle||'Video'}</div>
-        <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/${getYtId(e.youtube)}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture" allowfullscreen></iframe></div>
+        ${ytEmbed(e.youtube)}
       </div>`:''}
     </div>`;
   document.getElementById('edu-modal').classList.add('open');document.body.style.overflow='hidden';
@@ -1758,31 +1858,85 @@ async function renderPdfCanvas(url,cid){
 
 function md2html(md){
   if(!md)return'';
-  // Fix backslash paths (CMS sometimes saves \assets\ instead of /assets/)
   md=md.replace(/\\assets\\/g,'/assets/').replace(/\\assets\//g,'/assets/');
-  return md
-    // Images first (before links)
-    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g,(_,alt,src)=>{
-      const s=fixImg(src.trim());
-      return`<img src="${s}" alt="${alt}" style="max-width:100%;border-radius:8px;margin:.5rem 0">`;
-    })
-    // Links
+  const lines=md.split('\n');
+  let html='',i=0;
+  while(i<lines.length){
+    const L=lines[i];
+    // TABLE: | header | … followed by |---|
+    if(/^\|.+\|$/.test(L)&&lines[i+1]&&/^\|[\s\-:|]+\|$/.test(lines[i+1])){
+      const ths=L.split('|').slice(1,-1).map(h=>`<th>${inlineMd(h.trim())}</th>`).join('');
+      i+=2;
+      let rows='';
+      while(i<lines.length&&/^\|.+\|$/.test(lines[i])){
+        rows+=`<tr>${lines[i].split('|').slice(1,-1).map(c=>`<td>${inlineMd(c.trim())}</td>`).join('')}</tr>`;
+        i++;
+      }
+      html+=`<div style="overflow-x:auto;margin:.8rem 0"><table class="md-table"><thead><tr>${ths}</tr></thead><tbody>${rows}</tbody></table></div>`;
+      continue;
+    }
+    // HEADINGS
+    if(/^### /.test(L)){html+=`<h3>${inlineMd(L.slice(4))}</h3>`;i++;continue;}
+    if(/^## /.test(L)){html+=`<h2>${inlineMd(L.slice(3))}</h2>`;i++;continue;}
+    if(/^# /.test(L)){html+=`<h1>${inlineMd(L.slice(2))}</h1>`;i++;continue;}
+    // HORIZONTAL RULE
+    if(/^---+$/.test(L.trim())){html+=`<hr>`;i++;continue;}
+    // BLOCKQUOTE
+    if(/^> /.test(L)){
+      let bq='';
+      while(i<lines.length&&/^> /.test(lines[i])){bq+=lines[i].slice(2)+'\n';i++;}
+      html+=`<blockquote>${inlineMd(bq.trim())}</blockquote>`;
+      continue;
+    }
+    // UNORDERED LIST
+    if(/^[\-\*] /.test(L)){
+      let items='';
+      while(i<lines.length&&/^[\-\*] /.test(lines[i])){items+=`<li>${inlineMd(lines[i].slice(2))}</li>`;i++;}
+      html+=`<ul>${items}</ul>`;
+      continue;
+    }
+    // ORDERED LIST
+    if(/^\d+\. /.test(L)){
+      let items='';
+      while(i<lines.length&&/^\d+\. /.test(lines[i])){items+=`<li>${inlineMd(lines[i].replace(/^\d+\. /,''))}</li>`;i++;}
+      html+=`<ol>${items}</ol>`;
+      continue;
+    }
+    // BLANK LINE
+    if(L.trim()===''){i++;continue;}
+    // PARAGRAPH (gather consecutive plain lines)
+    let para='';
+    while(i<lines.length){
+      const l2=lines[i];
+      if(l2.trim()===''||/^[#>]/.test(l2)||/^[\-\*] /.test(l2)||/^\d+\. /.test(l2)||/^\|/.test(l2)||/^---+$/.test(l2.trim()))break;
+      para+=(para?' ':'')+l2.trim();
+      i++;
+    }
+    if(para)html+=`<p>${inlineMd(para)}</p>`;
+  }
+  return html;
+}
+function getYtId(url){
+  if(!url)return'';
+  const m=url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([^&\n?#]+)/);
+  return m?m[1]:url;
+}
+function ytEmbed(url){
+  if(!url)return'';
+  const id=getYtId(url);
+  const shorts=/youtube\.com\/shorts\//.test(url);
+  return`<div class="yt-wrap${shorts?' yt-shorts':''}"><iframe src="https://www.youtube.com/embed/${id}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture" allowfullscreen></iframe></div>`;
+}
+/* ── Inline markdown (used inside block-level elements) ── */
+function inlineMd(s){
+  if(!s)return'';
+  return s
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g,(_,alt,src)=>`<img src="${fixImg(src.trim())}" alt="${alt}" style="max-width:100%;border-radius:8px;margin:.5rem 0">`)
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>')
-    // Headings
-    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
-    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
-    .replace(/^# (.+)$/gm,'<h1>$1</h1>')
-    // Bold / italic / code
     .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
     .replace(/\*(.+?)\*/g,'<em>$1</em>')
-    .replace(/`(.+?)`/g,'<code>$1</code>')
-    // Lists
-    .replace(/^\- (.+)$/gm,'<li>$1</li>')
-    .replace(/(<li>[\s\S]+?<\/li>)/g,'<ul>$1</ul>')
-    // Paragraphs
-    .replace(/\n\n/g,'</p><p>')+'</p>';
+    .replace(/`(.+?)`/g,'<code>$1</code>');
 }
-function getYtId(url){const m=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);return m?m[1]:url;}
 /* ── Gallery slider ── */
 let _gal={};
 function renderGallery(id,imgs){
@@ -1836,7 +1990,7 @@ function renderDetail(id){
   stopPubSlides();
   const item=ALL_PROJECTS.find(p=>p.id===id);if(!item){goHome();return;}
   const gKey=Object.keys(GROUPS).find(k=>GROUPS[k].subcats.includes(item.category))||'';
-  const known=['Undergraduate Thesis','Thesis','Journal','Conference','Academic Project','Non-Academic Project','Full Time','Voluntary','Certificate','Presentation', 'Session','Award','Training','Field Work'];
+  const known=['Undergraduate Thesis','Thesis','Journal','Conference','Academic Project','Non-Academic Project','Full Time','Voluntary','Certificate','Session','Award','Training','Field Work'];
   const bc=known.includes(item.category)?'badge-'+item.category.replace(/\s+/g,''):'badge-dynamic';
   document.getElementById('app').innerHTML=`
   <div class="detail-page">
@@ -1859,7 +2013,7 @@ function renderDetail(id){
       ${item.link?`<a href="${item.link}" target="_blank" class="btn btn-p" style="margin-top:.85rem">View Project</a>`:''}
       ${item.interests_list&&item.interests_list.length?`<div style="margin-top:1rem"><div style="font-size:.68rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem">Research Interests</div><div style="display:flex;gap:.4rem;flex-wrap:wrap">${item.interests_list.map(ri=>`<button onclick="location.hash='interest-'+encodeURIComponent('${ri}')" style="padding:.28rem .62rem;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;border:1.5px solid var(--blue-m);background:var(--blue-l);color:var(--blue);transition:all .17s" onmouseover="this.style.background='var(--blue)';this.style.color='#fff'" onmouseout="this.style.background='var(--blue-l)';this.style.color='var(--blue)'">${ri}</button>`).join('')}</div></div>`:''}
     </div>
-    ${item.youtube?`<div class="detail-section"><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-bottom:.4rem">Video</h3><div class="yt-wrap"><iframe src="https://www.youtube.com/embed/${getYtId(item.youtube)}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture" allowfullscreen></iframe></div></div>`:''}
+    ${item.youtube?`<div class="detail-section"><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-bottom:.4rem">Video</h3>${ytEmbed(item.youtube)}</div>`:''}
     ${item.body?`<div class="detail-section"><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-bottom:.82rem">Details</h3><div class="detail-body">${md2html(item.body)}</div></div>`:''}
     ${item.pdfFile?`<div class="detail-section"><div class="pdf-embed-wrap">
       <div class="pdf-embed-title">📄 ${item.pdfTitle||'Document'}<a href="${item.pdfFile}" target="_blank" rel="noopener" style="margin-left:auto;font-size:.72rem;color:var(--blue);text-decoration:none;font-weight:600">↗ খুলুন</a></div>
@@ -1989,7 +2143,7 @@ function renderExpDetail(id){
       ${item.body?`<div class="detail-body" style="font-size:.87rem;color:var(--ink2);line-height:1.8;margin-bottom:1.2rem">${md2html(item.body)}</div>`:''}
       ${rolesHTML}
     </div>
-    ${item.youtube?`<div class="detail-section"><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-bottom:.6rem">${item.youtubeTitle||'Video'}</h3><div class="yt-wrap"><iframe src="https://www.youtube.com/embed/${getYtId(item.youtube)}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture" allowfullscreen></iframe></div></div>`:''}
+    ${item.youtube?`<div class="detail-section"><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-bottom:.6rem">${item.youtubeTitle||'Video'}</h3>${ytEmbed(item.youtube)}</div>`:''}
     ${item.pdfFile?`<div class="detail-section"><div class="pdf-embed-wrap">
       <div class="pdf-embed-title">📄 ${item.pdfTitle||'Document'} <a href="${item.pdfFile}" target="_blank" rel="noopener" style="margin-left:auto;font-size:.72rem;color:var(--blue);text-decoration:none;font-weight:600">↗ খুলুন</a></div>
       <div class="pdf-embed-body"><div class="pdf-canvas-wrap" id="${expPdfCid}">
@@ -2152,6 +2306,7 @@ async function fetchDesigns(){
     const{fm,body}=parseFM(text);
     return{
       id:f.name.replace('.md',''),
+      hidden:fm.hidden==='true'||fm.hidden===true,
       title:fm.title||'Untitled',
       date:fm.date||'',
       category:fm.category||'',
@@ -2163,7 +2318,7 @@ async function fetchDesigns(){
       pinned:fm.pinned==='true'||fm.pinned===true
     };
   }));
-  return items.filter(Boolean).sort((a,b)=>{
+  return items.filter(Boolean).filter(item=>!item.hidden).sort((a,b)=>{
     if(b.pinned!==a.pinned)return b.pinned?1:-1;
     return dateToTs(b.date)-dateToTs(a.date);
   });
@@ -2232,7 +2387,7 @@ function renderDesignDetail(id){
       ${d.description?`<p style="color:var(--ink2);margin-top:.4rem;font-size:.86rem">${d.description}</p>`:''}
       ${d.link?`<a href="${d.link}" target="_blank" rel="noopener" class="btn btn-p" style="margin-top:.85rem">View Design ↗</a>`:''}
     </div>
-    ${d.youtube?`<div class="detail-section"><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-bottom:.4rem">Video</h3><div class="yt-wrap"><iframe src="https://www.youtube.com/embed/${getYtId(d.youtube)}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture" allowfullscreen></iframe></div></div>`:''}
+    ${d.youtube?`<div class="detail-section"><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-bottom:.4rem">Video</h3>${ytEmbed(d.youtube)}</div>`:''}
     ${d.body?`<div class="detail-section"><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-bottom:.82rem">Details</h3><div class="detail-body">${md2html(d.body)}</div></div>`:''}
   </div>`;
   window.scrollTo(0,0);
